@@ -42,7 +42,7 @@ object BroStream extends StreamUtils {
 
       val schema : StructType = StructType(
         Seq(StructField
-        ("conn", StructType(Seq(
+        (StructType(Seq(
           StructField("link",StringType,true),
           StructField("authors", StringType, true),
           StructField("publish_date", StringType, true),
@@ -59,15 +59,15 @@ object BroStream extends StreamUtils {
           .cast(StringType)
           .as("col")
         )
-        .select(from_json(col("col"), schema)
-          .getField("conn")
-          .alias("conn")
-        )
+        //.select(from_json(col("col"), schema)
+        //  .getField("conn")
+        //  .alias("conn")
+        //)
 
       //val parsedRawDf = parsedLogData.select("conn.*").withColumn("ts",to_utc_timestamp(
       //  from_unixtime(col("ts")),"GMT").alias("ts").cast(StringType))
 
-      val parsedRawDf = parsedLogData.select("conn.*")
+      val parsedRawDf = parsedLogData.select("*")
 
       val connDf = parsedRawDf
         .map((r:Row) => ConnCountObj(r.getAs[String](0),
