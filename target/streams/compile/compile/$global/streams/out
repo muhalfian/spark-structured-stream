@@ -1,0 +1,13 @@
+[0m[[0m[31merror[0m] [0m[0m/home/hduser/live-dashboard/Brondo/src/main/scala/com/ando/spark/BroStream.scala:150:41: value service is not a member of com.ando.spark.BroStream.ConnCountObj[0m
+[0m[[0m[31merror[0m] [0m[0m                  doc.put("service", sc.service)[0m
+[0m[[0m[31merror[0m] [0m[0m                                        ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/hduser/live-dashboard/Brondo/src/main/scala/com/ando/spark/BroStream.scala:151:42: value duration is not a member of com.ando.spark.BroStream.ConnCountObj[0m
+[0m[[0m[31merror[0m] [0m[0m                  doc.put("duration", sc.duration)[0m
+[0m[[0m[31merror[0m] [0m[0m                                         ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/hduser/live-dashboard/Brondo/src/main/scala/com/ando/spark/BroStream.scala:152:44: value orig_bytes is not a member of com.ando.spark.BroStream.ConnCountObj[0m
+[0m[[0m[31merror[0m] [0m[0m                  doc.put("orig_bytes", sc.orig_bytes)[0m
+[0m[[0m[31merror[0m] [0m[0m                                           ^[0m
+[0m[[0m[31merror[0m] [0m[0m/home/hduser/live-dashboard/Brondo/src/main/scala/com/ando/spark/BroStream.scala:153:44: value resp_bytes is not a member of com.ando.spark.BroStream.ConnCountObj[0m
+[0m[[0m[31merror[0m] [0m[0m                  doc.put("orig_bytes", sc.resp_bytes)[0m
+[0m[[0m[31merror[0m] [0m[0m                                           ^[0m
+[0m[[0m[31merror[0m] [0m[0mfour errors found[0m
