@@ -27,7 +27,7 @@ object BroStream extends StreamUtils {
     def main(args: Array[String]): Unit = {
       val kafkaUrl = "ubuntu:9092"
       //val shemaRegistryURL = "http://10.252.108.232:8081"
-      val topic ="online_media"
+      val topic = "online_media"
 
       val spark = getSparkSession(args)
       import spark.implicits._
@@ -54,10 +54,10 @@ object BroStream extends StreamUtils {
           .cast(StringType)
           .as("col")
         )
-        //.select(from_json(col("col"), schema)
+        .select(from_json(col("col"), schema)
         //  .getField("conn")
         //  .alias("conn")
-        //)
+        )
 
       //val parsedRawDf = parsedLogData.select("conn.*").withColumn("ts",to_utc_timestamp(
       //  from_unixtime(col("ts")),"GMT").alias("ts").cast(StringType))
