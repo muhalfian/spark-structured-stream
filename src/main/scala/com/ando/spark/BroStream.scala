@@ -52,6 +52,7 @@ object BroStream extends StreamUtils {
         )
         )
       )
+      )
 
       val parsedLogData = kafkaStreamDF
         .select(col("value")
