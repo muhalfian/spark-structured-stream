@@ -40,18 +40,13 @@ object BroStream extends StreamUtils {
         .option("startingOffsets","earliest")
         .load()
 
-      val schema : StructType = StructType(
-        Seq(StructField
-        (StructType(Seq(
+      val schema : StructType = StructType(Seq(
           StructField("link",StringType,true),
           StructField("authors", StringType, true),
           StructField("publish_date", StringType, true),
           StructField("title", StringType, true),
           StructField("text", StringType, true)
         )
-        )
-        )
-      )
       )
 
       val parsedLogData = kafkaStreamDF
