@@ -66,7 +66,7 @@ object BroStream extends StreamUtils {
       //val parsedRawDf = parsedLogData.select("conn.*").withColumn("ts",to_utc_timestamp(
       //  from_unixtime(col("ts")),"GMT").alias("ts").cast(StringType))
 
-        val parsedRawDf = parsedLogData.select("conn.*").cast(StringType))
+      val parsedRawDf = parsedLogData.select("conn.*")
 
       val connDf = parsedRawDf
         .map((r:Row) => ConnCountObj(r.getAs[String](0),
