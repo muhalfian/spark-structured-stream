@@ -50,8 +50,8 @@ object BroStream extends StreamUtils {
       )
 
       val parsedLogData = kafkaStreamDF
-        .select(col("value")
-          // .cast(StringType)
+        .select(col("*")
+          .cast(StringType)
           .as("col")
         )
         .select(from_json(col("col"), schema)
