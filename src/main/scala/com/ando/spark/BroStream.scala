@@ -51,7 +51,7 @@ object BroStream extends StreamUtils {
 
       val parsedLogData = kafkaStreamDF
         .select(col("value")
-          .cast(StringType)
+          // .cast(StringType)
           .as("col")
         )
         .select(from_json(col("col"), schema)
@@ -65,7 +65,8 @@ object BroStream extends StreamUtils {
       val parsedRawDf = parsedLogData.select("*")
 
       val connDf = parsedRawDf
-        .map((r:Row) => ConnCountObj(r.getAs[String](0),
+        .map((r:Row) => ConnCountObj(
+          r.getAs[String](0),
           r.getAs[String](1),
           r.getAs[String](2),
           r.getAs[String](3),
