@@ -1,4 +1,4 @@
-name := "Brondo"
+name := "Prayuga-Streaming-Preprocessing"
 
 version := "0.1"
 
