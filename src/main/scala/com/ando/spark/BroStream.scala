@@ -58,7 +58,7 @@ object BroStream extends StreamUtils {
         .format("console")
         .start()
 
-      ds1.printSchema()
+      kafkaStreamDF.printSchema()
       query1.awaitTermination()
       query2.awaitTermination()
 
