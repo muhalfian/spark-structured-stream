@@ -18,7 +18,7 @@ import scala.collection.mutable
 object BroStream extends StreamUtils {
     case class ConnCountObj(
                    link: String,
-                   authors: Array[String],
+                   authors: String,
                    publish_date: String,
                    title: String,
                    text: String
@@ -42,7 +42,7 @@ object BroStream extends StreamUtils {
 
       val schema : StructType = StructType(Seq(
           StructField("link", StringType,true),
-          StructField("authors", ArrayType(StringType, true)),
+          StructField("authors", StringType, true),
           StructField("publish_date", StringType, true),
           StructField("title", StringType, true),
           StructField("text", StringType, true)
@@ -64,7 +64,7 @@ object BroStream extends StreamUtils {
       val connDf = parsedLogData
         .map((r:Row) => ConnCountObj(
           r.getAs[String](0),
-          r.getAs[Array[String]](1),
+          r.getAs[String](1),
           r.getAs[String](2),
           r.getAs[String](3),
           r.getAs[String](4)
@@ -93,19 +93,19 @@ object BroStream extends StreamUtils {
               }
 
               override def close(errorOrNull: Throwable): Unit = {
-                // if (ConnCounts.nonEmpty) {
-                //   mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                //     collection.insertMany(ConnCounts.map(sc => {
-                //       var doc = new Document()
-                //       doc.put("link", sc.link)
-                //       doc.put("authors", write(sc.authors))
-                //       doc.put("publish_date", sc.publish_date)
-                //       doc.put("title", sc.title)
-                //       doc.put("text", sc.text)
-                //       doc
-                //     }).asJava)
-                //   })
-                // }
+                if (ConnCounts.nonEmpty) {
+                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+                    collection.insertMany(ConnCounts.map(sc => {
+                      var doc = new Document()
+                      doc.put("link", sc.link)
+                      doc.put("authors", sc.authors)
+                      doc.put("publish_date", sc.publish_date)
+                      doc.put("title", sc.title)
+                      doc.put("text", sc.text)
+                      doc
+                    }).asJava)
+                  })
+                }
               }
 
               override def open(partitionId: Long, version: Long): Boolean = {
