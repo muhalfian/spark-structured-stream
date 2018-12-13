@@ -56,10 +56,11 @@ object BroStream extends StreamUtils {
          .select(col("value")
          .cast(StringType)
          .as("col")
-      ).select(from_json(col("col"), schema)
-      //  .getField("conn")
-      //  .alias("conn")
       )
+      // .select(from_json(col("col"), schema)
+      // //  .getField("conn")
+      // //  .alias("conn")
+      // )
 
       val connDf = parsedLogData
         .map((r:Row) => ConnCountObj(
