@@ -57,10 +57,10 @@ object BroStream extends StreamUtils {
          .cast(StringType)
          .as("col")
       )
-      // .select(from_json(col("col"), schema)
+      .select(from_json(col("col"), schema)
       //  .getField("*")
-      // .alias("conn")
-      // )
+      .alias("conn")
+      )
 
       // val parsedRawDf = parsedLogData.select(col("*")).withColumn("publish_date",to_utc_timestamp(from_unixtime(col("publish_date")),"GMT").alias("publish_date").cast(StringType))
 
