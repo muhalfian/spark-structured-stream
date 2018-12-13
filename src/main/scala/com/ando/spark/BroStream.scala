@@ -18,7 +18,7 @@ import scala.collection.mutable
 object BroStream extends StreamUtils {
     case class ConnCountObj(
                    link: String,
-                   authors: String,
+                   authors: Array[String],
                    publish_date: String,
                    title: String,
                    text: String
@@ -64,7 +64,7 @@ object BroStream extends StreamUtils {
       val connDf = parsedLogData
         .map((r:Row) => ConnCountObj(
           r.getAs[String](0),
-          r.getAs[Any](1),
+          r.getAs[Array[String]](1),
           r.getAs[String](2),
           r.getAs[String](3),
           r.getAs[String](4)
