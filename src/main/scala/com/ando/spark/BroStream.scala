@@ -50,7 +50,8 @@ object BroStream extends StreamUtils {
       )
 
       // kafkaStreamDF.show()
-      val query1 = kafkaStreamDF.collect.foreach(println).writeStream
+      val query1 = kafkaStreamDF.collect
+        .writeStream
         .format("console")
         .start()
       val query2 = kafkaStreamDF.writeStream
