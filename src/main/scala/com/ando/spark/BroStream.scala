@@ -92,21 +92,21 @@ object BroStream extends StreamUtils {
                 ConnCounts.append(value)
               }
 
-              // override def close(errorOrNull: Throwable): Unit = {
-              //   if (ConnCounts.nonEmpty) {
-              //     mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-              //       collection.insertMany(ConnCounts.map(sc => {
-              //         var doc = new Document()
-              //         doc.put("link", sc.link)
-              //         doc.put("authors", write(sc.authors))
-              //         doc.put("publish_date", sc.publish_date)
-              //         doc.put("title", sc.title)
-              //         doc.put("text", sc.text)
-              //         doc
-              //       }).asJava)
-              //     })
-              //   }
-              // }
+              override def close(errorOrNull: Throwable): Unit = {
+                // if (ConnCounts.nonEmpty) {
+                //   mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+                //     collection.insertMany(ConnCounts.map(sc => {
+                //       var doc = new Document()
+                //       doc.put("link", sc.link)
+                //       doc.put("authors", write(sc.authors))
+                //       doc.put("publish_date", sc.publish_date)
+                //       doc.put("title", sc.title)
+                //       doc.put("text", sc.text)
+                //       doc
+                //     }).asJava)
+                //   })
+                // }
+              }
 
               override def open(partitionId: Long, version: Long): Boolean = {
                 mongoConnector = MongoConnector(writeConfig.asOptions)
