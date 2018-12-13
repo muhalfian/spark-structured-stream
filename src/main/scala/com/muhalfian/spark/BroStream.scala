@@ -16,13 +16,13 @@ import scala.collection.mutable
 
 object BroStream extends StreamUtils {
     case class ConnCountObj(
-                   link: String,
-                   source: String,
-                   authors: String,
-                   publish_date: String,
-                   title: String,
-                   text: String
-                   )
+      link: String,
+      source: String,
+      authors: String,
+      publish_date: String,
+      title: String,
+      text: String
+    )
 
     def main(args: Array[String]): Unit = {
       val kafkaUrl = "ubuntu:9092"
@@ -112,8 +112,16 @@ object BroStream extends StreamUtils {
 
             }).start()
 
+            val parsedRawToHDFSQuery = parsedLogData
+             .writeStream
+             .option("checkpointLocation", "hdfs://localhost:9000/checkpoint/stream/bro")
+             .option("path","hdfs://localhost:9000/input/spark/stream/bro")
+             .outputMode("append")
+             .format("json")
+             .start()
+
             ConnCountQuery.awaitTermination()
-            //parsedRawToHDFSQuery.awaitTermination()
+            parsedRawToHDFSQuery.awaitTermination()
 
     }
 }
