@@ -98,11 +98,11 @@ object BroStream extends StreamUtils {
                     collection.insertMany(ConnCounts.map(sc => {
                       var doc = new Document()
                       doc.put("link", sc.link)
-                      doc.put("authors", sc.authors)
+                      doc.put("authors", sc.authors.toJson)
                       doc.put("publish_date", sc.publish_date)
                       doc.put("title", sc.title)
                       doc.put("text", sc.text)
-                      // doc
+                      doc
                     }).asJava)
                   })
                 }
