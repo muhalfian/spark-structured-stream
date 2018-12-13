@@ -61,9 +61,18 @@ object BroStream extends StreamUtils {
       //  .alias("conn")
       )
 
+      val connDf = parsedLogData
+        .map((r:Row) => ConnCountObj(
+          r.getAs[String](0),
+          r.getAs[String](1),
+          r.getAs[String](2),
+          r.getAs[String](3),
+          r.getAs[String](4)
+        ))
 
       println(kafkaStream)
       println(parsedLogData)
+      print(connDf)
 
 //       val parsedLogData = kafkaStreamDF
 //         .select(col("value")
