@@ -92,8 +92,6 @@ object BroStream extends StreamUtils {
                 ConnCounts.append(value)
               }
 
-              implicit val formats = DefaultFormats
-
               // override def close(errorOrNull: Throwable): Unit = {
               //   if (ConnCounts.nonEmpty) {
               //     mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
