@@ -18,7 +18,7 @@ import scala.collection.mutable
 object BroStream extends StreamUtils {
     case class ConnCountObj(
                    link: String,
-                   authors: Any,
+                   authors: String,
                    publish_date: String,
                    title: String,
                    text: String
