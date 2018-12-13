@@ -62,7 +62,7 @@ object BroStream extends StreamUtils {
       // .alias("conn")
       // )
 
-      val parsedRawDf = parsedLogData.select("*").withColumn("publish_date",to_utc_timestamp(from_unixtime(col("publish_date")),"GMT").alias("publish_date").cast(StringType))
+      val parsedRawDf = parsedLogData.select(col("*")).withColumn("publish_date",to_utc_timestamp(from_unixtime(col("publish_date")),"GMT").alias("publish_date").cast(StringType))
 
 
       val connDf = parsedRawDf
