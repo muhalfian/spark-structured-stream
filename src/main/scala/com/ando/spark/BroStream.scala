@@ -74,50 +74,50 @@ object BroStream extends StreamUtils {
       println(parsedLogData)
       println(connDf)
 
-      //Sink to Mongodb
-      val ConnCountQuery = connDf
-          .writeStream
-      //        .format("console")
-      //        .option("truncate", "false")
-          .outputMode("append")
-      //        .start()
-      //        .awaitTermination()
-          .foreach(new ForeachWriter[ConnCountObj] {
-
-              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
-              var mongoConnector: MongoConnector = _
-              var ConnCounts: mutable.ArrayBuffer[ConnCountObj] = _
-
-              override def process(value: ConnCountObj): Unit = {
-                ConnCounts.append(value)
-              }
-
-              override def close(errorOrNull: Throwable): Unit = {
-                if (ConnCounts.nonEmpty) {
-                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                    collection.insertMany(ConnCounts.map(sc => {
-                      var doc = new Document()
-                      doc.put("link", sc.link)
-                      doc.put("authors", sc.authors)
-                      doc.put("publish_date", sc.publish_date)
-                      doc.put("title", sc.title)
-                      doc.put("text", sc.text)
-                      doc
-                    }).asJava)
-                  })
-                }
-              }
-
-              override def open(partitionId: Long, version: Long): Boolean = {
-                mongoConnector = MongoConnector(writeConfig.asOptions)
-                ConnCounts = new mutable.ArrayBuffer[ConnCountObj]()
-                true
-              }
-
-            }).start()
-
-            ConnCountQuery.awaitTermination()
-            //parsedRawToHDFSQuery.awaitTermination()
+      // //Sink to Mongodb
+      // val ConnCountQuery = connDf
+      //     .writeStream
+      // //        .format("console")
+      // //        .option("truncate", "false")
+      //     .outputMode("append")
+      // //        .start()
+      // //        .awaitTermination()
+      //     .foreach(new ForeachWriter[ConnCountObj] {
+      //
+      //         val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
+      //         var mongoConnector: MongoConnector = _
+      //         var ConnCounts: mutable.ArrayBuffer[ConnCountObj] = _
+      //
+      //         override def process(value: ConnCountObj): Unit = {
+      //           ConnCounts.append(value)
+      //         }
+      //
+      //         override def close(errorOrNull: Throwable): Unit = {
+      //           if (ConnCounts.nonEmpty) {
+      //             mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+      //               collection.insertMany(ConnCounts.map(sc => {
+      //                 var doc = new Document()
+      //                 doc.put("link", sc.link)
+      //                 doc.put("authors", sc.authors)
+      //                 doc.put("publish_date", sc.publish_date)
+      //                 doc.put("title", sc.title)
+      //                 doc.put("text", sc.text)
+      //                 doc
+      //               }).asJava)
+      //             })
+      //           }
+      //         }
+      //
+      //         override def open(partitionId: Long, version: Long): Boolean = {
+      //           mongoConnector = MongoConnector(writeConfig.asOptions)
+      //           ConnCounts = new mutable.ArrayBuffer[ConnCountObj]()
+      //           true
+      //         }
+      //
+      //       }).start()
+      //
+      //       ConnCountQuery.awaitTermination()
+      //       //parsedRawToHDFSQuery.awaitTermination()
 
 //       val parsedLogData = kafkaStreamDF
 //         .select(col("value")
