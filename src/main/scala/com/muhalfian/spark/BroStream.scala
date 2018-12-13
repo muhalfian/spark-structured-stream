@@ -114,8 +114,8 @@ object BroStream extends StreamUtils {
 
             val parsedRawToHDFSQuery = parsedLogData
              .writeStream
-             .option("checkpointLocation", "hdfs://localhost:9000/checkpoint/stream/bro")
-             .option("path","hdfs://localhost:9000/input/spark/stream/bro")
+             .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/stream/bro")
+             .option("path","hdfs://blade1-node:9000/input/spark/stream/bro")
              .outputMode("append")
              .format("json")
              .start()
