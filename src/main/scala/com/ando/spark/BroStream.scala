@@ -99,10 +99,10 @@ object BroStream extends StreamUtils {
                       var doc = new Document()
                       doc.put("link", sc.link)
                       doc.put("authors", sc.authors)
-                      doc.put("publish_date", sc.publishDate)
+                      doc.put("publish_date", sc.publish_date)
                       doc.put("title", sc.title)
                       doc.put("text", sc.text)
-                      doc
+                      // doc
                     }).asJava)
                   })
                 }
