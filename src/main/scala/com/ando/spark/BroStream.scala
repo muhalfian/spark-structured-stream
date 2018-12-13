@@ -49,18 +49,8 @@ object BroStream extends StreamUtils {
         )
       )
 
-      // kafkaStreamDF.show()
-      val query1 = kafkaStreamDF.collect
-        .writeStream
-        .format("console")
-        .start()
-      val query2 = kafkaStreamDF.writeStream
-        .format("console")
-        .start()
-
-      kafkaStreamDF.printSchema()
-      query1.awaitTermination()
-      query2.awaitTermination()
+      df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+          .as[(String, String)]
 
 //       val parsedLogData = kafkaStreamDF
 //         .select(col("*")
