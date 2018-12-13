@@ -57,12 +57,15 @@ object BroStream extends StreamUtils {
          .cast(StringType)
          .as("col")
       )
-      // .select(from_json(col("col"), schema)
-      // //  .getField("conn")
-      // //  .alias("conn")
-      // )
+      .select(from_json(col("col"), schema)
+      //  .getField("conn")
+      .alias("conn")
+      )
 
-      val connDf = parsedLogData
+      val parsedRawDf = parsedLogData.select("*").withColumn("publish_date",to_utc_timestamp(from_unixtime(col("publish_date")),"GMT").alias("publish_date").cast(StringType))
+
+
+      val connDf = parsedRawDf
         .map((r:Row) => ConnCountObj(
           r.getAs[String](0),
           r.getAs[String](1),
