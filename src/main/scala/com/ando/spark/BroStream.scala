@@ -49,7 +49,7 @@ object BroStream extends StreamUtils {
         )
       )
 
-      df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+      kafkaStreamDF.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
           .as[(String, String)]
 
 //       val parsedLogData = kafkaStreamDF
