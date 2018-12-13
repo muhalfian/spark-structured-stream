@@ -49,7 +49,18 @@ object BroStream extends StreamUtils {
         )
       )
 
-      kafkaStreamDF.show()
+      // kafkaStreamDF.show()
+      val query1 = kafkaStreamDF.collect.foreach(println)
+        .writeStream
+        .format("console")
+        .start()
+      val query2 = kafkaStreamDF.writeStream
+        .format("console")
+        .start()
+
+      ds1.printSchema()
+      query1.awaitTermination()
+      query2.awaitTermination()
 
 //       val parsedLogData = kafkaStreamDF
 //         .select(col("*")
