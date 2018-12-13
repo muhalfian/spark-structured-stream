@@ -9,8 +9,6 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.from_json
 import org.bson._
 import org.apache.spark.sql.functions.{col, from_unixtime, to_utc_timestamp}
-import net.liftweb.json._
-import net.liftweb.json.Serialization.write
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -96,21 +94,21 @@ object BroStream extends StreamUtils {
 
               implicit val formats = DefaultFormats
 
-              override def close(errorOrNull: Throwable): Unit = {
-                if (ConnCounts.nonEmpty) {
-                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                    collection.insertMany(ConnCounts.map(sc => {
-                      var doc = new Document()
-                      doc.put("link", sc.link)
-                      doc.put("authors", write(sc.authors))
-                      doc.put("publish_date", sc.publish_date)
-                      doc.put("title", sc.title)
-                      doc.put("text", sc.text)
-                      doc
-                    }).asJava)
-                  })
-                }
-              }
+              // override def close(errorOrNull: Throwable): Unit = {
+              //   if (ConnCounts.nonEmpty) {
+              //     mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+              //       collection.insertMany(ConnCounts.map(sc => {
+              //         var doc = new Document()
+              //         doc.put("link", sc.link)
+              //         doc.put("authors", write(sc.authors))
+              //         doc.put("publish_date", sc.publish_date)
+              //         doc.put("title", sc.title)
+              //         doc.put("text", sc.text)
+              //         doc
+              //       }).asJava)
+              //     })
+              //   }
+              // }
 
               override def open(partitionId: Long, version: Long): Boolean = {
                 mongoConnector = MongoConnector(writeConfig.asOptions)

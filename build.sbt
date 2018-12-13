@@ -14,8 +14,6 @@ libraryDependencies += "org.apache.kafka" % "kafka-clients" % "1.0.0"
 
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.4.0"
 
-libraryDependencies += "net.liftweb" %% "lift-json" % "2.5+"
-
 assemblyMergeStrategy in assembly := {
   {
     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
