@@ -18,7 +18,7 @@ import scala.collection.mutable
 object BroStream extends StreamUtils {
     case class ConnCountObj(
                    link: String,
-                   authors: String,
+                   authors: Any,
                    publish_date: String,
                    title: String,
                    text: String
@@ -41,8 +41,8 @@ object BroStream extends StreamUtils {
         .load()
 
       val schema : StructType = StructType(Seq(
-          StructField("link",StringType,true),
-          StructField("authors", StringType, true),
+          StructField("link", StringType,true),
+          StructField("authors", ArrayType(StringType, true)),
           StructField("publish_date", StringType, true),
           StructField("title", StringType, true),
           StructField("text", StringType, true)
