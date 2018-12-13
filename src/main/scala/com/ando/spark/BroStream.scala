@@ -56,6 +56,9 @@ object BroStream extends StreamUtils {
          .select(col("value")
          .cast(StringType)
          .as("col")
+      ).select(from_json(col("col"), schema)
+      //  .getField("conn")
+      //  .alias("conn")
       )
 
 
