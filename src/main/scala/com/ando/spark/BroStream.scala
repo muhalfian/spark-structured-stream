@@ -64,7 +64,7 @@ object BroStream extends StreamUtils {
       val connDf = parsedLogData
         .map((r:Row) => ConnCountObj(
           r.getAs[String](0),
-          r.getAs[Array](1),
+          r.getAs[Any](1),
           r.getAs[String](2),
           r.getAs[String](3),
           r.getAs[String](4)
