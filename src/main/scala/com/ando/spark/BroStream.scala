@@ -58,7 +58,7 @@ object BroStream extends StreamUtils {
          .as("col")
       )
       .select(from_json(col("col"), schema)
-       .getField("link, authors, publish_date, title, text")
+       .getField("*")
       .alias("conn")
       )
 
