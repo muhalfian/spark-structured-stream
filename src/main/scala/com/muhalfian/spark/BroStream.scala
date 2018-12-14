@@ -61,6 +61,7 @@ object BroStream extends StreamUtils {
       )
 
       val parsedRawDf = parsedLogData.select("conn.*")
+      val textDf = parsedLogData.select("conn.text")
 
       val connDf = parsedRawDf
         .map((r:Row) => ConnCountObj(
@@ -75,7 +76,7 @@ object BroStream extends StreamUtils {
 
       println(parsedLogData)
       println(connDf)
-      println(connDf[0])
+      println(textDf)
 
     //   //Sink to Mongodb
     //   val ConnCountQuery = connDf
