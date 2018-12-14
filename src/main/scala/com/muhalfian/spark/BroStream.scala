@@ -123,6 +123,7 @@ object BroStream extends StreamUtils {
 
             }).start()
 
+        // Sink to HDFS
         val parsedRawToHDFSQuery = parsedLogData
              .writeStream
              .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/stream/bro")
