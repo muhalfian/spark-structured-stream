@@ -19,6 +19,7 @@ object BroStream extends StreamUtils {
       link: String,
       source: String,
       authors: String,
+      image: String,
       publish_date: String,
       title: String,
       text: String
@@ -36,13 +37,14 @@ object BroStream extends StreamUtils {
         .format("kafka")
         .option("kafka.bootstrap.servers",kafkaUrl)
         .option("subscribe", topic)
-        .option("startingOffsets","earliest")
+        .option("startingOffsets","latest")
         .load()
 
       val schema : StructType = StructType(Seq(
           StructField("link", StringType,true),
           StructField("source", StringType, true),
           StructField("authors", StringType, true),
+          StructField("image", StringType, true),
           StructField("publish_date", StringType, true),
           StructField("title", StringType, true),
           StructField("text", StringType, true)
@@ -67,7 +69,8 @@ object BroStream extends StreamUtils {
           r.getAs[String](2),
           r.getAs[String](3),
           r.getAs[String](4),
-          r.getAs[String](5)
+          r.getAs[String](5),
+          r.getAs[String](6)
         ))
 
       println(parsedLogData)
@@ -95,6 +98,7 @@ object BroStream extends StreamUtils {
                       doc.put("link", sc.link)
                       doc.put("source", sc.source)
                       doc.put("authors", sc.authors)
+                      doc.put("image", sc.authors)
                       doc.put("publish_date", sc.publish_date)
                       doc.put("title", sc.title)
                       doc.put("text", sc.text)
@@ -122,6 +126,5 @@ object BroStream extends StreamUtils {
 
             ConnCountQuery.awaitTermination()
             parsedRawToHDFSQuery.awaitTermination()
-
     }
 }
