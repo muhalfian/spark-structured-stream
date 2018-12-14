@@ -74,6 +74,7 @@ object BroStream extends StreamUtils {
           r.getAs[String](6)
         ))
 
+      println(kafkaStreamDF)
       println(parsedLogData)
       println(connDf)
       println(textDf)
