@@ -75,56 +75,57 @@ object BroStream extends StreamUtils {
 
       println(parsedLogData)
       println(connDf)
+      println(connDf['text'])
 
-      //Sink to Mongodb
-      val ConnCountQuery = connDf
-          .writeStream
-          .outputMode("append")
-          .foreach(new ForeachWriter[ConnCountObj] {
-
-              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
-              var mongoConnector: MongoConnector = _
-              var ConnCounts: mutable.ArrayBuffer[ConnCountObj] = _
-
-              override def process(value: ConnCountObj): Unit = {
-                ConnCounts.append(value)
-              }
-
-              override def close(errorOrNull: Throwable): Unit = {
-                if (ConnCounts.nonEmpty) {
-                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                    collection.insertMany(ConnCounts.map(sc => {
-                      var doc = new Document()
-                      doc.put("link", sc.link)
-                      doc.put("source", sc.source)
-                      doc.put("authors", sc.authors)
-                      doc.put("image", sc.authors)
-                      doc.put("publish_date", sc.publish_date)
-                      doc.put("title", sc.title)
-                      doc.put("text", sc.text)
-                      doc
-                    }).asJava)
-                  })
-                }
-              }
-
-              override def open(partitionId: Long, version: Long): Boolean = {
-                mongoConnector = MongoConnector(writeConfig.asOptions)
-                ConnCounts = new mutable.ArrayBuffer[ConnCountObj]()
-                true
-              }
-
-            }).start()
-
-            val parsedRawToHDFSQuery = parsedLogData
-             .writeStream
-             .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/stream/bro")
-             .option("path","hdfs://blade1-node:9000/input/spark/stream/bro")
-             .outputMode("append")
-             .format("json")
-             .start()
-
-            ConnCountQuery.awaitTermination()
-            parsedRawToHDFSQuery.awaitTermination()
-    }
+    //   //Sink to Mongodb
+    //   val ConnCountQuery = connDf
+    //       .writeStream
+    //       .outputMode("append")
+    //       .foreach(new ForeachWriter[ConnCountObj] {
+    //
+    //           val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
+    //           var mongoConnector: MongoConnector = _
+    //           var ConnCounts: mutable.ArrayBuffer[ConnCountObj] = _
+    //
+    //           override def process(value: ConnCountObj): Unit = {
+    //             ConnCounts.append(value)
+    //           }
+    //
+    //           override def close(errorOrNull: Throwable): Unit = {
+    //             if (ConnCounts.nonEmpty) {
+    //               mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+    //                 collection.insertMany(ConnCounts.map(sc => {
+    //                   var doc = new Document()
+    //                   doc.put("link", sc.link)
+    //                   doc.put("source", sc.source)
+    //                   doc.put("authors", sc.authors)
+    //                   doc.put("image", sc.authors)
+    //                   doc.put("publish_date", sc.publish_date)
+    //                   doc.put("title", sc.title)
+    //                   doc.put("text", sc.text)
+    //                   doc
+    //                 }).asJava)
+    //               })
+    //             }
+    //           }
+    //
+    //           override def open(partitionId: Long, version: Long): Boolean = {
+    //             mongoConnector = MongoConnector(writeConfig.asOptions)
+    //             ConnCounts = new mutable.ArrayBuffer[ConnCountObj]()
+    //             true
+    //           }
+    //
+    //         }).start()
+    //
+    //         val parsedRawToHDFSQuery = parsedLogData
+    //          .writeStream
+    //          .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/stream/bro")
+    //          .option("path","hdfs://blade1-node:9000/input/spark/stream/bro")
+    //          .outputMode("append")
+    //          .format("json")
+    //          .start()
+    //
+    //         ConnCountQuery.awaitTermination()
+    //         parsedRawToHDFSQuery.awaitTermination()
+    // }
 }
