@@ -127,5 +127,5 @@ object BroStream extends StreamUtils {
     //
     //         ConnCountQuery.awaitTermination()
     //         parsedRawToHDFSQuery.awaitTermination()
-    // }
+    }
 }
