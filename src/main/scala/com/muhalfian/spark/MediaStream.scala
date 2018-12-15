@@ -91,6 +91,5 @@ object MediaStream extends StreamUtils {
     val preprocess = udf((textContent: String)=>{
         var inputDocs = new Documents()
         inputDocs.add(textContent,textContent,textContent,textContent,textContent,textContent,textContent)
-        inputDocs.text_preprocess = "preprocess" + inputDocs.text_preprocess
     })
 }
