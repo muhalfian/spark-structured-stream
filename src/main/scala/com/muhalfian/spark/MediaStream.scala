@@ -66,13 +66,17 @@ object MediaStream extends StreamUtils {
             .select("data.*")
 
         // Running Preprocessing
-        val preprocessDF = myschema
-            .foldLeft(kafkaDF){ (memoDF, colName) =>
-                memoDF.withColumn(
-                  "text_preprocess",
-                  preprocess("CAST(col('text') AS STRING)")
-                )
-            }
+        // val preprocessDF = myschema
+        //     .foldLeft(kafkaDF){ (memoDF, colName) =>
+        //         memoDF.withColumn(
+        //           "text_preprocess",
+        //           preprocess("CAST(col('text') AS STRING)")
+        //         )
+        //     }
+
+        val preprocessDF = kafkaDF
+            .select("*")
+            .withColumn("text_preprocess", regexp_replace(col(text), "\\s+", ""))
 
         // Show Data after processed
         preprocessDF.writeStream
