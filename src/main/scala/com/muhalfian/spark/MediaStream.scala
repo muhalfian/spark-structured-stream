@@ -1,9 +1,5 @@
 package com.muhalfian.spark
 
-import java.io._
-import java.net._
-import java.util._
-
 import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
@@ -25,7 +21,7 @@ object MediaStream extends StreamUtils {
     val kafkaHost = "ubuntu"
     val kafkaPort = "9092"
     val topic = "online_media"
-    val startingOffsets = "latest"
+    val startingOffsets = "earliest"
     val kafkaBroker = kafkaHost+":"+kafkaPort
 
     val schema : StructType = StructType(Seq(
@@ -53,15 +49,15 @@ object MediaStream extends StreamUtils {
             .option("startingOffsets", startingOffsets)
             .load()
 
-        val kafkaDF = kafka.selectExpr("CAST(value AS STRING)", "CAST(timestamp AS TIMESTAMP)").as[(String, Timestamp)]
-            .select(from_json($"value", schema).as("data"), $"timestamp")
-            .select("data.*", "timestamp")
+        val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
+            .select(from_json($"value", schema).as("data"))
+            .select("data.*")
 
         val preprocessDF = kafkaDF
             .select("text")
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
-                  "text_preprocess",
+                  colName,
                   regexp_replace(col(colName), "\\s+", "")
                 )
             }
