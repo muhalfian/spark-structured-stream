@@ -72,3 +72,4 @@ object MediaStream extends StreamUtils {
             .start()
             .awaitTermination()
     }
+}
