@@ -67,7 +67,7 @@ object MediaStream extends StreamUtils {
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
                   "text_preprocess",
-                  regexp_replace(col("text"), "\\s+", "")
+                  preprocess(col("text"))
                 )
             }
 
@@ -76,5 +76,9 @@ object MediaStream extends StreamUtils {
             // .option("truncate","false")
             .start()
             .awaitTermination()
+    }
+
+    def preprocess(text: String): String {
+        regexp_replace(text, "\\s+", "")
     }
 }
