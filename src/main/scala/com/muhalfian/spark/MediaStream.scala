@@ -70,7 +70,7 @@ object MediaStream extends StreamUtils {
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
                   "text_preprocess",
-                  preprocess($col("text"))
+                  preprocess($"text")
                 )
             }
 
