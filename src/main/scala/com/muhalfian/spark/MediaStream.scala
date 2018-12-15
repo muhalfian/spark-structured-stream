@@ -75,8 +75,7 @@ object MediaStream extends StreamUtils {
         //     }
 
         val preprocessDF = kafkaDF
-            .select("*")
-            .withColumn("text_preprocess", regexp_replace($"text", "\\s+", ""))
+            .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
         // Show Data after processed
         preprocessDF.writeStream
@@ -86,14 +85,16 @@ object MediaStream extends StreamUtils {
             .awaitTermination()
     }
 
-    def preprocess(textString: String): Column = {
-        // regexp_replace(text, "\\s+", "")
-        val spark = SparkSession.builder().getOrCreate()
-        import spark.implicits._
-        println(textString)
-        val textDF = Seq(
-            (textString)
-        ).toDF("text_preprocess")
-        return textDF("text_preprocess")
+    val preprocess = udf((x: String) => x)
+
+    // def preprocess(textString: String): Column = {
+    //     // regexp_replace(text, "\\s+", "")
+    //     val spark = SparkSession.builder().getOrCreate()
+    //     import spark.implicits._
+    //     println(textString)
+    //     val textDF = Seq(
+    //         (textString)
+    //     ).toDF("text_preprocess")
+    //     return textDF("text_preprocess")
     }
 }
