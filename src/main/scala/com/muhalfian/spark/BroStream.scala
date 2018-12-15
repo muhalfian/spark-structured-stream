@@ -20,31 +20,39 @@ import org.apache.spark.sql.functions.{explode, split}
 object BroStream extends StreamUtils {
 
     def main(args: Array[String]): Unit = {
-      val kafkaUrl = "ubuntu:9092"
-      val topic = "online_media"
+        val kafkaHost = "ubuntu"
+        val kafkaPort = "9092"
+        val topic = "online_media"
+        val startingOffsets = "earliest"
+        val kafkaBroker = kafkaHost+":"+kafkaPort
 
-      val spark = getSparkSession(args)
-      import spark.implicits._
+        val spark = getSparkSession(args)
+        import spark.implicits._
 
-      spark.sparkContext.setLogLevel("ERROR")
+        spark.sparkContext.setLogLevel("ERROR")
 
-      val kafkaStreamDF = spark.readStream
-        .format("kafka")
-        .option("kafka.bootstrap.servers",kafkaUrl)
-        .option("subscribe", topic)
-        .option("startingOffsets","earliest")
-        .load()
+        val kafkaStreamDF = spark.readStream
+            .format("kafka")
+            .option("kafka.bootstrap.servers",kafkaBroker)
+            .option("subscribe", topic)
+            .option("startingOffsets", startingOffsets)
+            .load()
 
-      val kafkaData = kafkaStreamDF
-        .withColumn("Key", $"key".cast(StringType))
-        .withColumn("Topic", $"topic".cast(StringType))
-        .withColumn("Offset", $"offset".cast(LongType))
-        .withColumn("Partition", $"partition".cast(IntegerType))
-        .withColumn("Timestamp", $"timestamp".cast(TimestampType))
-        .withColumn("Value", $"value".cast(StringType))
-        .select("Value")
+        val kafkaData = kafkaStreamDF
+            .withColumn("Key", $"key".cast(StringType))
+            .withColumn("Topic", $"topic".cast(StringType))
+            .withColumn("Offset", $"offset".cast(LongType))
+            .withColumn("Partition", $"partition".cast(IntegerType))
+            .withColumn("Timestamp", $"timestamp".cast(TimestampType))
+            .withColumn("Value", $"value".cast(StringType))
+            .select("Value")
 
-      kafkaData.writeStream.outputMode("append").format("console").option("truncate", false).start().awaitTermination()
+        kafkaData.writeStream
+            .outputMode("append")
+            .format("console")
+            // .option("truncate", false)
+            .start()
+            .awaitTermination()
 
     }
 }
