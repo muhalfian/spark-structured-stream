@@ -20,28 +20,6 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
-class Document(
-    var link : String,
-    var source : String,
-    var authors : String,
-    var image : String,
-    var publish_date : String,
-    var title : String,
-    var text : String,
-    var text_preprocess : String
-) extends Serializable
-
-
-class Documents(var documents: List[Document] = new ArrayList[Document]()) extends Serializable{
-    def add(link: String, source: String, authors: String, image: String, publish_date: String, title: String, text: String, text_preprocess: String = ""){
-        documents.add(new Document(link, source, authors, image, publish_date, title, text, text_preprocess))
-    }
-
-    def add(doc : Document){
-        documents.add(doc)
-    }
-}
-
 object MediaStream extends StreamUtils {
 
     val kafkaHost = "ubuntu"
@@ -49,6 +27,17 @@ object MediaStream extends StreamUtils {
     val topic = "online_media"
     val startingOffsets = "latest"
     val kafkaBroker = kafkaHost+":"+kafkaPort
+
+    val schema : StructType = StructType(Seq(
+        StructField("link", StringType,true),
+        StructField("source", StringType, true),
+        StructField("authors", StringType, true),
+        StructField("image", StringType, true),
+        StructField("publish_date", StringType, true),
+        StructField("title", StringType, true),
+        StructField("text", StringType, true)
+      )
+    )
 
     def main(args: Array[String]): Unit = {
 
@@ -64,33 +53,22 @@ object MediaStream extends StreamUtils {
             .option("startingOffsets", startingOffsets)
             .load()
 
-        // val kafkaData = kafka
-        //     .withColumn("Key", $"key".cast(StringType))
-        //     .withColumn("Topic", $"topic".cast(StringType))
-        //     .withColumn("Offset", $"offset".cast(LongType))
-        //     .withColumn("Partition", $"partition".cast(IntegerType))
-        //     .withColumn("Timestamp", $"timestamp".cast(TimestampType))
-        //     .withColumn("Value", $"value".cast(StringType))
-        //     .select("Value")
-        //
-        // kafkaData.writeStream
-        //     .outputMode("append")
-        //     .format("console")
-        //     // .option("truncate", false)
-        //     .start()
-        //     .awaitTermination()
+        val kafkaDF = kafka.selectExpr("CAST(value AS STRING)", "CAST(timestamp AS TIMESTAMP)").as[(String, Timestamp)]
+            .select(from_json($"value", schema).as("data"), $"timestamp")
+            .select("data.*", "timestamp")
 
-        // Preparing a dataframe with Content and Sentiment columns
-        val streamingDataFrame = kafka.selectExpr("cast (value as string) AS Content").withColumn("text", preprocess($"Content"))
+        val preprocessDF = kafkaDF
+            .select("text")
+            .foldLeft(kafkaDF){ (memoDF, colName) =>
+                memoDF.withColumn(
+                  "text_preprocess",
+                  regexp_replace(col(colName), "\\s+", "")
+                )
+            }
 
-        // Displaying the streaming data
-        streamingDataFrame.writeStream.outputMode("append").format("console").option("truncate", false).start().awaitTermination()
-
+        preprocessDF.writeStream
+            .format("console")
+            .option("truncate","false")
+            .start()
+            .awaitTermination()
     }
-
-    val preprocess = udf((textContent: String)=>{
-
-        val inputDocs = new Documents()
-        inputDocs.add(textContent,textContent,textContent,textContent,textContent,textContent,textContent)
-    })
-}
