@@ -22,7 +22,6 @@ object BroStream extends StreamUtils {
     def main(args: Array[String]): Unit = {
       val kafkaUrl = "ubuntu:9092"
       val topic = "online_media"
-      val schema = Encoders.product[OnlineMedia].schema
 
       val spark = getSparkSession(args)
       import spark.implicits._
