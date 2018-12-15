@@ -84,6 +84,7 @@ object MediaStream extends StreamUtils {
 
     def preprocess(textString: String): Column = {
         // regexp_replace(text, "\\s+", "")
+        val spark = SparkSession.builder().getOrCreate()
         import spark.implicits._
         println(textString)
         val textDF = Seq(
