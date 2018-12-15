@@ -52,6 +52,7 @@ object MediaStream extends StreamUtils {
 
         spark.sparkContext.setLogLevel("ERROR")
 
+        // read data stream from Kafka
         val kafka = spark.readStream
             .format("kafka")
             .option("kafka.bootstrap.servers",kafkaBroker)
@@ -59,18 +60,21 @@ object MediaStream extends StreamUtils {
             .option("startingOffsets", startingOffsets)
             .load()
 
+        // Transform data stream to Dataframe
         val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
             .select(from_json($"value", schema).as("data"))
             .select("data.*")
 
+        // Running Preprocessing
         val preprocessDF = myschema
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
                   "text_preprocess",
-                  preprocess(col("text"))
+                  preprocess($col("text"))
                 )
             }
 
+        // Show Data after processed
         preprocessDF.writeStream
             .format("console")
             // .option("truncate","false")
@@ -78,7 +82,7 @@ object MediaStream extends StreamUtils {
             .awaitTermination()
     }
 
-    def preprocess(text: Column): Column = {
+    def preprocess(text: String): Column = {
         regexp_replace(text, "\\s+", "")
     }
 }
