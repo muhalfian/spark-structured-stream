@@ -82,7 +82,7 @@ object MediaStream extends StreamUtils {
             .awaitTermination()
     }
 
-    def preprocess(text: Column): Column = {
+    def preprocess(text: String): Column = {
         regexp_replace(text, "\\s+", "")
     }
 }
