@@ -83,7 +83,7 @@ object BroStream extends StreamUtils {
       print(parsedRawDf)
       println(connDf)
       println(textDf)
-      println(parsedRawDf.show())
+      println(connDf.show())
 
       // //Sink to Mongodb
       // val ConnCountQuery = connDf
