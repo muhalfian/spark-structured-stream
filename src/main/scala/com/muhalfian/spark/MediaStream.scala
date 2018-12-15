@@ -90,5 +90,6 @@ object MediaStream extends StreamUtils {
         val textDF = Seq(
             textString
         ).toDF("text")
+        return textDf
     }
 }
