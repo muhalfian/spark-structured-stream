@@ -1,5 +1,9 @@
 package com.muhalfian.spark
 
+import java.io._
+import java.net._
+import java.util._
+
 import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
