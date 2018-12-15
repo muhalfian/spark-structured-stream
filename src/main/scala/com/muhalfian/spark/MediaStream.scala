@@ -45,10 +45,10 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    def main(args: Array[String]): Unit = {
+    val spark = getSparkSession(args)
+    import spark.implicits._
 
-        val spark = getSparkSession(args)
-        import spark.implicits._
+    def main(args: Array[String]): Unit = {
 
         spark.sparkContext.setLogLevel("ERROR")
 
@@ -82,10 +82,11 @@ object MediaStream extends StreamUtils {
             .awaitTermination()
     }
 
-    def preprocess(text: String): Column = {
+    def preprocess(textString: String): Column = {
         // regexp_replace(text, "\\s+", "")
+        println(textString)
         val textDF = Seq(
-            text
+            textString
         ).toDF("text")
     }
 }
