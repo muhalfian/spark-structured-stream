@@ -76,7 +76,7 @@ object MediaStream extends StreamUtils {
 
         val preprocessDF = kafkaDF
             .select("*")
-            .withColumn("text_preprocess", regexp_replace(col(text), "\\s+", ""))
+            .withColumn("text_preprocess", regexp_replace($"text", "\\s+", ""))
 
         // Show Data after processed
         preprocessDF.writeStream
