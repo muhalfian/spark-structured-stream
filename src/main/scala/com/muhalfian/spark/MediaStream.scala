@@ -85,7 +85,7 @@ object MediaStream extends StreamUtils {
     def preprocess(text: String): Column = {
         // regexp_replace(text, "\\s+", "")
         val textDF = Seq(
-            (text)
+            text
         ).toDF("text")
     }
 }
