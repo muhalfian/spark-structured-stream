@@ -73,7 +73,7 @@ object MediaStream extends StreamUtils {
 
         preprocessDF.writeStream
             .format("console")
-            .option("truncate","false")
+            // .option("truncate","false")
             .start()
             .awaitTermination()
     }
