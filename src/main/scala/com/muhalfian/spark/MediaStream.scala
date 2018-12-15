@@ -35,6 +35,16 @@ object MediaStream extends StreamUtils {
       )
     )
 
+    val myschema = Seq(
+        "link",
+        "source",
+        "authors",
+        "image",
+        "publish_date",
+        "title",
+        "text"
+    )
+
     def main(args: Array[String]): Unit = {
 
         val spark = getSparkSession(args)
@@ -53,7 +63,7 @@ object MediaStream extends StreamUtils {
             .select(from_json($"value", schema).as("data"))
             .select("data.*")
 
-        val preprocessDF = kafkaDF
+        val preprocessDF = myschema
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
                   "text_preprocess",
