@@ -67,7 +67,7 @@ object BroStream extends StreamUtils {
       val textDf = parsedLogData.select("conn.text")
 
       val connDf = parsedRawDf
-        .map((r:Row) => ConnCountObj(
+        .map((r:Row) => ConnCountObj(kafka/
           r.getAs[String](0),
           r.getAs[String](1),
           r.getAs[String](2),
@@ -80,8 +80,10 @@ object BroStream extends StreamUtils {
       println(kafkaStreamDF)
       println(kafkaStream)
       println(parsedLogData)
+      print(parsedRawDf)
       println(connDf)
       println(textDf)
+      println(parserdRawDf.show())
 
       //Sink to Mongodb
       val ConnCountQuery = connDf
