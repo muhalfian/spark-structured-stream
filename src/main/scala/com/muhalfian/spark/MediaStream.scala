@@ -47,7 +47,7 @@ object MediaStream extends StreamUtils {
     val kafkaHost = "ubuntu"
     val kafkaPort = "9092"
     val topic = "online_media"
-    val startingOffsets = "earliest"
+    val startingOffsets = "latest"
     val kafkaBroker = kafkaHost+":"+kafkaPort
 
     def main(args: Array[String]): Unit = {
