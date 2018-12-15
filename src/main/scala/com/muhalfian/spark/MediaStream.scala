@@ -89,7 +89,7 @@ object MediaStream extends StreamUtils {
         println(textString)
         val textDF = Seq(
             (textString)
-        ).toDF("text")
-        return textDF("text")
+        ).toDF("text_preprocess")
+        return textDF("text_preprocess")
     }
 }
