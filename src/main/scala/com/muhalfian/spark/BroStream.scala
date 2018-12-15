@@ -19,26 +19,27 @@ import org.apache.spark.sql.functions.{explode, split}
 
 object BroStream extends StreamUtils {
 
+    val kafkaHost = "ubuntu"
+    val kafkaPort = "9092"
+    val topic = "online_media"
+    val startingOffsets = "earliest"
+    val kafkaBroker = kafkaHost+":"+kafkaPort
+
     def main(args: Array[String]): Unit = {
-        val kafkaHost = "ubuntu"
-        val kafkaPort = "9092"
-        val topic = "online_media"
-        val startingOffsets = "earliest"
-        val kafkaBroker = kafkaHost+":"+kafkaPort
 
         val spark = getSparkSession(args)
         import spark.implicits._
 
         spark.sparkContext.setLogLevel("ERROR")
 
-        val kafkaStreamDF = spark.readStream
+        val kafka = spark.readStream
             .format("kafka")
             .option("kafka.bootstrap.servers",kafkaBroker)
             .option("subscribe", topic)
             .option("startingOffsets", startingOffsets)
             .load()
 
-        val kafkaData = kafkaStreamDF
+        val kafkaData = kafka
             .withColumn("Key", $"key".cast(StringType))
             .withColumn("Topic", $"topic".cast(StringType))
             .withColumn("Offset", $"offset".cast(LongType))
