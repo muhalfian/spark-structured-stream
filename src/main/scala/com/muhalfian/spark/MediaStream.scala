@@ -54,11 +54,10 @@ object MediaStream extends StreamUtils {
             .select("data.*")
 
         val preprocessDF = kafkaDF
-            .select("text")
             .foldLeft(kafkaDF){ (memoDF, colName) =>
                 memoDF.withColumn(
-                  colName,
-                  regexp_replace(col(colName), "\\s+", "")
+                  "text_preprocess",
+                  regexp_replace(col("text"), "\\s+", "")
                 )
             }
 
