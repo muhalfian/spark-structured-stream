@@ -16,6 +16,11 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
+import org.apache.lucene.analysis.id.EnglishAnalyzer
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
+import scala.collection.mutable.ArrayBuffer
+
+
 object MediaStream extends StreamUtils {
 
     val kafkaHost = "ubuntu"
@@ -66,14 +71,26 @@ object MediaStream extends StreamUtils {
             .select("data.*")
 
         // Running Preprocessing
-        // val preprocessDF = myschema
-        //     .foldLeft(kafkaDF){ (memoDF, colName) =>
-        //         memoDF.withColumn(
-        //           "text_preprocess",
-        //           preprocess("CAST(col('text') AS STRING)")
-        //         )
-        //     }
+        val preprocess = udf((content: String) => {
+          val analyzer=new IndonesianAnalyzer()
+          val tokenStream=analyzer.tokenStream("contents", content)
+          //CharTermAttribute is what we're extracting
+          val term=tokenStream.addAttribute(classOf[CharTermAttribute])
 
+          tokenStream.reset() // must be called by the consumer before consumption to clean the stream
+
+          var result = ArrayBuffer.empty[String]
+
+          while(tokenStream.incrementToken()) {
+              val termValue = term.toString
+              if (!(termValue matches ".*[\\d\\.].*")) {
+                result += term.toString
+              }
+          }
+          tokenStream.end()
+          tokenStream.close()
+          result
+        })
         val preprocessDF = kafkaDF
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
@@ -85,16 +102,6 @@ object MediaStream extends StreamUtils {
             .awaitTermination()
     }
 
-    val preprocess = udf((x: String) => x)
 
-    // def preprocess(textString: String): Column = {
-    //     // regexp_replace(text, "\\s+", "")
-    //     val spark = SparkSession.builder().getOrCreate()
-    //     import spark.implicits._
-    //     println(textString)
-    //     val textDF = Seq(
-    //         (textString)
-    //     ).toDF("text_preprocess")
-    //     return textDF("text_preprocess")
 
 }
