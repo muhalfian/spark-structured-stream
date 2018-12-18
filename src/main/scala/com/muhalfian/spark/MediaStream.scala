@@ -15,7 +15,7 @@ import scala.collection.mutable
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
-import org.apache.spark.sql.{functions => F}
+// import org.apache.spark.sql.{functions => F}
 
 import org.apache.lucene.analysis.id.IndonesianAnalyzer
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
@@ -98,10 +98,10 @@ object MediaStream extends StreamUtils {
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
         // Aggregate User Defined Function
-        val aggregate = udf((content: String) => {
-            val splits = F.explode(F.split(content, " "))
-            println(splits)
-        })
+        // val aggregate = udf((content: String) => {
+        //     val splits = F.explode(F.split(content, " "))
+        //     println(splits)
+        // })
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
