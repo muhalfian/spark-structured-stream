@@ -103,17 +103,17 @@ object MediaStream extends StreamUtils {
         //     println(splits)
         // })
 
-        // Aggregate Running in DF
-        val aggregateDF = preprocessDF
-            .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
+        // // Aggregate Running in DF
+        // val aggregateDF = preprocessDF
+        //     .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
 
 
-        // Show Data after processed
-        // preprocessDF.writeStream
-        //     .format("console")
-        //     .option("truncate","false")
-        //     .start()
-        //     .awaitTermination()
+        //Show Data after processed
+        preprocessDF.writeStream
+            .format("console")
+            .option("truncate","false")
+            .start()
+            .awaitTermination()
     }
 
 
