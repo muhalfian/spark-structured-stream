@@ -74,16 +74,16 @@ object MediaStream extends StreamUtils {
         val preprocess = udf((content: String) => {
           val analyzer=new IndonesianAnalyzer()
           val tokenStream=analyzer.tokenStream("contents", content)
-          //CharTermAttribute is what we're extracting
-          val term=tokenStream.addAttribute(classOf[CharTermAttribute])
+          val term=tokenStream.addAttribute(classOf[CharTermAttribute]) //CharTermAttribute is what we're extracting
 
           tokenStream.reset() // must be called by the consumer before consumption to clean the stream
 
-          var result = ArrayBuffer.empty[String]
+          // var result = ArrayBuffer.empty[String]
+          var result = ""
 
           while(tokenStream.incrementToken()) {
               val termValue = term.toString
-              if (!(termValue matches ".*[\\d\\.].*")) {
+              if (!(termValue matches ".*[\\W\\.].*")) {
                 result += term.toString
               }
           }
@@ -95,6 +95,17 @@ object MediaStream extends StreamUtils {
         // Preprocess Running in DF
         val preprocessDF = kafkaDF
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+
+
+        // Aggregate User Defined Function
+        val aggregate = udf((content: String) => {
+        val splits = explode(split(content, " "))
+            println(splits)
+        })
+
+        // Aggregate Running in DF
+        val aggregateDF = preprocessDF
+            .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
 
         //Show Data after processed
         preprocessDF.writeStream
