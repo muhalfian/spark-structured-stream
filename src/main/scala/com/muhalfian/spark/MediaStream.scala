@@ -84,7 +84,7 @@ object MediaStream extends StreamUtils {
           while(tokenStream.incrementToken()) {
               val termValue = term.toString
               if (!(termValue matches ".*[\\W\\.].*")) {
-                result += term.toString
+                result += term.toString + " "
               }
           }
           tokenStream.end()
@@ -97,22 +97,22 @@ object MediaStream extends StreamUtils {
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
 
-        // // Aggregate User Defined Function
-        // val aggregate = udf((content: String) => {
-        // val splits = explode(split(content, " "))
-        //     println(splits)
-        // })
-        //
-        // // Aggregate Running in DF
-        // val aggregateDF = preprocessDF
-        //     .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
+        // Aggregate User Defined Function
+        val aggregate = udf((content: Column) => {
+        val splits = explode(split(content, " "))
+            println(splits)
+        })
 
-        //Show Data after processed
-        preprocessDF.writeStream
-            .format("console")
-            .option("truncate","false")
-            .start()
-            .awaitTermination()
+        // Aggregate Running in DF
+        val aggregateDF = preprocessDF
+            .withColumn("text_preprocess", aggregate(col("text_preprocess")))
+
+        // //Show Data after processed
+        // preprocessDF.writeStream
+        //     .format("console")
+        //     .option("truncate","false")
+        //     .start()
+        //     .awaitTermination()
     }
 
 
