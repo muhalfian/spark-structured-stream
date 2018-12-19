@@ -97,15 +97,15 @@ object MediaStream extends StreamUtils {
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
 
-        // Aggregate User Defined Function
-        val aggregate = udf((content: String) => {
-        val splits = explode(split(content, " "))
-            println(splits)
-        })
-
-        // Aggregate Running in DF
-        val aggregateDF = preprocessDF
-            .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
+        // // Aggregate User Defined Function
+        // val aggregate = udf((content: String) => {
+        // val splits = explode(split(content, " "))
+        //     println(splits)
+        // })
+        //
+        // // Aggregate Running in DF
+        // val aggregateDF = preprocessDF
+        //     .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
 
         //Show Data after processed
         preprocessDF.writeStream
