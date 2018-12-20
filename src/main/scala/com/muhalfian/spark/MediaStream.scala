@@ -87,7 +87,7 @@ object MediaStream extends StreamUtils {
         // Preprocessing User Defined Function
         val preprocess = udf((content: String) => {
             content
-        }
+        })
 
         // Preprocess Running in DF
         val preprocessDF = kafkaDF
