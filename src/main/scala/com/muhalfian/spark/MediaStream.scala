@@ -22,7 +22,7 @@ import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
 // import scala.collection.mutable.{Set, HashSet}
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.util.Set
+import java.util.{Set, HashSet}
 
 
 object MediaStream extends StreamUtils {
@@ -54,7 +54,7 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    Set<String> dictionary = new HashSet<String>()
+    Set[String] dictionary = new HashSet[String]()
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
