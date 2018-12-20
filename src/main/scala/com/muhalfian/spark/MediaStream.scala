@@ -51,19 +51,18 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    var dictionary : Set[String] = HashSet.empty[String];
+    var dictionary : Set[String] = HashSet.empty[String]
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
     // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
     // BufferedReader br = new BufferedReader(new InputStreamReader(in));
     val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-    var br = new BufferedReader(new InputStreamReader(
-                           this.getClass().getResourceAsStream(filename)));
+    var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
 
-    String line;
+    var line : String
     while ((line = br.readLine()) != null) {
-        dictionary.add(line);
+        dictionary.add(line)
     }
 
     def main(args: Array[String]): Unit = {
