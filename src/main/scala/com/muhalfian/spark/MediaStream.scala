@@ -53,8 +53,8 @@ object MediaStream extends StreamUtils {
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
-    val InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
-    val BufferedReader br = new BufferedReader(new InputStreamReader(in));
+    InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
+    BufferedReader br = new BufferedReader(new InputStreamReader(in));
 
     String line;
     while ((line = br.readLine()) != null) {
