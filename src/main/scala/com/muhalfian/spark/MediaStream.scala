@@ -101,7 +101,7 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
           .setOutputCol("text_preprocess")
-          .setPattern("\\w*[^\W\d]") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
 
         val regexTokenized = regexTokenizer.transform(kafkaDF)
         val tokenized = tokenizer.transform(regexTokenized)
