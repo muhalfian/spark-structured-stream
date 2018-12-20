@@ -51,7 +51,7 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    Set[String] dictionary = new HashSet[String]();
+    var dictionary : Set[String] = HashSet.empty[String];
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
