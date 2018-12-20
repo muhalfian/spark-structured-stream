@@ -16,9 +16,8 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
-import org.apache.lucene.analysis.id.IndonesianAnalyzer
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-import scala.collection.mutable.ArrayBuffer
+import com.andylibrian.jsastrawi._
+import scala.collection.mutable.{Set, HashSet}
 
 
 object MediaStream extends StreamUtils {
@@ -50,6 +49,18 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
+    Set<String> dictionary = new HashSet<String>();
+
+    // Memuat file kata dasar dari distribusi JSastrawi
+    // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
+    val InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
+    val BufferedReader br = new BufferedReader(new InputStreamReader(in));
+
+    String line;
+    while ((line = br.readLine()) != null) {
+        dictionary.add(line);
+    }
+
     def main(args: Array[String]): Unit = {
 
         val spark = getSparkSession(args)
@@ -72,25 +83,7 @@ object MediaStream extends StreamUtils {
 
         // Preprocessing User Defined Function
         val preprocess = udf((content: String) => {
-          val analyzer=new IndonesianAnalyzer()
-          val tokenStream=analyzer.tokenStream("contents", content)
-          val term=tokenStream.addAttribute(classOf[CharTermAttribute]) //CharTermAttribute is what we're extracting
-
-          tokenStream.reset() // must be called by the consumer before consumption to clean the stream
-
-          // var result = ArrayBuffer.empty[String]
-          var result = ""
-
-          while(tokenStream.incrementToken()) {
-              val termValue = term.toString
-              if (!(termValue matches ".*[\\W\\.].*")) {
-                result += term.toString + " "
-              }
-          }
-          tokenStream.end()
-          tokenStream.close()
-          result
-        })
+        }
 
         // Preprocess Running in DF
         val preprocessDF = kafkaDF
