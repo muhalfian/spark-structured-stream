@@ -67,7 +67,7 @@ object MediaStream extends StreamUtils {
         dictionary.add(line)
     }
 
-    Lemmatizer lemmatizer = new DefaultLemmatizer(dictionary);
+    lemmatizer : Lemmatizer = new DefaultLemmatizer(dictionary);
 
     def main(args: Array[String]): Unit = {
 
