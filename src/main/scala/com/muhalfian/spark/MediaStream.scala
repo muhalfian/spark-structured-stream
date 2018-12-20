@@ -60,7 +60,7 @@ object MediaStream extends StreamUtils {
     val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
     var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
 
-    var line : String
+    var line : String = ""
     while ((line = br.readLine()) != null) {
         dictionary.add(line)
     }
