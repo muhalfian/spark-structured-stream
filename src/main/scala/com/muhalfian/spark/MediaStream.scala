@@ -18,7 +18,7 @@ import org.apache.spark.sql.functions.{explode, split}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
 
-import jsastrawi._
+import jsastrawi.{Lemmatizer, DefaultLemmatizer}
 import scala.collection.mutable.{Set, HashSet}
 import java.io.BufferedReader
 import java.io.InputStreamReader
