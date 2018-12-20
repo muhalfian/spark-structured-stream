@@ -67,6 +67,8 @@ object MediaStream extends StreamUtils {
         dictionary.add(line)
     }
 
+    Lemmatizer lemmatizer = new DefaultLemmatizer(dictionary);
+
     def main(args: Array[String]): Unit = {
 
         val spark = getSparkSession(args)
@@ -116,7 +118,7 @@ object MediaStream extends StreamUtils {
 
         // Preprocess Running in DF
         val stemmed = tokenized
-            .withColumn("text_preprocess", preprocess(col("text_preprocess")))
+            .withColumn("text_preprocess", stemming(col("text_preprocess")))
 
         //
         // // Aggregate User Defined Function
