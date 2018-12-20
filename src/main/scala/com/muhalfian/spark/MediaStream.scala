@@ -16,6 +16,8 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
+import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
+
 import jsastrawi._
 import scala.collection.mutable.{Set, HashSet}
 import java.io.BufferedReader
@@ -61,7 +63,7 @@ object MediaStream extends StreamUtils {
     var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
 
     var line : String = ""
-    while ((line = br.readLine()) != null) {
+    while ((line = br.readLine()) != "") {
         dictionary.add(line)
     }
 
@@ -85,14 +87,36 @@ object MediaStream extends StreamUtils {
             .select(from_json($"value", schema).as("data"))
             .select("data.*")
 
-        // Preprocessing User Defined Function
-        val preprocess = udf((content: String) => {
-            content
+        // // Preprocessing User Defined Function
+        // val preprocess = udf((content: String) => {
+        //     content
+        // })
+        //
+        // // Preprocess Running in DF
+        // val preprocessDF = kafkaDF
+        //     .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+
+        // =================== PREPROCESS ===============================
+        val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
+        val regexTokenizer = new RegexTokenizer()
+          .setInputCol("text")
+          .setOutputCol("text_preprocess")
+          .setPattern("\\w*[^\W\d]") // alternatively .setPattern("\\w+").setGaps(false)
+
+        val regexTokenized = regexTokenizer.transform(kafkaDF)
+        val tokenized = tokenizer.transform(regexTokenized)
+
+        val stemming = udf((content: Seq[Seq[String]]) => {
+            content.foreach{
+              _.foreach{
+                lemmatizer.lemmatize(_)
+              }
+            }
         })
 
         // Preprocess Running in DF
-        val preprocessDF = kafkaDF
-            .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+        val stemmed = tokenized
+            .withColumn("text_preprocess", preprocess(col("text_preprocess")))
 
         //
         // // Aggregate User Defined Function
@@ -106,9 +130,9 @@ object MediaStream extends StreamUtils {
         //     .withColumn("text_preprocess", aggregate(col("text_preprocess")))
 
         //Show Data after processed
-        preprocessDF.writeStream
+        stemmed.writeStream
             .format("console")
-            // .option("truncate","false")
+            .option("truncate","false")
             .start()
             .awaitTermination()
     }
