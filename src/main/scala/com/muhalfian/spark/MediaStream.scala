@@ -18,7 +18,7 @@ import org.apache.spark.sql.functions.{explode, split}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
 
-import jsastrawi.{Lemmatizer, DefaultLemmatizer}
+import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
 import scala.collection.mutable.{Set, HashSet}
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -99,6 +99,7 @@ object MediaStream extends StreamUtils {
         //     .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
         // =================== PREPROCESS ===============================
+
         val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
