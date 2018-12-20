@@ -96,23 +96,23 @@ object MediaStream extends StreamUtils {
         val preprocessDF = kafkaDF
             .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
+        //
+        // // Aggregate User Defined Function
+        // val aggregate = udf((content: Column) => {
+        //     val splits = explode(split(content, " "))
+        //     println(splits)
+        // })
+        //
+        // // Aggregate Running in DF
+        // val aggregateDF = preprocessDF
+        //     .withColumn("text_preprocess", aggregate(col("text_preprocess")))
 
-        // Aggregate User Defined Function
-        val aggregate = udf((content: Column) => {
-        val splits = explode(split(content, " "))
-            println(splits)
-        })
-
-        // Aggregate Running in DF
-        val aggregateDF = preprocessDF
-            .withColumn("text_preprocess", aggregate(col("text_preprocess")))
-
-        // //Show Data after processed
-        // preprocessDF.writeStream
-        //     .format("console")
-        //     .option("truncate","false")
-        //     .start()
-        //     .awaitTermination()
+        //Show Data after processed
+        preprocessDF.writeStream
+            .format("console")
+            // .option("truncate","false")
+            .start()
+            .awaitTermination()
     }
 
 
