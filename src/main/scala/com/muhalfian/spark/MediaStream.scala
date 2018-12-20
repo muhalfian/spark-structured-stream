@@ -53,8 +53,11 @@ object MediaStream extends StreamUtils {
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
-    InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
-    BufferedReader br = new BufferedReader(new InputStreamReader(in));
+    // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
+    // BufferedReader br = new BufferedReader(new InputStreamReader(in));
+    val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
+    var br = new BufferedReader(new InputStreamReader(
+                           this.getClass().getResourceAsStream(filename)));
 
     String line;
     while ((line = br.readLine()) != null) {
