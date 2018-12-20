@@ -19,9 +19,10 @@ import org.apache.spark.sql.functions.{explode, split}
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
 
 import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
-import scala.collection.mutable.{Set, HashSet}
+// import scala.collection.mutable.{Set, HashSet}
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.Set
 
 
 object MediaStream extends StreamUtils {
@@ -53,7 +54,7 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    var dictionary : Set[String] = HashSet.empty[String]
+    Set<String> dictionary = new HashSet<String>()
 
     // Memuat file kata dasar dari distribusi JSastrawi
     // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
