@@ -16,7 +16,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
-import com.andylibrian.jsastrawi._
+import jsastrawi._
 import scala.collection.mutable.{Set, HashSet}
 
 
