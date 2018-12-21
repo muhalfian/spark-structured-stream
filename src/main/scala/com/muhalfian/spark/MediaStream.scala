@@ -54,21 +54,21 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    Set[String] dictionary = new HashSet[String]()
-
-    // Memuat file kata dasar dari distribusi JSastrawi
-    // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
-    // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
-    // BufferedReader br = new BufferedReader(new InputStreamReader(in));
-    val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-    var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
-
-    var line : String = ""
-    while ((line = br.readLine()) != "") {
-        dictionary.add(line)
-    }
-
-    var lemmatizer = new DefaultLemmatizer(dictionary);
+    // Set[String] dictionary = new HashSet[String]()
+    //
+    // // Memuat file kata dasar dari distribusi JSastrawi
+    // // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
+    // // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
+    // // BufferedReader br = new BufferedReader(new InputStreamReader(in));
+    // val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
+    // var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
+    //
+    // var line : String = ""
+    // while ((line = br.readLine()) != "") {
+    //     dictionary.add(line)
+    // }
+    //
+    // var lemmatizer = new DefaultLemmatizer(dictionary);
 
     def main(args: Array[String]): Unit = {
 
