@@ -106,7 +106,7 @@ object MediaStream extends StreamUtils {
 
             while(tokenStream.incrementToken()) {
                 val termValue = term.toString
-                if (!(termValue matches ".*[\\W\\.].*")) {
+                if (!(termValue matches ".*[\\d\\.].*")) {
                     result += term.toString + " "
                 }
             }
