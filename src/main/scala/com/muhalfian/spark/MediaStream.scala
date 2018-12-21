@@ -119,6 +119,9 @@ object MediaStream extends StreamUtils {
             result
         })
 
+        val preprocessDF = kafkaDF
+            .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+
         // ===================== PREPROCESS SASTRAWI ===========================
 
         // val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
@@ -157,7 +160,7 @@ object MediaStream extends StreamUtils {
         // =========================== SINK ====================================
 
         //Show Data after processed
-        preprocess.writeStream
+        preprocessDF.writeStream
             .format("console")
             .option("truncate","false")
             .start()
