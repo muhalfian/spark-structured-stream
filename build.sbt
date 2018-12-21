@@ -16,7 +16,7 @@ libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.4
 
 libraryDependencies += "org.apache.spark" % "spark-mllib_2.11" % "2.4.0"
 
-// libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "7.4.0"
+libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "7.4.0"
 
 libraryDependencies += "com.andylibrian.jsastrawi" % "jsastrawi" % "0.1"
 

@@ -77,6 +77,8 @@ object MediaStream extends StreamUtils {
 
         spark.sparkContext.setLogLevel("ERROR")
 
+        // ======================== READ STREAM ================================
+
         // read data stream from Kafka
         val kafka = spark.readStream
             .format("kafka")
@@ -90,39 +92,54 @@ object MediaStream extends StreamUtils {
             .select(from_json($"value", schema).as("data"))
             .select("data.*")
 
-        // // Preprocessing User Defined Function
-        // val preprocess = udf((content: String) => {
-        //     content
+        // ==================== PREPROCESS APACHE LUCENE =======================
+
+        val preprocess = udf((content: String) => {
+            val analyzer=new IndonesianAnalyzer()
+            val tokenStream=analyzer.tokenStream("contents", content)
+            val term=tokenStream.addAttribute(classOf[CharTermAttribute]) //CharTermAttribute is what we're extracting
+
+            tokenStream.reset() // must be called by the consumer before consumption to clean the stream
+
+            // var result = ArrayBuffer.empty[String]
+            var result = ""
+
+            while(tokenStream.incrementToken()) {
+                val termValue = term.toString
+                if (!(termValue matches ".*[\\W\\.].*")) {
+                    result += term.toString + " "
+                }
+            }
+            tokenStream.end()
+            tokenStream.close()
+            result
+        })
+
+        // ===================== PREPROCESS SASTRAWI ===========================
+
+        // val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
+        // val regexTokenizer = new RegexTokenizer()
+        //   .setInputCol("text")
+        //   .setOutputCol("text_preprocess")
+        //   .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
+        //
+        // val regexTokenized = regexTokenizer.transform(kafkaDF)
+        // val tokenized = tokenizer.transform(regexTokenized)
+        //
+        // val stemming = udf((content: Seq[Seq[String]]) => {
+        //     content.foreach{
+        //       _.foreach{
+        //         lemmatizer.lemmatize(_)
+        //       }
+        //     }
         // })
         //
         // // Preprocess Running in DF
-        // val preprocessDF = kafkaDF
-        //     .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+        // val stemmed = tokenized
+        //     .withColumn("text_preprocess", stemming(col("text_preprocess")))
 
-        // =================== PREPROCESS ===============================
+        // ======================== AGGREGATION ================================
 
-        val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
-        val regexTokenizer = new RegexTokenizer()
-          .setInputCol("text")
-          .setOutputCol("text_preprocess")
-          .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
-
-        val regexTokenized = regexTokenizer.transform(kafkaDF)
-        val tokenized = tokenizer.transform(regexTokenized)
-
-        val stemming = udf((content: Seq[Seq[String]]) => {
-            content.foreach{
-              _.foreach{
-                lemmatizer.lemmatize(_)
-              }
-            }
-        })
-
-        // Preprocess Running in DF
-        val stemmed = tokenized
-            .withColumn("text_preprocess", stemming(col("text_preprocess")))
-
-        //
         // // Aggregate User Defined Function
         // val aggregate = udf((content: Column) => {
         //     val splits = explode(split(content, " "))
@@ -133,8 +150,10 @@ object MediaStream extends StreamUtils {
         // val aggregateDF = preprocessDF
         //     .withColumn("text_preprocess", aggregate(col("text_preprocess")))
 
+        // =========================== SINK ====================================
+
         //Show Data after processed
-        stemmed.writeStream
+        preprocess.writeStream
             .format("console")
             .option("truncate","false")
             .start()
