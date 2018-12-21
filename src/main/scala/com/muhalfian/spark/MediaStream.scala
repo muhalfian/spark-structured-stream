@@ -18,11 +18,15 @@ import org.apache.spark.sql.functions.{explode, split}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, Tokenizer}
 
-import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
-// import scala.collection.mutable.{Set, HashSet}
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.util.{Set, HashSet}
+import org.apache.lucene.analysis.id.IndonesianAnalyzer
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
+import scala.collection.mutable.ArrayBuffer
+
+// import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
+// // import scala.collection.mutable.{Set, HashSet}
+// import java.io.BufferedReader
+// import java.io.InputStreamReader
+// import java.util.{Set, HashSet}
 
 
 object MediaStream extends StreamUtils {
