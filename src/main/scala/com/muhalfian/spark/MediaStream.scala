@@ -245,7 +245,7 @@ object MediaStream extends StreamUtils {
             .setOutputCol("stemmed")
             .setStopWords(stopwords)
 
-        val preprocessDF = remover.transform(preprocessDF)
+        preprocessDF = remover.transform(preprocessDF)
 
         // ======================== AGGREGATION ================================
 
