@@ -145,14 +145,14 @@ object MediaStream extends StreamUtils {
         //     // }
         //
         //     // words(1)
-            words = words.split(",")
+            var word = words.split(",")
               .toSeq
               .map(_.trim)
               .filter(_ != "")
         //
             var hasil = ""
 
-            words.foreach{ row =>
+            word.foreach{ row =>
                 println(row)
                 hasil += row
                 lemmatizer.lemmatize(row)
