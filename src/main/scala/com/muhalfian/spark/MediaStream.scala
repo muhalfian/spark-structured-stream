@@ -237,7 +237,7 @@ object MediaStream extends StreamUtils {
             hasil
         })
 
-        val preprocessDF = kafkaDF.select("text")
+        val stemmedDF = kafkaDF.select("text")
             .withColumn("stemmed", stemming(col("text").cast("string")))
 
         val remover = new StopWordsRemover()
@@ -245,7 +245,7 @@ object MediaStream extends StreamUtils {
             .setOutputCol("stemmed")
             .setStopWords(stopwords)
 
-        preprocessDF = remover.transform(preprocessDF)
+        val preprocessDF = remover.transform(stemmedDF)
 
         // ======================== AGGREGATION ================================
 
