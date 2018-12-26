@@ -218,36 +218,35 @@ object MediaStream extends StreamUtils {
 
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
-          .setOutputCol("text_preprocess")
+          .setOutputCol("text_regex")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
         val filteredDF = regexTokenizer.transform(kafkaDF)
 
-        // val stemming = udf ((words: String) => {
-        //     var filtered = words.replaceAll("\\W\\d*", " ");
-        //     var word = filtered.split(" ")
-        //       .toSeq
-        //       .map(_.trim)
-        //       .filter(_ != "")
-        //     var hasil = ArrayBuffer.empty[String]
-        //     // var hasil = ""
-        //
-        //     word.foreach{ row =>
-        //         var stemmed = lemmatizer.lemmatize(row)
-        //         hasil += stemmed + " "
-        //     }
-        //     hasil
-        // })
-        //
-        // val stemmedDF = kafkaDF.select("text")
-        //     .withColumn("stemmed", stemming(col("text").cast("string")))
-
         val remover = new StopWordsRemover()
             .setStopWords(stopwordsArr)
-            .setInputCol("text_preprocess")
-            .setOutputCol("text_filtered")
-
-
+            .setInputCol("text_regex")
+            .setOutputCol("text_filter")
         val preprocessDF = remover.transform(filteredDF)
+
+        val stemming = udf ((words: String) => {
+            var filtered = words.replaceAll(",[]", " ");
+            var word = filtered.split(" ")
+              .toSeq
+              .map(_.trim)
+              .filter(_ != "")
+            var hasil = ArrayBuffer.empty[String]
+            // var hasil = ""
+
+            word.foreach{ row =>
+                var stemmed = lemmatizer.lemmatize(row)
+                hasil += stemmed + " "
+            }
+            hasil
+        })
+
+        val preprocessDF = kafkaDF.select("text, text_preprocess")
+            .withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
+
 
         // ======================== AGGREGATION ================================
 
