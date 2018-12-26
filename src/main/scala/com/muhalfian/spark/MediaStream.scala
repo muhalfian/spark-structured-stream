@@ -137,7 +137,7 @@ object MediaStream extends StreamUtils {
           .setOutputCol("text_preprocess")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
 
-        // val stemming = udf { (words: String) => {
+        val stemming = udf { (words: Seq[String]): String => {
         //     // words.foreach{
         //     //   lemmatizer.lemmatize(_)
         //     // }
@@ -148,24 +148,24 @@ object MediaStream extends StreamUtils {
         //       .map(_.trim)
         //       .filter(_ != "")
         //
-        //     var hasil = ""
-        //
-        //     words.foreach{ row =>
-        //         println(row)
-        //         hasil += row
-        //         lemmatizer.lemmatize(row)
-        //     }
+            var hasil = ""
+
+            words.foreach{ row =>
+                println(row)
+                hasil += row
+                lemmatizer.lemmatize(row)
+            }
         //
         //     //
         //     // result.to[mutable.Set]
-        // } }
+        } }
 
         // val countTokens = udf { (words: Seq[String]) => words.length }
 
         // val tokenizeDF = tokenizer.transform(kafkaDF)
-        val preprocessDF = regexTokenizer.transform(kafkaDF)
-        // val preprocessDF = filteredDF.select("text", "text_preprocess")
-        //     .withColumn("stemmed", stemming(col("text").cast("string")))
+        val filteredDF = regexTokenizer.transform(kafkaDF)
+        val preprocessDF = filteredDF.select("text", "text_preprocess")
+            .withColumn("stemmed", stemming(col("text")))
 
         // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
         // regexTokenized.select("sentence", "words")
