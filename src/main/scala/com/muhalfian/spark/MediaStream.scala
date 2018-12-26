@@ -262,7 +262,7 @@ object MediaStream extends StreamUtils {
                         .toSeq
 
             print(splits)
-            splits.foreach { word =>
+            for(word <- splits){
                 print(word)
                 var char:String = word.take(1)
                 var startPoint = indexWords(char)
