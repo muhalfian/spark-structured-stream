@@ -147,7 +147,7 @@ object MediaStream extends StreamUtils {
 
         val preprocessDF = tokenizer.transform(kafkaDF)
         preprocessDF.select("text", "text_preprocess")
-            .withColumn("tokens", countTokens(col("text_preprocess"))).show(false)
+            .withColumn("tokens", countTokens(col("text_preprocess")))
 
         // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
         // regexTokenized.select("sentence", "words")
