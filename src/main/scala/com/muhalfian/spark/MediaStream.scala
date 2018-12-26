@@ -137,6 +137,14 @@ object MediaStream extends StreamUtils {
           .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
 
         val regexTokenized = regexTokenizer.transform(kafkaDF)
+
+        //Show Data after processed
+        regexTokenized.writeStream
+            .format("console")
+            // .option("truncate","false")
+            .start()
+            .awaitTermination()
+
         val tokenized = tokenizer.transform(regexTokenized)
 
         val stemming = udf((content: Seq[Seq[String]]) => {
