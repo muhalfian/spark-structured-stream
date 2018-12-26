@@ -140,32 +140,21 @@ object MediaStream extends StreamUtils {
         // val filteredDF = regexTokenizer.transform(kafkaDF)
 
         val stemming = udf ((words: String) => {
-        //     // words.foreach{
-        //     //   lemmatizer.lemmatize(_)
-        //     // }
-        //
-        //     // words(1)
-            // var word = words.substring(1, words.length()-1)
+
             var filtered = words.replaceAll("\\W\\d*", " ");
             var word = filtered.split(" ")
               .toSeq
               .map(_.trim)
               .filter(_ != "")
 
-
-        //
             var hasil = ""
 
             word.foreach{ row =>
-                println(row)
-                hasil += row
+                hasil += row + " "
                 lemmatizer.lemmatize(row)
             }
 
             hasil
-        //
-        //     //
-        //     // result.to[mutable.Set]
         })
 
         // val countTokens = udf { (words: Seq[String]) => words.length }
