@@ -143,7 +143,7 @@ object MediaStream extends StreamUtils {
             }
         } }
 
-        val tokenized = tokenizer.transform(sentenceDataFrame)
+        val preprocessDF = tokenizer.transform(sentenceDataFrame)
         tokenized.select("text", "text_preprocess")
             .withColumn("tokens", countTokens(col("text_preprocess"))).show(false)
 
