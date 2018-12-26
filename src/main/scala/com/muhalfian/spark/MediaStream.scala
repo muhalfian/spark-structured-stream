@@ -268,17 +268,18 @@ object MediaStream extends StreamUtils {
             // println(counted)
 
             for ((token,count) <- counted) {
-                print(token)
-                var char:String = token.take(1)
-                var startPoint = indexWords(char)
-                var endPoint = startPoint + 999
-
-                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-                if(index != 1){
-                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                    var currentPoint = startPoint + latest
-                    masterWords(currentPoint) = token
-                }
+                printf("key: %s, value: %s\n", token, count)
+                // print(token)
+                // var char:String = token.take(1)
+                // var startPoint = indexWords(char)
+                // var endPoint = startPoint + 999
+                //
+                // var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+                // if(index != 1){
+                //     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+                //     var currentPoint = startPoint + latest
+                //     masterWords(currentPoint) = token
+                // }
             }
             // splits.foreach { token =>
             //     print(token)
