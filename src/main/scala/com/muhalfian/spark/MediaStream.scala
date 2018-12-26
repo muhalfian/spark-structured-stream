@@ -243,8 +243,8 @@ object MediaStream extends StreamUtils {
 
         val remover = new StopWordsRemover()
             .setStopWords(stopwordsArr)
-            .setInputCol("stemmed")
-            .setOutputCol("text_processed")
+            .setInputCol("text_preprocess")
+            .setOutputCol("text_filtered")
 
 
         val preprocessDF = remover.transform(filteredDF)
