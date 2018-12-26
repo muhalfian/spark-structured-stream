@@ -150,7 +150,7 @@ object MediaStream extends StreamUtils {
             word = word.split(" ")
               .toSeq
               .map(_.trim)
-              .filter(_ != "")
+              // .filter(_ != "")
         //
             var hasil = ""
 
