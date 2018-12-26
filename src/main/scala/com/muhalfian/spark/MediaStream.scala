@@ -229,7 +229,7 @@ object MediaStream extends StreamUtils {
         val filteredDF = remover.transform(regexDF)
 
         val stemming = udf ((words: String) => {
-            var filtered = words.replaceAll(",[]", " ");
+            var filtered = words.replaceAll("[\\[\\],]", " ");
             var word = filtered.split(" ")
               .toSeq
               .map(_.trim)
