@@ -261,20 +261,24 @@ object MediaStream extends StreamUtils {
             val splits = content.split(" ")
                         .toSeq
 
-            print(splits)
-            splits.foreach { token =>
-                print(token)
-                var char:String = token.take(1)
-                var startPoint = indexWords(char)
-                var endPoint = startPoint + 999
+            println(splits)
 
-                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-                if(index != 1){
-                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                    var currentPoint = startPoint + latest
-                    masterWords(currentPoint) = token
-                }
-            }
+            val counted = splits.groupBy(identity).mapValues(_.size)
+
+            println(counted)
+            // splits.foreach { token =>
+            //     print(token)
+            //     var char:String = token.take(1)
+            //     var startPoint = indexWords(char)
+            //     var endPoint = startPoint + 999
+            //
+            //     var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+            //     if(index != 1){
+            //         var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+            //         var currentPoint = startPoint + latest
+            //         masterWords(currentPoint) = token
+            //     }
+            // }
             masterWords
         })
 
