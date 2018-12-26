@@ -135,7 +135,7 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
           .setOutputCol("text_preprocess")
-          .setPattern("\\W\\D") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
 
         // val stemming = udf { (words: String) => {
         //     // words.foreach{
