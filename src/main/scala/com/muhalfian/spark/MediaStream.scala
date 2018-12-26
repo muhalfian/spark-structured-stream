@@ -217,7 +217,7 @@ object MediaStream extends StreamUtils {
         // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
 
         val regexTokenizer = new RegexTokenizer()
-          .setInputCol("text")
+          .setInputCol("text","title")
           .setOutputCol("text_regex")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
         val regexDF = regexTokenizer.transform(kafkaDF)
@@ -247,7 +247,7 @@ object MediaStream extends StreamUtils {
         val stemmedDF = filteredDF.select("text", "text_filter")
             .withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
-        val preprocessDF = stemmedDF.select("text", "text_preprocess")
+        val preprocessDF = stemmedDF.select("title","text", "text_preprocess")
 
 
         // ======================== AGGREGATION ================================
