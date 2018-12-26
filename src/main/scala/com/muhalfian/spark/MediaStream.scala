@@ -146,7 +146,7 @@ object MediaStream extends StreamUtils {
             var result:Array[String] = new Array[String]()
 
             words.foreach{
-                result += _
+                result :+ _
             }
             //
             // result.to[mutable.Set]
