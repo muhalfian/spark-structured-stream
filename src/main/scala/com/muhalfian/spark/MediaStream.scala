@@ -216,30 +216,30 @@ object MediaStream extends StreamUtils {
 
         // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
 
-        // val regexTokenizer = new RegexTokenizer()
-        //   .setInputCol("text")
-        //   .setOutputCol("text_preprocess")
-        //   .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
-        // val filteredDF = regexTokenizer.transform(kafkaDF)
+        val regexTokenizer = new RegexTokenizer()
+          .setInputCol("text")
+          .setOutputCol("text_preprocess")
+          .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
+        val filteredDF = regexTokenizer.transform(kafkaDF)
 
-        val stemming = udf ((words: String) => {
-            var filtered = words.replaceAll("\\W\\d*", " ");
-            var word = filtered.split(" ")
-              .toSeq
-              .map(_.trim)
-              .filter(_ != "")
-            var hasil = ArrayBuffer.empty[String]
-            // var hasil = ""
-
-            word.foreach{ row =>
-                var stemmed = lemmatizer.lemmatize(row)
-                hasil += stemmed + " "
-            }
-            hasil
-        })
-
-        val stemmedDF = kafkaDF.select("text")
-            .withColumn("stemmed", stemming(col("text").cast("string")))
+        // val stemming = udf ((words: String) => {
+        //     var filtered = words.replaceAll("\\W\\d*", " ");
+        //     var word = filtered.split(" ")
+        //       .toSeq
+        //       .map(_.trim)
+        //       .filter(_ != "")
+        //     var hasil = ArrayBuffer.empty[String]
+        //     // var hasil = ""
+        //
+        //     word.foreach{ row =>
+        //         var stemmed = lemmatizer.lemmatize(row)
+        //         hasil += stemmed + " "
+        //     }
+        //     hasil
+        // })
+        //
+        // val stemmedDF = kafkaDF.select("text")
+        //     .withColumn("stemmed", stemming(col("text").cast("string")))
 
         val remover = new StopWordsRemover()
             .setStopWords(stopwordsArr)
@@ -247,7 +247,7 @@ object MediaStream extends StreamUtils {
             .setOutputCol("text_processed")
 
 
-        val preprocessDF = remover.transform(stemmedDF)
+        val preprocessDF = remover.transform(filteredDF)
 
         // ======================== AGGREGATION ================================
 
