@@ -262,17 +262,17 @@ object MediaStream extends StreamUtils {
                         .toSeq
 
             print(splits)
-            for(word <- splits){
-                print(word)
-                var char:String = word.take(1)
+            splits.foreach { token =>
+                print(token)
+                var char:String = token.take(1)
                 var startPoint = indexWords(char)
                 var endPoint = startPoint + 999
 
-                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == word)
+                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
                 if(index != 1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
                     var currentPoint = startPoint + latest
-                    masterWords(currentPoint) = word
+                    masterWords(currentPoint) = token
                 }
             }
             masterWords
