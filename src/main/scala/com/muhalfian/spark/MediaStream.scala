@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.{explode, split, col, lit, concat}
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
