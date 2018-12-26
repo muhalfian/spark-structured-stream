@@ -150,8 +150,9 @@ object MediaStream extends StreamUtils {
             var hasil = ""
 
             word.foreach{ row =>
-                hasil += row + " "
-                lemmatizer.lemmatize(row)
+                var stemmed = lemmatizer.lemmatize(row)
+                hasil += stemmed + " "
+
             }
 
             hasil
