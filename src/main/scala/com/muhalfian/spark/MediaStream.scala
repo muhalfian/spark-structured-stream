@@ -4,7 +4,6 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.sql._
-import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.from_json
 import org.bson._
@@ -13,8 +12,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions._
-import org.apache.spark.sql.functions.{explode, split}
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
@@ -218,7 +216,7 @@ object MediaStream extends StreamUtils {
         // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
 
         var rawDF = kafkaDF.withColumn("raw_text",
-                    concat(col("title"), lit(" "), col"text"))
+                    concat(col("title"), lit(" "), col("text"))
 
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("raw_text")
