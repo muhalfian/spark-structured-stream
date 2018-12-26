@@ -22,10 +22,11 @@ import org.apache.lucene.analysis.id.IndonesianAnalyzer
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 import scala.collection.mutable.ArrayBuffer
 
-// import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
-// // import scala.collection.mutable.{Set, HashSet}
-// import java.io.BufferedReader
-// import java.io.InputStreamReader
+import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
+import scala.collection.mutable.{Set, HashSet}
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import collection.JavaConverters._
 // import java.util.{Set, HashSet}
 
 
@@ -58,21 +59,22 @@ object MediaStream extends StreamUtils {
         "text"
     )
 
-    // Set[String] dictionary = new HashSet[String]()
+    val dictionary : Set[String] = HashSet[String]()
     //
     // // Memuat file kata dasar dari distribusi JSastrawi
     // // Jika perlu, anda dapat mengganti file ini dengan kamus anda sendiri
     // // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
     // // BufferedReader br = new BufferedReader(new InputStreamReader(in));
-    // val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-    // var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
-    //
-    // var line : String = ""
-    // while ((line = br.readLine()) != "") {
-    //     dictionary.add(line)
-    // }
-    //
-    // var lemmatizer = new DefaultLemmatizer(dictionary);
+    val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
+    var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
+
+    var line : String = ""
+    while ((line = br.readLine()) != "") {
+        dictionary.add(line)
+    }
+    val dict : java.util.Set[String] = dictionary.asJava
+
+    var lemmatizer = new DefaultLemmatizer(dict);
 
     def main(args: Array[String]): Unit = {
 
@@ -98,52 +100,52 @@ object MediaStream extends StreamUtils {
 
         // ==================== PREPROCESS APACHE LUCENE =======================
 
-        val preprocess = udf((content: String) => {
-            val analyzer=new IndonesianAnalyzer()
-            val tokenStream=analyzer.tokenStream("contents", content)
-            val term=tokenStream.addAttribute(classOf[CharTermAttribute]) //CharTermAttribute is what we're extracting
+        // val preprocess = udf((content: String) => {
+        //     val analyzer=new IndonesianAnalyzer()
+        //     val tokenStream=analyzer.tokenStream("contents", content)
+        //     val term=tokenStream.addAttribute(classOf[CharTermAttribute]) //CharTermAttribute is what we're extracting
+        //
+        //     tokenStream.reset() // must be called by the consumer before consumption to clean the stream
+        //
+        //     // var result = ArrayBuffer.empty[String]
+        //     var result = ""
+        //
+        //     while(tokenStream.incrementToken()) {
+        //         val termValue = term.toString
+        //         if (!(termValue matches ".*[\\d\\.].*")) {
+        //             result += term.toString + " "
+        //         }
+        //     }
+        //     tokenStream.end()
+        //     tokenStream.close()
+        //     result
+        // })
 
-            tokenStream.reset() // must be called by the consumer before consumption to clean the stream
-
-            // var result = ArrayBuffer.empty[String]
-            var result = ""
-
-            while(tokenStream.incrementToken()) {
-                val termValue = term.toString
-                if (!(termValue matches ".*[\\d\\.].*")) {
-                    result += term.toString + " "
-                }
-            }
-            tokenStream.end()
-            tokenStream.close()
-            result
-        })
-
-        val preprocessDF = kafkaDF
-            .withColumn("text_preprocess", preprocess(col("text").cast("string")))
+        // val preprocessDF = kafkaDF
+        //     .withColumn("text_preprocess", preprocess(col("text").cast("string")))
 
         // ===================== PREPROCESS SASTRAWI ===========================
 
-        // val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
-        // val regexTokenizer = new RegexTokenizer()
-        //   .setInputCol("text")
-        //   .setOutputCol("text_preprocess")
-        //   .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
-        //
-        // val regexTokenized = regexTokenizer.transform(kafkaDF)
-        // val tokenized = tokenizer.transform(regexTokenized)
-        //
-        // val stemming = udf((content: Seq[Seq[String]]) => {
-        //     content.foreach{
-        //       _.foreach{
-        //         lemmatizer.lemmatize(_)
-        //       }
-        //     }
-        // })
-        //
-        // // Preprocess Running in DF
-        // val stemmed = tokenized
-        //     .withColumn("text_preprocess", stemming(col("text_preprocess")))
+        val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
+        val regexTokenizer = new RegexTokenizer()
+          .setInputCol("text")
+          .setOutputCol("text_preprocess")
+          .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
+
+        val regexTokenized = regexTokenizer.transform(kafkaDF)
+        val tokenized = tokenizer.transform(regexTokenized)
+
+        val stemming = udf((content: Seq[Seq[String]]) => {
+            content.foreach{
+              _.foreach{
+                lemmatizer.lemmatize(_)
+              }
+            }
+        })
+
+        // Preprocess Running in DF
+        val stemmed = tokenized
+            .withColumn("text_preprocess", stemming(col("text_preprocess")))
 
         // ======================== AGGREGATION ================================
 
