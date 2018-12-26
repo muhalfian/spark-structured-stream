@@ -118,7 +118,7 @@ object MediaStream extends StreamUtils {
         //         val termValue = term.toString
         //         if (!(termValue matches ".*[\\d\\.].*")) {
         //             result += term.toString + " "
-        //         }
+        //         }.show(false)
         //     }
         //     tokenStream.end()
         //     tokenStream.close()
@@ -146,7 +146,7 @@ object MediaStream extends StreamUtils {
         val countTokens = udf { (words: Seq[String]) => words.length }
 
         val preprocessDF = tokenizer.transform(kafkaDF)
-        preprocessDF.select("text", "text_preprocess")
+        preprocessDF = preprocessDF.select("text", "text_preprocess")
             .withColumn("tokens", countTokens(col("text_preprocess")))
 
         // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
