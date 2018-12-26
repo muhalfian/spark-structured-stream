@@ -146,7 +146,7 @@ object MediaStream extends StreamUtils {
             var hasil:Array[String] = new Array[String](words.length)
 
             words.foreach{
-              println(_)
+              println(s"$_")
                 hasil :+ _
             }
 
