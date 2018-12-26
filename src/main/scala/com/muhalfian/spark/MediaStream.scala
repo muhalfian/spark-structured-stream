@@ -260,7 +260,6 @@ object MediaStream extends StreamUtils {
         val aggregate = udf((content: String) => {
             val splits = content.split(" ")
                         .toSeq
-                        .map(_.trim)
                         .filter(_ != "")
             splits.foreach { word =>
                 print(word)
