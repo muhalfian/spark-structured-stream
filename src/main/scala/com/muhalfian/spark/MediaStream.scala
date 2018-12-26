@@ -144,7 +144,7 @@ object MediaStream extends StreamUtils {
         })
 
         // Preprocess Running in DF
-        val stemmed = tokenized
+        val preprocessDF = tokenized
             .withColumn("text_preprocess", stemming(col("text_preprocess")))
 
         // ======================== AGGREGATION ================================
