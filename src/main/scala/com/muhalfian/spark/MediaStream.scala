@@ -142,12 +142,12 @@ object MediaStream extends StreamUtils {
             //   lemmatizer.lemmatize(_)
             // }
 
-            words(1)
-            // var result = ArrayBuffer.empty[String]
-            //
-            // words.foreach{
-            //     result += _
-            // }
+            // words(1)
+            var result:Array[String] = new Array[String]()
+
+            words.foreach{
+                result += _
+            }
             //
             // result.to[mutable.Set]
         } }
