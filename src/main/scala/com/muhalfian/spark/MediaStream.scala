@@ -145,9 +145,9 @@ object MediaStream extends StreamUtils {
             // words(1)
             var hasil:Array[String] = new Array[String](words.length)
 
-            words.foreach{
-              println(s"$_")
-                hasil :+ _
+            words.foreach{ row =>
+                println(row)
+                hasil :+ row
             }
 
             val hasilall = hasil.mkString(" ")
