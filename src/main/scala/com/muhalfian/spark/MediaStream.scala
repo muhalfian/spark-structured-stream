@@ -220,13 +220,13 @@ object MediaStream extends StreamUtils {
           .setInputCol("text")
           .setOutputCol("text_regex")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
-        val filteredDF = regexTokenizer.transform(kafkaDF)
+        val regexDF = regexTokenizer.transform(kafkaDF)
 
         val remover = new StopWordsRemover()
             .setStopWords(stopwordsArr)
             .setInputCol("text_regex")
             .setOutputCol("text_filter")
-        val preprocessDF = remover.transform(filteredDF)
+        val filteredDF = remover.transform(regexDF)
 
         val stemming = udf ((words: String) => {
             var filtered = words.replaceAll(",[]", " ");
@@ -244,7 +244,7 @@ object MediaStream extends StreamUtils {
             hasil
         })
 
-        val preprocessDF = kafkaDF.select("text, text_preprocess")
+        val preprocessDF = filteredDF.select("text, text_preprocess")
             .withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
 
