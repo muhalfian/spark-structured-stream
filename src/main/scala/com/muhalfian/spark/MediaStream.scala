@@ -216,7 +216,7 @@ object MediaStream extends StreamUtils {
         // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
 
         var rawDF = kafkaDF.withColumn("raw_text",
-                    concat(col("title"), lit(" "), col("text"))
+                    concat(col("title"), lit(" "), col("text")))
 
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("raw_text")
