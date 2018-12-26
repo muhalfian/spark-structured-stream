@@ -244,9 +244,10 @@ object MediaStream extends StreamUtils {
             hasil
         })
 
-        val preprocessDF = filteredDF.select("text")
+        val stemmedDF = filteredDF.select("text")
             .withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
-        preprocessDF = preprocessDF.select("text", "text_preprocess")
+
+        val preprocessDF = stemmedDF.select("text", "text_preprocess")
 
 
         // ======================== AGGREGATION ================================
