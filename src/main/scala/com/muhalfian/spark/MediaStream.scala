@@ -148,6 +148,8 @@ object MediaStream extends StreamUtils {
             words.foreach{
                 result :+ _
             }
+
+            val resultSeq = result.toSeq
             //
             // result.to[mutable.Set]
         } }
