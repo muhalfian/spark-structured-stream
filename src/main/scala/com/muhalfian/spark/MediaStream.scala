@@ -24,8 +24,9 @@ import scala.collection.mutable.ArrayBuffer
 
 import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
 import scala.collection.mutable.{Set, HashSet}
-import java.io.BufferedReader
-import java.io.InputStreamReader
+// import java.io.BufferedReader
+// import java.io.InputStreamReader
+import scala.io.Source
 import collection.JavaConverters._
 // import java.util.{Set, HashSet}
 
@@ -66,10 +67,13 @@ object MediaStream extends StreamUtils {
     // // InputStream in = Lemmatizer.class.getResourceAsStream("/root-words.txt");
     // // BufferedReader br = new BufferedReader(new InputStreamReader(in));
     val filename = "/home/ubuntu/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-    var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
+    // var br = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream(filename)))
 
-    var line : String = ""
-    while ((line = br.readLine()) != "") {
+    // var line : String = ""
+    // while ((line = br.readLine()) != "") {
+    //     dictionary.add(line)
+    // }
+    for (line <- Source.fromFile(filename).getLines) {
         dictionary.add(line)
     }
     val dict : java.util.Set[String] = dictionary.asJava
