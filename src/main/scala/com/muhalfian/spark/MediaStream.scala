@@ -71,6 +71,7 @@ object MediaStream extends StreamUtils {
     var lemmatizer = new DefaultLemmatizer(dict);
 
     // dictionary stopwords sastrawi
+    // https://github.com/har07/PySastrawi/blob/master/src/Sastrawi/StopWordRemover/StopWordRemoverFactory.py
     val stopwordsArr = Array("a","ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir",
             "akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara",
             "antaranya","apa","apaan","apabila","apakah","apalagi","apatah","arti","artinya","asal",
@@ -216,11 +217,14 @@ object MediaStream extends StreamUtils {
 
         // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
 
+        var rawDF = kafkaDF.withColumn("raw_text",
+                    concat(col("title"), lit(" "), col"text"))
+
         val regexTokenizer = new RegexTokenizer()
-          .setInputCol("text","title")
+          .setInputCol("raw_text")
           .setOutputCol("text_regex")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
-        val regexDF = regexTokenizer.transform(kafkaDF)
+        val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
             .setStopWords(stopwordsArr)
