@@ -242,9 +242,10 @@ object MediaStream extends StreamUtils {
             .withColumn("stemmed", stemming(col("text").cast("string")))
 
         val remover = new StopWordsRemover()
+            .setStopWords(stopwordsArr)
             .setInputCol("stemmed")
             .setOutputCol("text_processed")
-            .setStopWords(stopwordsArr)
+
 
         val preprocessDF = remover.transform(stemmedDF)
 
