@@ -131,22 +131,24 @@ object MediaStream extends StreamUtils {
         // ===================== PREPROCESS SASTRAWI ===========================
 
 
-        val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
+        // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
+
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
           .setOutputCol("text_preprocess")
           .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
+        val filteredDF = regexTokenizer.transform(kafkaDF)
 
-        val stemming = udf { (words: Seq[String]): String => {
+        val stemming = udf ((words: String) => {
         //     // words.foreach{
         //     //   lemmatizer.lemmatize(_)
         //     // }
         //
         //     // words(1)
-        //     words = words.split(" ")
-        //       .toSeq
-        //       .map(_.trim)
-        //       .filter(_ != "")
+            words = words.split(",")
+              .toSeq
+              .map(_.trim)
+              .filter(_ != "")
         //
             var hasil = ""
 
@@ -158,12 +160,11 @@ object MediaStream extends StreamUtils {
         //
         //     //
         //     // result.to[mutable.Set]
-        } }
+        })
 
         // val countTokens = udf { (words: Seq[String]) => words.length }
 
         // val tokenizeDF = tokenizer.transform(kafkaDF)
-        val filteredDF = regexTokenizer.transform(kafkaDF)
         val preprocessDF = filteredDF.select("text", "text_preprocess")
             .withColumn("stemmed", stemming(col("text")))
 
