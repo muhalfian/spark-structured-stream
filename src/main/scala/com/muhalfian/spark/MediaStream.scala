@@ -130,20 +130,14 @@ object MediaStream extends StreamUtils {
 
         // ===================== PREPROCESS SASTRAWI ===========================
 
-        val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
           .setOutputCol("text_preprocess")
           .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
 
-        val regexTokenized = regexTokenizer.transform(kafkaDF)
+        val tokenizer = new Tokenizer().setInputCol("text_preprocess").setOutputCol("text_preprocess")
 
-        //Show Data after processed
-        regexTokenized.writeStream
-            .format("console")
-            // .option("truncate","false")
-            .start()
-            .awaitTermination()
+        val regexTokenized = regexTokenizer.transform(kafkaDF)
 
         val tokenized = tokenizer.transform(regexTokenized)
 
