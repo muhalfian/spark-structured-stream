@@ -71,7 +71,7 @@ object MediaStream extends StreamUtils {
     var lemmatizer = new DefaultLemmatizer(dict);
 
     // dictionary stopwords sastrawi
-    val stopwords = Array("a","ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir",
+    val stopwordsArr = Array("a","ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir",
             "akhiri","akhirnya","aku","akulah","amat","amatlah","anda","andalah","antar","antara",
             "antaranya","apa","apaan","apabila","apakah","apalagi","apatah","arti","artinya","asal",
             "asalkan","atas","atau","ataukah","ataupun","awal","awalnya","b","bagai","bagaikan",
@@ -244,7 +244,7 @@ object MediaStream extends StreamUtils {
         val remover = new StopWordsRemover()
             .setInputCol("stemmed")
             .setOutputCol("text_processed")
-            .setStopWords(stopwords)
+            .setStopWords(stopwordsArr)
 
         val preprocessDF = remover.transform(stemmedDF)
 
