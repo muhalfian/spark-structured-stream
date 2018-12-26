@@ -228,7 +228,8 @@ object MediaStream extends StreamUtils {
               .toSeq
               .map(_.trim)
               .filter(_ != "")
-            var hasil = ""
+            var hasil = ArrayBuffer.empty[String]
+            // var hasil = ""
 
             word.foreach{ row =>
                 var stemmed = lemmatizer.lemmatize(row)
