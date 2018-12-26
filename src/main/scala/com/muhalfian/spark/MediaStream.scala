@@ -261,11 +261,11 @@ object MediaStream extends StreamUtils {
             val splits = content.split(" ")
                         .toSeq
 
-            println(splits)
+            // println(splits)
 
             val counted = splits.groupBy(identity).mapValues(_.size)
-
-            println(counted)
+            //
+            // println(counted)
 
             for ((token,count) <- counted) {
                 print(token)
