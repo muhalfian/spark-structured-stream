@@ -263,7 +263,8 @@ object MediaStream extends StreamUtils {
                         .map(_.trim)
                         .filter(_ != "")
             splits.foreach { word =>
-                var char = word.take(1)
+                print(word)
+                var char:String = word.take(1)
                 var startPoint = indexWords(char)
                 var endPoint = startPoint + 999
 
