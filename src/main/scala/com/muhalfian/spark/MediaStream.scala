@@ -249,7 +249,7 @@ object MediaStream extends StreamUtils {
         val stemmedDF = filteredDF.select("text", "text_filter")
             .withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
-        val preprocessDF = stemmedDF.select("text", "text_preprocess")
+        val preprocessDF = stemmedDF.select("*")
 
 
         // ======================== AGGREGATION ================================
@@ -269,7 +269,7 @@ object MediaStream extends StreamUtils {
         //Show Data after processed
         preprocessDF.writeStream
             .format("console")
-            .option("truncate","false")
+            // .option("truncate","false")
             .start()
             .awaitTermination()
     }
