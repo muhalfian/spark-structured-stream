@@ -157,6 +157,8 @@ object MediaStream extends StreamUtils {
                 hasil += row
                 lemmatizer.lemmatize(row)
             }
+
+            hasil
         //
         //     //
         //     // result.to[mutable.Set]
