@@ -143,13 +143,13 @@ object MediaStream extends StreamUtils {
             // }
 
             // words(1)
-            var result:Array[String] = new Array[String](words.length)
+            var hasil:Array[String] = new Array[String](words.length)
 
             words.foreach{
-                result :+ _
+                hasil :+ _
             }
 
-            val resultSeq = result.toSeq
+            val hasilall = hasil.mkString(" ")
             //
             // result.to[mutable.Set]
         } }
