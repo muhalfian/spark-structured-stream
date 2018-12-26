@@ -253,15 +253,30 @@ object MediaStream extends StreamUtils {
 
         // ======================== AGGREGATION ================================
 
-        // // Aggregate User Defined Function
-        // val aggregate = udf((content: Column) => {
-        //     val splits = explode(split(content, " "))
-        //     println(splits)
-        // })
-        //
-        // // Aggregate Running in DF
-        // val aggregateDF = preprocessDF
-        //     .withColumn("text_preprocess", aggregate(col("text_preprocess")))
+        var masterWords = new Array[String](26000)
+        val indexWords = Map("a" -> 0, "b" -> 1000, "c" -> 2000, "d" -> 3000, "e" -> 4000, "f" -> 5000, "g" -> 6000, "h" -> 7000, "i" -> 8000, "j" -> 9000, "k" -> 10000, "l" -> 11000, "m" -> 12000, "n" -> 13000, "o" -> 14000, "p" -> 15000, "q" -> 16000, "r" -> 17000, "s" -> 18000, "t" -> 19000, "u" -> 20000, "v" -> 21000, "w" -> 22000, "x" -> 23000, "y" -> 24000, "z" -> 25000)
+
+        // Aggregate User Defined Function
+        val aggregate = udf((content: Column) => {
+            val splits = explode(split(content, " "))
+            splits.foreach { word =>
+                var char = word.charAt(0)
+                var startPoint = indexWords(char)
+                var endPoint = startPoint + 999
+
+                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == word)
+                if(index != 1){
+                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+                    var currentPoint = startPoint + latest
+                    masterWords(currentPoint) = word
+                }
+            }
+            masterWords
+        })
+
+        // Aggregate Running in DF
+        val aggregateDF = preprocessDF
+            .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
