@@ -141,7 +141,7 @@ object MediaStream extends StreamUtils {
             // words.foreach{
             //   lemmatizer.lemmatize(_)
             // }
-            words[0]
+            words
         } }
 
         // val countTokens = udf { (words: Seq[String]) => words.length }
