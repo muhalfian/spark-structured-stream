@@ -143,7 +143,7 @@ object MediaStream extends StreamUtils {
             // }
 
             // words(1)
-            var result:Array[String] = new Array[String]()
+            var result:Array[String] = new Array[String](words.length)
 
             words.foreach{
                 result :+ _
