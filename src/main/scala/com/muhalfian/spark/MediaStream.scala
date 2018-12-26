@@ -130,28 +130,49 @@ object MediaStream extends StreamUtils {
 
         // ===================== PREPROCESS SASTRAWI ===========================
 
-        val regexTokenizer = new RegexTokenizer()
-          .setInputCol("text_preprocess")
-          .setOutputCol("text_preprocess")
-          .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
 
         val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
+        val regexTokenizer = new RegexTokenizer()
+          .setInputCol("text")
+          .setOutputCol("text_preprocess")
+          .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
 
-        val tokenized = tokenizer.transform(kafkaDF)
-
-        // val regexTokenized = regexTokenizer.transform(tokenized)
-
-        val stemming = udf((content: Seq[Seq[String]]) => {
-            content.foreach{
-              _.foreach{
-                lemmatizer.lemmatize(_)
-              }
+        val countTokens = udf { (words: Seq[String]) => {
+            words.foreach{
+              lemmatizer.lemmatize(_)
             }
-        })
+        } }
 
-        // Preprocess Running in DF
-        val preprocessDF = tokenized
-            .withColumn("text_preprocess", stemming(col("text_preprocess")))
+        val tokenized = tokenizer.transform(sentenceDataFrame)
+        tokenized.select("text", "text_preprocess")
+            .withColumn("tokens", countTokens(col("text_preprocess"))).show(false)
+
+        // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
+        // regexTokenized.select("sentence", "words")
+        //     .withColumn("tokens", countTokens(col("words"))).show(false)
+
+        // val regexTokenizer = new RegexTokenizer()
+        //   .setInputCol("text_preprocess")
+        //   .setOutputCol("text_preprocess")
+        //   .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
+        //
+        // val tokenizer = new Tokenizer().setInputCol("text").setOutputCol("text_preprocess")
+        //
+        // val tokenized = tokenizer.transform(kafkaDF)
+        //
+        // // val regexTokenized = regexTokenizer.transform(tokenized)
+        //
+        // val stemming = udf((content: Seq[Seq[String]]) => {
+        //     content.foreach{
+        //       _.foreach{
+        //         lemmatizer.lemmatize(_)
+        //       }
+        //     }
+        // })
+        //
+        // // Preprocess Running in DF
+        // val preprocessDF = tokenized
+        //     .withColumn("text_preprocess", stemming(col("text_preprocess")))
 
         // ======================== AGGREGATION ================================
 
