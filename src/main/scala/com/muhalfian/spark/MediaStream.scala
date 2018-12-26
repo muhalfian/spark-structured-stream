@@ -146,11 +146,12 @@ object MediaStream extends StreamUtils {
         //
         //     // words(1)
             // var word = words.substring(1, words.length()-1)
-            var word = words.replaceAll("\\W\\d*", "");
-            word = word.split(" ")
+            var filtered = words.replaceAll("\\W\\d*", "");
+            var word = filtered.split(" ")
+              .toSeq
               .map(_.trim)
               .filter(_ != "")
-              .toSeq
+
 
         //
             var hasil = ""
