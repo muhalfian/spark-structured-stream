@@ -138,9 +138,10 @@ object MediaStream extends StreamUtils {
           .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
 
         val countTokens = udf { (words: Seq[String]) => {
-            words.foreach{
-              lemmatizer.lemmatize(_)
-            }
+            // words.foreach{
+            //   lemmatizer.lemmatize(_)
+            // }
+            words[0]
         } }
 
         // val countTokens = udf { (words: Seq[String]) => words.length }
