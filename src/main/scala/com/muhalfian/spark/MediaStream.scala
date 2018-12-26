@@ -16,7 +16,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.functions.{explode, split}
 
-import org.apache.spark.ml.feature.{StopWordsRemover}
+import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
 import org.apache.lucene.analysis.id.IndonesianAnalyzer
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
