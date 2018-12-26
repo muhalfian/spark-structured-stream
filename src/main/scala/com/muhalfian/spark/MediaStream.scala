@@ -142,7 +142,7 @@ object MediaStream extends StreamUtils {
             //   lemmatizer.lemmatize(_)
             // }
 
-            word(1)
+            words(1)
             // var result = ArrayBuffer.empty[String]
             //
             // words.foreach{
