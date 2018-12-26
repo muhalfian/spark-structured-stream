@@ -145,8 +145,8 @@ object MediaStream extends StreamUtils {
 
         val countTokens = udf { (words: Seq[String]) => words.length }
 
-        val preprocessDF = tokenizer.transform(kafkaDF)
-        preprocessDF = preprocessDF.select("text", "text_preprocess")
+        val tokenizeDF = tokenizer.transform(kafkaDF)
+        val preprocessDF = tokenizeDF.select("text", "text_preprocess")
             .withColumn("tokens", countTokens(col("text_preprocess")))
 
         // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
