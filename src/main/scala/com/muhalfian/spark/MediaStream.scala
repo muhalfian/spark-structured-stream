@@ -258,7 +258,10 @@ object MediaStream extends StreamUtils {
 
         // Aggregate User Defined Function
         val aggregate = udf((content: Column) => {
-            val splits = explode(split(content, " "))
+            val splits = content.split(" ")
+                        .toSeq
+                        .map(_.trim)
+                        .filter(_ != "")
             splits.foreach { word =>
                 var char = word.charAt(0)
                 var startPoint = indexWords(char)
