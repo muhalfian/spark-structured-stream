@@ -135,7 +135,7 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("text")
           .setOutputCol("text_preprocess")
-          .setPattern("\\w*[^\\W\\d]") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("\\W") // alternatively .setPattern("\\w+").setGaps(false)
 
         // val stemming = udf { (words: String) => {
         //     // words.foreach{
@@ -163,9 +163,9 @@ object MediaStream extends StreamUtils {
         // val countTokens = udf { (words: Seq[String]) => words.length }
 
         // val tokenizeDF = tokenizer.transform(kafkaDF)
-        val preprocessDF = regexTokenizer.transform(kafkaDF)
-        // val preprocessDF = tokenizeDF.select("text", "text_preprocess")
-        //     .withColumn("tokens", stemming(col("text").cast("string")))
+        val filteredDF = regexTokenizer.transform(kafkaDF)
+        // val preprocessDF = filteredDF.select("text", "text_preprocess")
+        //     .withColumn("stemmed", stemming(col("text").cast("string")))
 
         // val regexTokenized = regexTokenizer.transform(sentenceDataFrame)
         // regexTokenized.select("sentence", "words")
@@ -211,7 +211,7 @@ object MediaStream extends StreamUtils {
         //Show Data after processed
         preprocessDF.writeStream
             .format("console")
-            // .option("truncate","false")
+            .option("truncate","false")
             .start()
             .awaitTermination()
     }
