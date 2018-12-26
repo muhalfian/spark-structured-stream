@@ -145,7 +145,8 @@ object MediaStream extends StreamUtils {
         //     // }
         //
         //     // words(1)
-            var word = words.split(",")
+            var word = words.substring(1, words.length()-1)
+            word = words.split(",")
               .toSeq
               .map(_.trim)
               .filter(_ != "")
