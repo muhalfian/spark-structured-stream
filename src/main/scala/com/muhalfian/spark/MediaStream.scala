@@ -299,6 +299,7 @@ object MediaStream extends StreamUtils {
                         .map(_.trim)
                         .filter(_ != "")
 
+            println(content)
             val counted = splits.groupBy(identity).mapValues(_.size)
 
             for ((token,count) <- counted) {
