@@ -298,6 +298,7 @@ object MediaStream extends StreamUtils {
                     currentPoint = index
                 }
 
+                println(id, currentPoint, count)
                 var temp = Seq(id, currentPoint, count).toDF("link_id", "word_id", "counts")
                 println(temp)
                 masterDataAgg = masterDataAgg.union(temp)
