@@ -304,7 +304,7 @@ object MediaStream extends StreamUtils {
             }
 
             println(masterWords)
-            content
+            content, id
         })
 
         // Aggregate Running in DF
