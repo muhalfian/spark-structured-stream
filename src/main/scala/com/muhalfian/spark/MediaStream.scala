@@ -337,7 +337,7 @@ object MediaStream extends StreamUtils {
                     temp(row._2) = row._3
                 }
                 masterAgg += temp
-                println(temp)
+                // println(temp)
             }
 
             // println(masterAgg)
