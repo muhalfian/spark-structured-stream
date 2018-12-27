@@ -279,7 +279,7 @@ object MediaStream extends StreamUtils {
         // )
 
         val schemaAgg = StructType(
-            StructField("link_id", IntegerType, true) ::
+            // StructField("link_id", IntegerType, true) ::
             StructField("word_id", IntegerType, true) ::
             StructField("count", IntegerType, true) :: Nil)
         var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
@@ -288,7 +288,7 @@ object MediaStream extends StreamUtils {
         var currentPoint = 0
 
         // Aggregate User Defined FunctionmonotonicallyIncreasingId
-        val aggregate = udf((content: String, id: Int) => {
+        val aggregate = udf((content: String) => {
             val splits = content.split(" ")
                         .toSeq
                         .map(_.trim)
@@ -319,11 +319,11 @@ object MediaStream extends StreamUtils {
                     currentPoint = index
                 }
 
-                println(id, currentPoint, count)
+                println(currentPoint, count)
                 // var temp = List(List(id, currentPoint, count)).map(x =>(x(0), x(1), x(2))).toDF
                 // var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
-                masterDataAgg = masterDataAgg.union(Seq((id, currentPoint, count)).toDF)
+                masterDataAgg = masterDataAgg.union(Seq((currentPoint, count)).toDF)
             }
 
             println(masterWords)
@@ -334,7 +334,8 @@ object MediaStream extends StreamUtils {
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
+            // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
