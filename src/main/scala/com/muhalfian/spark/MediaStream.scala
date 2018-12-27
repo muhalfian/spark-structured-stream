@@ -309,7 +309,7 @@ object MediaStream extends StreamUtils {
         // =========================== SINK ====================================
 
         //Show Data after processed
-        preprocessDF.writeStream
+        aggregateDF.writeStream
             .format("console")
             // .option("truncate","false")
             .start()
