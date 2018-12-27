@@ -315,6 +315,7 @@ object MediaStream extends StreamUtils {
                 var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
                 if(index == -1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+                    print("latest null : " + latest)
                     currentPoint = startPoint + latest
                     masterWords(currentPoint) = token
                 } else {
@@ -334,7 +335,7 @@ object MediaStream extends StreamUtils {
             }
 
             // println(masterWords)
-            println(masterWords.deep.mkString(", "))
+            // println(masterWords.deep.mkString(", "))
 
             // val result = Seq(content, id)
             // result
