@@ -285,6 +285,7 @@ object MediaStream extends StreamUtils {
                     var currentPoint = startPoint + latest
                     println(currentPoint)
                     masterWords(currentPoint) = token
+                    println(masterWords)
                 }
             }
             // splits.foreach { token =>
