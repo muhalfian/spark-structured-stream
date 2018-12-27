@@ -250,7 +250,7 @@ object MediaStream extends StreamUtils {
 
         val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
-        val increment = udf((link : String){
+        val increment = udf((link : String) => {
             id += 1
             id
         })
