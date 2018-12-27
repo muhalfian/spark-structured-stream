@@ -323,7 +323,7 @@ object MediaStream extends StreamUtils {
                 // var temp = List(List(id, currentPoint, count)).map(x =>(x(0), x(1), x(2))).toDF
                 // var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
-                masterDataAgg = masterDataAgg.union(Seq((currentPoint, count)).toDF)
+                masterDataAgg = masterDataAgg.union(Seq((currentPoint, count)).toDF())
             }
 
             println(masterWords)
