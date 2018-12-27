@@ -228,7 +228,8 @@ object MediaStream extends StreamUtils {
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
           // .setPattern("\\d|\\W*") // alternatively .setPattern("\\w+").setGaps(false)
-          .setPattern("/[\\d\\_\\W]*/g")
+          .setPattern("[\\d\\_\\W]*")
+          .setGaps(true)
         val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
@@ -266,80 +267,80 @@ object MediaStream extends StreamUtils {
 
         // ======================== AGGREGATION ================================
 
-        var masterWords = new Array[String](52000)
-        val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
-        var masterListAgg = MutableList[(Int, Int, Int)]()
-
-        // // var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
-        // // var masterDataAgg = Seq((0,0,0)).toDF("link_id", "word_id", "count")
-        // // println(masterDataAgg.printSchema())
+        // var masterWords = new Array[String](52000)
+        // val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
+        // var masterListAgg = MutableList[(Int, Int, Int)]()
         //
+        // // // var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
+        // // // var masterDataAgg = Seq((0,0,0)).toDF("link_id", "word_id", "count")
+        // // // println(masterDataAgg.printSchema())
+        // //
+        // // // val schemaAgg = StructType(
+        // // //     List(
+        // // //         StructField("link_id", IntegerType, true),
+        // // //         StructField("word_id", IntegerType, true),
+        // // //         StructField("count", IntegerType, true)
+        // // //     )
+        // // // )
+        // //
         // // val schemaAgg = StructType(
         // //     List(
-        // //         StructField("link_id", IntegerType, true),
+        // //         // StructField("link_id", IntegerType, true) ::
         // //         StructField("word_id", IntegerType, true),
         // //         StructField("count", IntegerType, true)
         // //     )
         // // )
+        // // var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
         //
-        // val schemaAgg = StructType(
-        //     List(
-        //         // StructField("link_id", IntegerType, true) ::
-        //         StructField("word_id", IntegerType, true),
-        //         StructField("count", IntegerType, true)
-        //     )
-        // )
-        // var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
-
-
-        var currentPoint = 0
-
-        // Aggregate User Defined FunctionmonotonicallyIncreasingId
-        val aggregate = udf((content: String, id: Int) => {
-            val splits = content.split(" ")
-                        .toSeq
-                        .map(_.trim)
-                        .filter(_ != "")
-
-            val counted = splits.groupBy(identity).mapValues(_.size)
-
-            for ((token,count) <- counted) {
-                var char = token.take(1)
-                println(token + " -> " + char)
-                var startPoint = indexWords(char) * 2000
-                var endPoint = startPoint + 1999
-
-                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-                if(index == -1){
-                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                    currentPoint = startPoint + latest
-                    masterWords(currentPoint) = token
-                } else {
-                    currentPoint = index
-                }
-
-                println(id, currentPoint, count)
-                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
-                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
-                // var temp = Seq(Row(currentPoint, count))
-                // // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                // // println(temp)
-                // // var temp = Seq((currentPoint, count)).toDF()
-                // var masterDataAgg2 = masterDataAgg.union(tempDF)
-                masterListAgg += ((id, currentPoint, count))
-            }
-
-            println(masterWords)
-            // val result = Seq(content, id)
-            // result
-            content
-        })
-
-        // Aggregate Running in DF
-        val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
-            // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
+        //
+        // var currentPoint = 0
+        //
+        // // Aggregate User Defined FunctionmonotonicallyIncreasingId
+        // val aggregate = udf((content: String, id: Int) => {
+        //     val splits = content.split(" ")
+        //                 .toSeq
+        //                 .map(_.trim)
+        //                 .filter(_ != "")
+        //
+        //     val counted = splits.groupBy(identity).mapValues(_.size)
+        //
+        //     for ((token,count) <- counted) {
+        //         var char = token.take(1)
+        //         println(token + " -> " + char)
+        //         var startPoint = indexWords(char) * 2000
+        //         var endPoint = startPoint + 1999
+        //
+        //         var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+        //         if(index == -1){
+        //             var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+        //             currentPoint = startPoint + latest
+        //             masterWords(currentPoint) = token
+        //         } else {
+        //             currentPoint = index
+        //         }
+        //
+        //         println(id, currentPoint, count)
+        //         // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
+        //         // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
+        //         // var temp = Seq(Row(currentPoint, count))
+        //         // // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+        //         // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+        //         // // println(temp)
+        //         // // var temp = Seq((currentPoint, count)).toDF()
+        //         // var masterDataAgg2 = masterDataAgg.union(tempDF)
+        //         masterListAgg += ((id, currentPoint, count))
+        //     }
+        //
+        //     println(masterWords)
+        //     // val result = Seq(content, id)
+        //     // result
+        //     content
+        // })
+        //
+        // // Aggregate Running in DF
+        // val aggregateDF = preprocessDF
+        //     .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
+        //     // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
