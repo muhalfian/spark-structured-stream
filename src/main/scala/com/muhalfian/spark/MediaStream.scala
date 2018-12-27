@@ -10,7 +10,7 @@ import org.apache.spark.sql.functions.from_json
 import org.bson._
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
+import scala.collection.mutable.MutableList
 
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, monotonicallyIncreasingId}
