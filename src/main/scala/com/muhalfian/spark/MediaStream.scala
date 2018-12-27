@@ -167,7 +167,7 @@ object MediaStream extends StreamUtils {
 
     // aggregation
     var masterWords = new Array[String](78000)
-    var masterAgg = List[Array[Int](78000)]
+    var masterAgg = MutableList[Array[Int]]
 
     def main(args: Array[String]): Unit = {
 
@@ -331,7 +331,7 @@ object MediaStream extends StreamUtils {
             // print(groupMasterList)
 
             for((group, content) <- groupMasterList){
-                var temp = new Array[Int](78000)
+                var temp = new Array.fill[Int](78000)(0)
 
                 for(row <- content){
                     temp(row._1) = row._2
