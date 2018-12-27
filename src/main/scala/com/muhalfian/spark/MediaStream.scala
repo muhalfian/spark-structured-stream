@@ -318,7 +318,7 @@ object MediaStream extends StreamUtils {
                     currentPoint = startPoint + latest
                     masterWords(currentPoint) = token
                 } else {
-                    currentPoint = index
+                    currentPoint = startPoint + index
                 }
 
                 println(link, currentPoint, count)
