@@ -228,7 +228,7 @@ object MediaStream extends StreamUtils {
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
           // .setPattern("\\d|\\W*") // alternatively .setPattern("\\w+").setGaps(false)
-          .setPattern("[\\d\\_\\W]*")
+          .setPattern("\\[\\d\\_\\W\\]\\*")
           .setGaps(true)
         val regexDF = regexTokenizer.transform(rawDF)
 
