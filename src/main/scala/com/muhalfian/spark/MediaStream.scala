@@ -1,7 +1,7 @@
 package com.muhalfian.spark
 
 import com.mongodb.client.MongoCollection
-import com.mongodb.spark.MongoConnector
+import com.mongodb.spark.{MongoConnector, SparkContext, SparkConf}
 import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
@@ -170,6 +170,9 @@ object MediaStream extends StreamUtils {
         import spark.implicits._
 
         spark.sparkContext.setLogLevel("ERROR")
+
+        val conf = new SparkConf().setAppName("Simple Application")
+        val sc = new SparkContext(conf)
 
         // ======================== READ STREAM ================================
 
