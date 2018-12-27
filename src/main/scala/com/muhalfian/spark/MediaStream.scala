@@ -262,9 +262,9 @@ object MediaStream extends StreamUtils {
 
         var masterWords = new Array[String](52000)
         val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
-        var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
+        // var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
         // var masterDataAgg = Seq((0,0,0)).toDF("link_id", "word_id", "count")
-        println(masterDataAgg.printSchema())
+        // println(masterDataAgg.printSchema())
 
         // val schemaAgg = StructType(
         //     List(
@@ -273,6 +273,13 @@ object MediaStream extends StreamUtils {
         //         StructField("count", IntegerType, true)
         //     )
         // )
+
+        val schemaAgg = StructType(
+            StructField("link_id", StringType, true) ::
+            StructField("word_id", StringType, true) ::
+            StructField("count", StringType, true) :: Nil)
+        var masterDataAgg = spark.createDataFrame(sc.emptyRDD[Row], schema)
+
 
         var currentPoint = 0
 
@@ -309,7 +316,7 @@ object MediaStream extends StreamUtils {
                 }
 
                 println(id, currentPoint, count)
-                var temp = Seq((id, currentPoint, count)).toDF("link_id", "word_id", "count")
+                var temp = Seq((id, currentPoint, count)).toDF
                 println(temp.printSchema())
                 // var temp = List(List(id, currentPoint, count)).map(x =>(x(0), x(1), x(2))).toDF
                 // var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
