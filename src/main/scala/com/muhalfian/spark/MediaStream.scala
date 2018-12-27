@@ -269,13 +269,13 @@ object MediaStream extends StreamUtils {
             //
             // println(counted)
 
-            println(content)
+            // println(content)
 
             for ((token,count) <- counted) {
                 // printf("key: %s, value: %s\n", token, count)
                 // print(token)
                 var char:String = token.take(1)
-                println(token + " -> " + char)
+                // println(token + " -> " + char)
                 var startPoint = indexWords(char)
                 var endPoint = startPoint + 999
 
@@ -299,7 +299,7 @@ object MediaStream extends StreamUtils {
             //         masterWords(currentPoint) = token
             //     }
             // }
-            masterWords
+            content
         })
 
         // Aggregate Running in DF
