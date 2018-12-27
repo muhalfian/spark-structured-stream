@@ -302,14 +302,14 @@ object MediaStream extends StreamUtils {
         //     masterWords
         // })
 
-        // Aggregate Running in DF
-        val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
+        // // Aggregate Running in DF
+        // val aggregateDF = preprocessDF
+        //     .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
         //Show Data after processed
-        aggregateDF.writeStream
+        preprocessDF.writeStream
             .format("console")
             // .option("truncate","false")
             .start()
