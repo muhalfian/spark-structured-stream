@@ -228,7 +228,7 @@ object MediaStream extends StreamUtils {
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
           // .setPattern("\\d|\\W*") // alternatively .setPattern("\\w+").setGaps(false)
-          .setPattern("/[\\d\\b_\\W]*/g")
+          .setPattern("/[\\d\\_\\W]*/g")
         val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
