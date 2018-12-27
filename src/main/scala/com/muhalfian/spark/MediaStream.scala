@@ -250,8 +250,9 @@ object MediaStream extends StreamUtils {
 
         val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
+        id += 1
         val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                          .withColumn("id", (id+1))
+                          .withColumn("id", id)
 
 
         // ======================== AGGREGATION ================================
