@@ -275,7 +275,7 @@ object MediaStream extends StreamUtils {
                 // printf("key: %s, value: %s\n", token, count)
                 // print(token)
                 var char = token.take(1)
-                // println(token + " -> " + char)
+                println(token + " -> " + char)
                 var startPoint = indexWords(char)
                 var endPoint = startPoint + 999
 
