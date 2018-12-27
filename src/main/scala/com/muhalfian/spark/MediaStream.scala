@@ -221,7 +221,7 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
-          .setPattern("\\d*\\W*\\_*\\d*") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("[\\d\\W]*") // alternatively .setPattern("\\w+").setGaps(false)
         val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
@@ -231,7 +231,7 @@ object MediaStream extends StreamUtils {
         val filteredDF = remover.transform(regexDF)
 
         val stemming = udf ((words: String) => {
-            var filtered = words.replaceAll("[\\[\\],]", " ");
+            var filtered = words.replaceAll("[\\[\\],\\_]", " ");
             var word = filtered.split(" ")
               .toSeq
               .map(_.trim)
