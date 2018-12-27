@@ -334,7 +334,7 @@ object MediaStream extends StreamUtils {
                 var temp = Array.fill[Int](78000)(0)
 
                 for(row <- content){
-                    temp(row._1) = row._2
+                    temp(row._2) = row._3
                 }
                 masterAgg += temp
             }
