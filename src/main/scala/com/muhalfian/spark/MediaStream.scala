@@ -267,9 +267,9 @@ object MediaStream extends StreamUtils {
 
         val schemaAgg = StructType(
             List(
-                StructField("link_id", IntType, true),
-                StructField("word_id", IntType, true),
-                StructField("count", IntType, true)
+                StructField("link_id", IntegerType, true),
+                StructField("word_id", IntegerType, true),
+                StructField("count", IntegerType, true)
             )
         )
 
