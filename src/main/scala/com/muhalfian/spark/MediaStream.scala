@@ -221,7 +221,7 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
-          .setPattern("\\W\\d*") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("\\W*\\d*") // alternatively .setPattern("\\w+").setGaps(false)
         val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
@@ -269,13 +269,13 @@ object MediaStream extends StreamUtils {
             //
             // println(counted)
 
-            println(content)
+            // println(content)
 
             for ((token,count) <- counted) {
                 // printf("key: %s, value: %s\n", token, count)
                 // print(token)
                 var char:String = token.take(1)
-                println(token + " -> " + char)
+                // println(token + " -> " + char)
                 var startPoint = indexWords(char)
                 var endPoint = startPoint + 999
 
