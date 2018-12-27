@@ -262,14 +262,13 @@ object MediaStream extends StreamUtils {
             id
         })
         val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                          .withColumn("id", increment(col("link").cast("string")))
 
 
         // ======================== AGGREGATION ================================
 
         var masterWords = new Array[String](52000)
         val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
-        var masterListAgg = MutableList[(Int, Int, Int)]()
+        var masterListAgg = MutableList[(String, Int, Int)]()
 
         // // var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
         // // var masterDataAgg = Seq((0,0,0)).toDF("link_id", "word_id", "count")
@@ -296,7 +295,7 @@ object MediaStream extends StreamUtils {
         var currentPoint = 0
 
         // Aggregate User Defined FunctionmonotonicallyIncreasingId
-        val aggregate = udf((content: String, id: Int) => {
+        val aggregate = udf((content: String, link: String) => {
             val splits = content.split(" ")
                         .toSeq
                         .map(_.trim)
@@ -322,7 +321,7 @@ object MediaStream extends StreamUtils {
                     currentPoint = index
                 }
 
-                println(id, currentPoint, count)
+                println(link, currentPoint, count)
                 // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
                 // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
                 // var temp = Seq(Row(currentPoint, count))
@@ -331,7 +330,7 @@ object MediaStream extends StreamUtils {
                 // // println(temp)
                 // // var temp = Seq((currentPoint, count)).toDF()
                 // var masterDataAgg2 = masterDataAgg.union(tempDF)
-                masterListAgg += ((id, currentPoint, count))
+                masterListAgg += ((link, currentPoint, count))
             }
 
             println(masterWords)
@@ -342,7 +341,7 @@ object MediaStream extends StreamUtils {
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
             // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
