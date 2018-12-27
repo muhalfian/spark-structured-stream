@@ -337,7 +337,7 @@ object MediaStream extends StreamUtils {
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("raw_text").cast("string"), col("id").cast("int")))
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("text").cast("string"), col("id").cast("int")))
             // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
