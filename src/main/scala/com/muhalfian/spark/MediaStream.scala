@@ -166,7 +166,8 @@ object MediaStream extends StreamUtils {
             "waktunya","walau","walaupun","wong","x","y","ya","yaitu","yakin","yakni","yang","z")
 
     // aggregation
-    var masterWords = new Array[String](52000)
+    var masterWords = new Array[String](78000)
+    var masterAgg = new ArrayBuffer[Array[Int](78000)]
 
     def main(args: Array[String]): Unit = {
 
@@ -260,10 +261,6 @@ object MediaStream extends StreamUtils {
 
         val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
-        val increment = udf((link : String) => {
-            id += 1
-            id
-        })
         val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
 
 
@@ -308,18 +305,18 @@ object MediaStream extends StreamUtils {
 
             for ((token,count) <- counted) {
                 var char = token.take(1)
-                println(token + " -> " + char)
+                // println(token + " -> " + char)
 
                 var searchPoint = indexWords(char)
 
-                var startPoint = searchPoint * 2000
-                var endPoint = startPoint + 1999
+                var startPoint = searchPoint * 3000
+                var endPoint = startPoint + 2999
 
                 var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
                 if(index == -1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                    println(masterWords.slice(startPoint, endPoint).groupBy(identity).mapValues(_.size))
-                    println("latest null : " + latest)
+                    // println(masterWords.slice(startPoint, endPoint).groupBy(identity).mapValues(_.size))
+                    // println("latest null : " + latest)
                     currentPoint = startPoint + latest
                     masterWords(currentPoint) = token
                 } else {
@@ -327,16 +324,22 @@ object MediaStream extends StreamUtils {
                 }
 
                 println(link, currentPoint, count)
-                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
-                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
-                // var temp = Seq(Row(currentPoint, count))
-                // // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                // // println(temp)
-                // // var temp = Seq((currentPoint, count)).toDF()
-                // var masterDataAgg2 = masterDataAgg.union(tempDF)
                 masterListAgg += ((link, currentPoint, count))
             }
+
+            var groupMasterList = masterListAgg.groupBy(_._1)
+            // print(groupMasterList)
+
+            for((group, content) <- groupMasterList){
+                var temp = new Array[Int](78000)
+
+                for(row <- content){
+                    temp(row._1) = row._2
+                }
+                masterAgg += temp
+            }
+
+            println(masterAgg)
 
             // println(masterWords)
             // println(masterWords.deep.mkString(", "))
