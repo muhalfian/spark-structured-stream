@@ -1,8 +1,9 @@
 package com.muhalfian.spark
 
 import com.mongodb.client.MongoCollection
-import com.mongodb.spark.{MongoConnector, SparkContext, SparkConf}
+import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
+import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.from_json
