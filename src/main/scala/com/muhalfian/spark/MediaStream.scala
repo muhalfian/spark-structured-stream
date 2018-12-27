@@ -253,8 +253,8 @@ object MediaStream extends StreamUtils {
 
         // ======================== AGGREGATION ================================
 
-        var masterWords = new Array[String](26000)
-        val indexWords = Map("a" -> 0, "b" -> 1000, "c" -> 2000, "d" -> 3000, "e" -> 4000, "f" -> 5000, "g" -> 6000, "h" -> 7000, "i" -> 8000, "j" -> 9000, "k" -> 10000, "l" -> 11000, "m" -> 12000, "n" -> 13000, "o" -> 14000, "p" -> 15000, "q" -> 16000, "r" -> 17000, "s" -> 18000, "t" -> 19000, "u" -> 20000, "v" -> 21000, "w" -> 22000, "x" -> 23000, "y" -> 24000, "z" -> 25000)
+        var masterWords = new Array[String](52000)
+        val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
 
         // Aggregate User Defined Function
         val aggregate = udf((content: String) => {
@@ -276,8 +276,8 @@ object MediaStream extends StreamUtils {
                 // print(token)
                 var char = token.take(1)
                 println(token + " -> " + char)
-                var startPoint = indexWords(char)
-                var endPoint = startPoint + 999
+                var startPoint = indexWords(char) * 2000
+                var endPoint = startPoint + 1999
 
                 var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
                 if(index == -1){
