@@ -269,6 +269,8 @@ object MediaStream extends StreamUtils {
             //
             // println(counted)
 
+            println(content)
+
             for ((token,count) <- counted) {
                 // printf("key: %s, value: %s\n", token, count)
                 // print(token)
