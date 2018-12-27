@@ -285,7 +285,7 @@ object MediaStream extends StreamUtils {
                 StructField("count", IntegerType, true)
             )
         )
-        // var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
+        var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
 
 
         var currentPoint = 0
