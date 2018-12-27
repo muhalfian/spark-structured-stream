@@ -318,7 +318,8 @@ object MediaStream extends StreamUtils {
             }
 
             println(masterWords)
-            (content, count)
+            val result = (content, count)
+            result
         })
 
         // Aggregate Running in DF
