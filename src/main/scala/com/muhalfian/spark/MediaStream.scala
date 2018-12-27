@@ -167,7 +167,7 @@ object MediaStream extends StreamUtils {
 
     // aggregation
     var masterWords = new Array[String](78000)
-    var masterAgg = new ArrayBuffer[Array[Int](78000)]
+    var masterAgg = List[Array[Int](78000)]
 
     def main(args: Array[String]): Unit = {
 
