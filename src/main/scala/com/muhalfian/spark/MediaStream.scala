@@ -318,7 +318,7 @@ object MediaStream extends StreamUtils {
             }
 
             println(masterWords)
-            val result = List(content, id)
+            val result = Seq(content, id)
             result
         })
 
