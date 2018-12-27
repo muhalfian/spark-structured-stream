@@ -323,7 +323,7 @@ object MediaStream extends StreamUtils {
                     currentPoint = startPoint + index
                 }
 
-                println(link, currentPoint, count)
+                // println(link, currentPoint, count)
                 masterListAgg += ((link, currentPoint, count))
             }
 
@@ -337,9 +337,10 @@ object MediaStream extends StreamUtils {
                     temp(row._2) = row._3
                 }
                 masterAgg += temp
+                println(temp)
             }
 
-            println(masterAgg)
+            // println(masterAgg)
 
             // println(masterWords)
             // println(masterWords.deep.mkString(", "))
