@@ -283,9 +283,9 @@ object MediaStream extends StreamUtils {
                 if(index == -1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
                     var currentPoint = startPoint + latest
-                    println(currentPoint)
+                    println(currentPoint + " - " + token)
                     masterWords(currentPoint) = token
-                    println(masterWords)
+                    // println(masterWords)
                 }
             }
             // splits.foreach { token =>
