@@ -227,7 +227,8 @@ object MediaStream extends StreamUtils {
         val regexTokenizer = new RegexTokenizer()
           .setInputCol("raw_text")
           .setOutputCol("text_regex")
-          .setPattern("\\d|\\W*") // alternatively .setPattern("\\w+").setGaps(false)
+          // .setPattern("\\d|\\W*") // alternatively .setPattern("\\w+").setGaps(false)
+          .setPattern("/[\\d\\b_\\W]*/g")
         val regexDF = regexTokenizer.transform(rawDF)
 
         val remover = new StopWordsRemover()
@@ -293,13 +294,12 @@ object MediaStream extends StreamUtils {
         var currentPoint = 0
 
         // Aggregate User Defined FunctionmonotonicallyIncreasingId
-        val aggregate = udf((content: String, raw: String, id: Int) => {
+        val aggregate = udf((content: String, id: Int) => {
             val splits = content.split(" ")
                         .toSeq
                         .map(_.trim)
                         .filter(_ != "")
 
-            println(raw)
             val counted = splits.groupBy(identity).mapValues(_.size)
 
             for ((token,count) <- counted) {
@@ -337,13 +337,13 @@ object MediaStream extends StreamUtils {
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("text").cast("string"), col("id").cast("int")))
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
             // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
         //Show Data after processed
-        aggregateDF.writeStream
+        preprocessDF.writeStream
             .format("console")
             // .option("truncate","false")
             .start()
