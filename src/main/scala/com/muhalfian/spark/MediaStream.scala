@@ -299,7 +299,7 @@ object MediaStream extends StreamUtils {
 
                 var temp = Seq(id, currentPoint, count)
                 println(temp)
-                masterDataAgg.union(temp.toDF())
+                masterDataAgg = masterDataAgg.union(temp.toDF())
             }
 
             println(masterWords)
