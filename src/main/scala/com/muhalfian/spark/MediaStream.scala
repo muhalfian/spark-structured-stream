@@ -239,7 +239,7 @@ object MediaStream extends StreamUtils {
         val filteredDF = remover.transform(regexDF)
 
         val stemming = udf ((words: String) => {
-            println(words)
+            // println(words)
             var filtered = words.replaceAll("[\\[\\],\\_]", " ");
             var word = filtered.split(" ")
               .toSeq
