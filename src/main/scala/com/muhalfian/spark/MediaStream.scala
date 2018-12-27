@@ -331,7 +331,7 @@ object MediaStream extends StreamUtils {
             // print(groupMasterList)
 
             for((group, content) <- groupMasterList){
-                var temp = new Array.fill[Int](78000)(0)
+                var temp = Array.fill[Int](78000)(0)
 
                 for(row <- content){
                     temp(row._1) = row._2
