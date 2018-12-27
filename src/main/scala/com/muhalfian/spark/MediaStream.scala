@@ -311,7 +311,7 @@ object MediaStream extends StreamUtils {
                 var temp = Seq((id, currentPoint, count)).toDF()
                 // var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
-                masterDataAgg = masterDataAgg.union(tempDF)
+                masterDataAgg = masterDataAgg.union(temp)
             }
 
             println(masterWords)
