@@ -283,6 +283,7 @@ object MediaStream extends StreamUtils {
                 if(index != 1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
                     var currentPoint = startPoint + latest
+                    println(currentPoint)
                     masterWords(currentPoint) = token
                 }
             }
