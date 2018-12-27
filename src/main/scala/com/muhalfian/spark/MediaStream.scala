@@ -344,6 +344,8 @@ object MediaStream extends StreamUtils {
             .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
             // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
+        println(masterWords.deep.mkString("\n"))
+
         // =========================== SINK ====================================
 
         //Show Data after processed
