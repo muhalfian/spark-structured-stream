@@ -68,6 +68,8 @@ object MediaStream extends StreamUtils {
     val dict : java.util.Set[String] = dictionary.asJava
     var lemmatizer = new DefaultLemmatizer(dict);
 
+    var id = 0
+
     // dictionary stopwords sastrawi
     // https://github.com/har07/PySastrawi/blob/master/src/Sastrawi/StopWordRemover/StopWordRemoverFactory.py
     val stopwordsArr = Array("a","ada","adalah","adanya","adapun","agak","agaknya","agar","akan","akankah","akhir",
@@ -249,7 +251,7 @@ object MediaStream extends StreamUtils {
         val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
         val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                          .withColumn("id",monotonicallyIncreasingId)
+                          .withColumn("id", (id+1))
 
 
         // ======================== AGGREGATION ================================
