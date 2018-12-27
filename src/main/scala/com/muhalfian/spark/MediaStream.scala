@@ -321,7 +321,7 @@ object MediaStream extends StreamUtils {
 
                 println(currentPoint, count)
                 var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
-                var tempDF = spark.sparkContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+                var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
                 // var temp = Seq((currentPoint, count)).toDF()
                 var masterDataAgg2 = masterDataAgg.union(tempDF)
