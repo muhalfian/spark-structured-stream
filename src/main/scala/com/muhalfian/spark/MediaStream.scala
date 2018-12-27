@@ -253,58 +253,58 @@ object MediaStream extends StreamUtils {
 
         // ======================== AGGREGATION ================================
 
-        // var masterWords = new Array[String](26000)
-        // val indexWords = Map("a" -> 0, "b" -> 1000, "c" -> 2000, "d" -> 3000, "e" -> 4000, "f" -> 5000, "g" -> 6000, "h" -> 7000, "i" -> 8000, "j" -> 9000, "k" -> 10000, "l" -> 11000, "m" -> 12000, "n" -> 13000, "o" -> 14000, "p" -> 15000, "q" -> 16000, "r" -> 17000, "s" -> 18000, "t" -> 19000, "u" -> 20000, "v" -> 21000, "w" -> 22000, "x" -> 23000, "y" -> 24000, "z" -> 25000)
-        //
-        // // Aggregate User Defined Function
-        // val aggregate = udf((content: String) => {
-        //     val splits = content.split(" ")
-        //                 .toSeq
-        //                 .map(_.trim)
-        //                 .filter(_ != "")
-        //
-        //     // println(splits)
-        //
-        //     val counted = splits.groupBy(identity).mapValues(_.size)
-        //     //
-        //     // println(counted)
-        //
-        //     println(content)
-        //
-        //     for ((token,count) <- counted) {
-        //         // printf("key: %s, value: %s\n", token, count)
-        //         // print(token)
-        //         var char:String = token.take(1)
-        //         println(token + " -> " + char)
-        //         var startPoint = indexWords(char)
-        //         var endPoint = startPoint + 999
-        //
-        //         var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-        //         if(index != 1){
-        //             var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-        //             var currentPoint = startPoint + latest
-        //             masterWords(currentPoint) = token
-        //         }
-        //     }
-        //     // splits.foreach { token =>
-        //     //     print(token)
-        //     //     var char:String = token.take(1)
-        //     //     var startPoint = indexWords(char)
-        //     //     var endPoint = startPoint + 999
-        //     //
-        //     //     var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-        //     //     if(index != 1){
-        //     //         var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-        //     //         var currentPoint = startPoint + latest
-        //     //         masterWords(currentPoint) = token
-        //     //     }
-        //     // }
-        //     masterWords
-        // })
-        //
-        // // Aggregate Running in DF
-        // val aggregateDF = preprocessDF
-        //     .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
+        var masterWords = new Array[String](26000)
+        val indexWords = Map("a" -> 0, "b" -> 1000, "c" -> 2000, "d" -> 3000, "e" -> 4000, "f" -> 5000, "g" -> 6000, "h" -> 7000, "i" -> 8000, "j" -> 9000, "k" -> 10000, "l" -> 11000, "m" -> 12000, "n" -> 13000, "o" -> 14000, "p" -> 15000, "q" -> 16000, "r" -> 17000, "s" -> 18000, "t" -> 19000, "u" -> 20000, "v" -> 21000, "w" -> 22000, "x" -> 23000, "y" -> 24000, "z" -> 25000)
+
+        // Aggregate User Defined Function
+        val aggregate = udf((content: String) => {
+            val splits = content.split(" ")
+                        .toSeq
+                        .map(_.trim)
+                        .filter(_ != "")
+
+            // println(splits)
+
+            val counted = splits.groupBy(identity).mapValues(_.size)
+            //
+            // println(counted)
+
+            println(content)
+
+            for ((token,count) <- counted) {
+                // printf("key: %s, value: %s\n", token, count)
+                // print(token)
+                var char:String = token.take(1)
+                println(token + " -> " + char)
+                var startPoint = indexWords(char)
+                var endPoint = startPoint + 999
+
+                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+                if(index != 1){
+                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+                    var currentPoint = startPoint + latest
+                    masterWords(currentPoint) = token
+                }
+            }
+            // splits.foreach { token =>
+            //     print(token)
+            //     var char:String = token.take(1)
+            //     var startPoint = indexWords(char)
+            //     var endPoint = startPoint + 999
+            //
+            //     var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+            //     if(index != 1){
+            //         var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+            //         var currentPoint = startPoint + latest
+            //         masterWords(currentPoint) = token
+            //     }
+            // }
+            masterWords
+        })
+
+        // Aggregate Running in DF
+        val aggregateDF = preprocessDF
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
         // =========================== SINK ====================================
 
