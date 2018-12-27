@@ -241,7 +241,7 @@ object MediaStream extends StreamUtils {
 
         val stemming = udf ((words: String) => {
             // println(words)
-            var filtered = words.replaceAll("[\\[\\],\\_]", " ");
+            var filtered = words.replaceAll("[^A-Za-z]", " ");
             var word = filtered.split(" ")
               .toSeq
               .map(_.trim)
@@ -306,40 +306,36 @@ object MediaStream extends StreamUtils {
             val counted = splits.groupBy(identity).mapValues(_.size)
 
             for ((token,count) <- counted) {
-                breakable{
-                    var char = token.take(1)
-                    println(token + " -> " + char)
-                    try{
-                        var searchPoint = indexWords(char)
-                    } catch {
-                        break
-                    }
-                    var startPoint = searchPoint * 2000
-                    var endPoint = startPoint + 1999
+                var char = token.take(1)
+                println(token + " -> " + char)
 
-                    var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-                    if(index == -1){
-                        var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                        currentPoint = startPoint + latest
-                        masterWords(currentPoint) = token
-                    } else {
-                        currentPoint = index
-                    }
+                var searchPoint = indexWords(char)
 
-                    println(id, currentPoint, count)
-                    // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
-                    // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
-                    // var temp = Seq(Row(currentPoint, count))
-                    // // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                    // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
-                    // // println(temp)
-                    // // var temp = Seq((currentPoint, count)).toDF()
-                    // var masterDataAgg2 = masterDataAgg.union(tempDF)
-                    masterListAgg += ((id, currentPoint, count))
+                var startPoint = searchPoint * 2000
+                var endPoint = startPoint + 1999
+
+                var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
+                if(index == -1){
+                    var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
+                    currentPoint = startPoint + latest
+                    masterWords(currentPoint) = token
+                } else {
+                    currentPoint = index
                 }
+
+                println(id, currentPoint, count)
+                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1))).toDF
+                // var temp = List(List(currentPoint, count)).map(x =>(x(0), x(1)))
+                // var temp = Seq(Row(currentPoint, count))
+                // // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+                // var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+                // // println(temp)
+                // // var temp = Seq((currentPoint, count)).toDF()
+                // var masterDataAgg2 = masterDataAgg.union(tempDF)
+                masterListAgg += ((id, currentPoint, count))
             }
 
-            // println(masterWords)
+            println(masterWords)
             // val result = Seq(content, id)
             // result
             content
