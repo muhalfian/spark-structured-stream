@@ -318,7 +318,8 @@ object MediaStream extends StreamUtils {
                 var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
                 if(index == -1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-                    print("latest null : " + latest)
+                    println("Total null : " + masterWords.slice(startPoint, endPoint).groupBy("null").mapValues(_.size))
+                    println("latest null : " + latest)
                     currentPoint = startPoint + latest
                     masterWords(currentPoint) = token
                 } else {
