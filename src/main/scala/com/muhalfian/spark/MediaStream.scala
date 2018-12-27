@@ -309,7 +309,7 @@ object MediaStream extends StreamUtils {
 
                 println(id, currentPoint, count)
                 var temp = Seq(id, currentPoint, count)
-                var tempDF = spark.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
+                var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
                 masterDataAgg = masterDataAgg.union(tempDF)
             }
