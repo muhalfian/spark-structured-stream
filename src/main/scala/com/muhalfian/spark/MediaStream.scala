@@ -279,9 +279,9 @@ object MediaStream extends StreamUtils {
         // )
 
         val schemaAgg = StructType(
-            StructField("link_id", StringType, true) ::
-            StructField("word_id", StringType, true) ::
-            StructField("count", StringType, true) :: Nil)
+            StructField("link_id", IntegerType, true) ::
+            StructField("word_id", IntegerType, true) ::
+            StructField("count", IntegerType, true) :: Nil)
         var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
 
 
@@ -320,12 +320,10 @@ object MediaStream extends StreamUtils {
                 }
 
                 println(id, currentPoint, count)
-                var temp = Seq((id, currentPoint, count)).toDF
-                println(temp.printSchema())
                 // var temp = List(List(id, currentPoint, count)).map(x =>(x(0), x(1), x(2))).toDF
                 // var tempDF = sqlContext.createDataFrame(spark.sparkContext.parallelize(temp), schemaAgg)
                 // println(temp)
-                masterDataAgg = masterDataAgg.union(temp)
+                masterDataAgg = masterDataAgg.union(Seq((id, currentPoint, count)).toDF)
             }
 
             println(masterWords)
