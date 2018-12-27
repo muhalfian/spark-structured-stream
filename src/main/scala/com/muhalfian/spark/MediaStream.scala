@@ -172,8 +172,8 @@ object MediaStream extends StreamUtils {
 
         spark.sparkContext.setLogLevel("ERROR")
 
-        val conf = new SparkConf().setAppName("Simple Application")
-        val sc = new SparkContext(conf)
+        // val conf = new SparkConf().setAppName("Simple Application")
+        // val sc = new SparkContext(conf)
 
         // ======================== READ STREAM ================================
 
@@ -282,7 +282,7 @@ object MediaStream extends StreamUtils {
             StructField("link_id", StringType, true) ::
             StructField("word_id", StringType, true) ::
             StructField("count", StringType, true) :: Nil)
-        var masterDataAgg = spark.createDataFrame(sc.emptyRDD[Row], schema)
+        var masterDataAgg = spark.createDataFrame(spark.sparkContext.emptyRDD[Row], schema)
 
 
         var currentPoint = 0
