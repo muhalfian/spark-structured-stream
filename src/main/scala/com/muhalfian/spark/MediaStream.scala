@@ -12,7 +12,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf}
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, monotonicallyIncreasingId}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
@@ -249,15 +249,17 @@ object MediaStream extends StreamUtils {
         val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
 
         val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+                          .withColumn("id",monotonicallyIncreasingId)
 
 
         // ======================== AGGREGATION ================================
 
         var masterWords = new Array[String](52000)
         val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2, "d" -> 3, "e" -> 4, "f" -> 5, "g" -> 6, "h" -> 7, "i" -> 8, "j" -> 9, "k" -> 10, "l" -> 11, "m" -> 12, "n" -> 13, "o" -> 14, "p" -> 15, "q" -> 16, "r" -> 17, "s" -> 18, "t" -> 19, "u" -> 20, "v" -> 21, "w" -> 22, "x" -> 23, "y" -> 24, "z" -> 25)
+        var masterDataAgg = Seq.empty[(Int, Int, Int)].toDF("link_id", "word_id", "counts")
 
-        // Aggregate User Defined Function
-        val aggregate = udf((content: String) => {
+        // Aggregate User Defined FunctionmonotonicallyIncreasingId
+        val aggregate = udf((content: String, id: Int) => {
             val splits = content.split(" ")
                         .toSeq
                         .map(_.trim)
@@ -283,31 +285,22 @@ object MediaStream extends StreamUtils {
                 if(index == -1){
                     var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
                     var currentPoint = startPoint + latest
-                    println(startPoint + " + " + latest)
-                    println(currentPoint + " - " + token)
                     masterWords(currentPoint) = token
-                    // println(masterWords)
+                } else {
+                    var currentPoint = index
                 }
+
+                var temp = Seq(id, currentPoint, count)
+                masterDataAgg.union(temp.toDF())
             }
-            // splits.foreach { token =>
-            //     print(token)
-            //     var char:String = token.take(1)
-            //     var startPoint = indexWords(char)
-            //     var endPoint = startPoint + 999
-            //
-            //     var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-            //     if(index != 1){
-            //         var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-            //         var currentPoint = startPoint + latest
-            //         masterWords(currentPoint) = token
-            //     }
-            // }
+
+            println(masterWords)
             content
         })
 
         // Aggregate Running in DF
         val aggregateDF = preprocessDF
-            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
+            .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("id").cast("int")))
 
         // =========================== SINK ====================================
 
