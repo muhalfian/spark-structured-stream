@@ -128,7 +128,7 @@ object TextTools {
   val remover = new StopWordsRemover()
     .setStopWords(stopwordsArr)
     .setInputCol("text_regex")
-    .setOutputCol("text_filter")
+    .setOutputCol("text_preprocess")
 
   // ======================= STEMMING UDF ===============================
 
