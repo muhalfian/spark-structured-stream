@@ -80,7 +80,7 @@ object MediaStream extends StreamUtils {
     var currentPoint = 0
 
     val wordDict = udf((content: String, link: String) => {
-      var edited = False
+      var edited = false
       val splits = content.split(" ")
         .toSeq
         .map(_.trim)
@@ -96,7 +96,7 @@ object MediaStream extends StreamUtils {
 
         var currentPoint = masterWords(point).indexWhere(_ == token)
         if(currentPoint == -1){
-          edited = True
+          edited = true
           masterWords(point) += token
           currentPoint = masterWords(point).indexWhere(_ == token)
         }
@@ -109,7 +109,7 @@ object MediaStream extends StreamUtils {
         for(row <- masterWords){
           masterWordsIndex = masterWordsIndex ++ row
         }
-        edited = False
+        edited = false
         println(masterWordsIndex.deep.mkString("\n"))
       }
 
