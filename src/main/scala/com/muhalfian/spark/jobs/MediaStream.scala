@@ -110,7 +110,7 @@ object MediaStream extends StreamUtils {
           masterWordsIndex = masterWordsIndex ++ row
         }
         edited = false
-        println(masterWordsIndex.mkString(" "))
+        // println(masterWordsIndex.mkString(" "))
       }
 
       // extract data from List
@@ -145,6 +145,7 @@ object MediaStream extends StreamUtils {
 
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
 
+      print(wordCount)
       masterAgg = masterAgg :+ wordCount
 
       content
