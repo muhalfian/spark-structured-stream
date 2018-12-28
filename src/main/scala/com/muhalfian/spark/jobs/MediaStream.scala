@@ -147,6 +147,8 @@ object MediaStream extends StreamUtils {
 
       masterAgg = masterAgg :+ wordCount
 
+      content
+
     })
 
     val aggregateDF2 = aggregateDF
