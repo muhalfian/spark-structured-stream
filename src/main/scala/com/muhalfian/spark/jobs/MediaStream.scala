@@ -79,57 +79,66 @@ object MediaStream extends StreamUtils {
     var currentPoint = 0
 
     // Aggregate User Defined FunctionmonotonicallyIncreasingId
-    val aggregate = udf((content: String, link: String) => {
-      val splits = content.split(" ")
-        .toSeq
-        .map(_.trim)
-        .filter(_ != "")
-
-      val counted = splits.groupBy(identity).mapValues(_.size)
-
-      for ((token,count) <- counted) {
-        var char = token.take(1)
-        // println(token + " -> " + char)
-
-        var point = indexWords(char)
-
-        var currentPoint = masterWords(point).indexWhere(_ == token)
-        if(currentPoint == -1){
-          masterWords(point) += token
-          currentPoint = masterWords(point).indexWhere(_ == token)
-        }
-
-        println(link, currentPoint, count)
-        // masterListAgg += ((link, currentPoint, count))
-      }
-
-      // extract data from List
-      // var groupMasterList = masterListAgg.groupBy(_._1)
-      // // print(groupMasterList)
-      //
-      // for((group, content) <- groupMasterList){
-      //     var temp = Array.fill[Int](78000)(0)
-      //
-      //     for(row <- content){
-      //         temp(row._2) = row._3
-      //     }
-      //     masterAgg += temp
-      //     // println(temp)
-      // }
-
-      content
-    })
-
-    // Aggregate Running in DF
-    val aggregateDF = preprocessDF
-      .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
+    // val aggregate = udf((content: String, link: String) => {
+    //   val splits = content.split(" ")
+    //     .toSeq
+    //     .map(_.trim)
+    //     .filter(_ != "")
+    //
+    //   val counted = splits.groupBy(identity).mapValues(_.size)
+    //
+    //   for ((token,count) <- counted) {
+    //     var char = token.take(1)
+    //     // println(token + " -> " + char)
+    //
+    //     var point = indexWords(char)
+    //
+    //     var currentPoint = masterWords(point).indexWhere(_ == token)
+    //     if(currentPoint == -1){
+    //       masterWords(point) += token
+    //       currentPoint = masterWords(point).indexWhere(_ == token)
+    //     }
+    //
+    //     println(link, currentPoint, count)
+    //     // masterListAgg += ((link, currentPoint, count))
+    //   }
+    //
+    //   // extract data from List
+    //   // var groupMasterList = masterListAgg.groupBy(_._1)
+    //   // // print(groupMasterList)
+    //   //
+    //   // for((group, content) <- groupMasterList){
+    //   //     var temp = Array.fill[Int](78000)(0)
+    //   //
+    //   //     for(row <- content){
+    //   //         temp(row._2) = row._3
+    //   //     }
+    //   //     masterAgg += temp
+    //   //     // println(temp)
+    //   // }
+    //
+    //   content
+    // })
+    //
+    // // Aggregate Running in DF
+    // val aggregateDF = preprocessDF
+    //   .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
       // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
+    var wordRDD =  preprocessDF.select("text_preprocess").
+                                flatMap( row => {
+                                    row.split(" ")
+                                } ).
+                                map( word ).
+                                reduceByKey( _ )
+                                // sortBy( z => (z._2, z._1), ascending = false )
+
+    println(wordRDD)
 
     // =========================== SINK ====================================
 
     //Show Data after processed
-    aggregateDF.writeStream
+    preprocessDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
