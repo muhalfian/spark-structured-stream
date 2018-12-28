@@ -28,12 +28,6 @@ import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
 
 object MediaStream extends StreamUtils {
 
-  // val kafkaHost = "ubuntu"
-  // val kafkaPort = "9092"
-  // val topic = "online_media"
-  // val startingOffsets = "earliest"
-  // val kafkaBroker = kafkaHost+":"+kafkaPort
-
   val schema : StructType = StructType(Seq(
     StructField("link", StringType,true),
     StructField("source", StringType, true),
@@ -58,8 +52,8 @@ object MediaStream extends StreamUtils {
   val dictionary : Set[String] = HashSet[String]()
 
   // load dictionary stemming sastrawi
-  val filename = "/home/blade1/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-  for (line <- Source.fromFile(filename).getLines) {
+  // val filename = "/home/blade1/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
+  for (line <- Source.fromFile("kata-dasar.txt").getLines) {
     dictionary.add(line)
   }
   val dict : java.util.Set[String] = dictionary.asJava
