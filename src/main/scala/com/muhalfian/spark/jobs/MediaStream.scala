@@ -129,7 +129,7 @@ object MediaStream extends StreamUtils {
                                 flatMap( row => {
                                     row.split(" ")
                                 } ).
-                                map( _ ).
+                                map( word => word ).
                                 reduceByKey( _ )
                                 // sortBy( z => (z._2, z._1), ascending = false )
 
