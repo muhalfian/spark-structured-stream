@@ -1,4 +1,4 @@
-package com.muhalfian.spark
+package com.muhalfian.spark.util
 
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig

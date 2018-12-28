@@ -1,4 +1,4 @@
-// package com.muhalfian.spark
+// package com.muhalfian.spark.jobs
 //
 // import com.mongodb.client.MongoCollection
 // import com.mongodb.spark.MongoConnector
