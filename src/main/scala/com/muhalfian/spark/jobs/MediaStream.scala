@@ -6,31 +6,24 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
 
+import scala.io.Source
+
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.from_json
-import org.bson._
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.MutableList
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf}
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
 
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
-import org.apache.lucene.analysis.id.IndonesianAnalyzer
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-import scala.collection.mutable.ArrayBuffer
-
 import jsastrawi.morphology.{Lemmatizer, DefaultLemmatizer}
-import scala.collection.mutable.{Set, HashSet}
-// import java.io.BufferedReader
-// import java.io.InputStreamReader
-import scala.io.Source
-import collection.JavaConverters._
-// import java.util.{Set, HashSet}
+
+// import org.apache.lucene.analysis.id.IndonesianAnalyzer
+// import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 
 
 object MediaStream extends StreamUtils {
