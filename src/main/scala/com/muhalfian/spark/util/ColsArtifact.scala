@@ -1,5 +1,7 @@
 package com.muhalfian.spark.util
 
+import org.apache.spark.sql.types._
+
 object ColsArtifact {
   val rawSchema : StructType = StructType(Seq(
     StructField("link", StringType,true),

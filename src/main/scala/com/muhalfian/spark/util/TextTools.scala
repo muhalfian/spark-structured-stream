@@ -2,6 +2,11 @@ package com.muhalfian.spark.util
 
 import jsastrawi.morphology.DefaultLemmatizer
 
+import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
+
+import scala.io.Source
+import scala.collection.mutable.{Set, HashSet}
+
 object TextTools {
 
   // =================== LOAD DICTIONARY SASTRAWI ==============
