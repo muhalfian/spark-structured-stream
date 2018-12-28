@@ -137,13 +137,13 @@ object MediaStream extends StreamUtils {
     val aggregate = udf((content: String, link: String) => {
       val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
-      val counted: Array[String] = splits.groupBy(identity).mapValues(_.size)
+      // val counted = splits.groupBy(identity).mapValues(_.size)
 
       // val temp = Array.empty[Type]()
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
 
-      val wordCount = masterWordsIndex.map(intersectCounts.getOrElse(_, 0))
+      val wordCount: Array[String] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0))
 
       masterAgg = masterAgg :+ wordCount
 
