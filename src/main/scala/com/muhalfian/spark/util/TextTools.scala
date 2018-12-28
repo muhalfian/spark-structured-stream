@@ -7,6 +7,7 @@ import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 import scala.io.Source
 import scala.collection.JavaConverters._
 import scala.collection.mutable.{Set, HashSet}
+import org.apache.spark.sql.functions.udf
 
 object TextTools {
 
