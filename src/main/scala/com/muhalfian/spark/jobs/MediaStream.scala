@@ -97,7 +97,7 @@ object MediaStream extends StreamUtils {
           masterWords(point) += token
         }
         // println(link, currentPoint, count)
-        masterListAgg += ((link, splits))
+        masterListAgg += ((link, splits.toArray))
       }
       content
     })
@@ -114,7 +114,7 @@ object MediaStream extends StreamUtils {
     // extract data from masterList
     var groupMasterList = masterListAgg.groupBy(_._1)
 
-    masterAgg.clear
+    masterAgg = Vector[Array[Int]]()
     for((group, splits) <- groupMasterList){
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
