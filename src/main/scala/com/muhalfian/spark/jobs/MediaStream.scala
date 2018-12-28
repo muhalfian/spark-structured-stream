@@ -121,9 +121,9 @@ object MediaStream extends StreamUtils {
       masterAgg = masterAgg :+ wordCount
 
       content
+    })
 
-
-      aggregateDF = aggregateDF
+    val aggregateDF2 = aggregateDF
         .withColumn("text_preprocess", aggregation(col("text_preprocess").cast("string")))
 
     // masterWordsIndex.clear
@@ -148,7 +148,7 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    aggregateDF.writeStream
+    aggregateDF2.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
