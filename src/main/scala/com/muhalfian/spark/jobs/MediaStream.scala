@@ -95,7 +95,7 @@ object MediaStream extends StreamUtils {
         var point = indexWords(char)
 
         var currentPoint = masterWords(point).indexWhere(_ == token)
-        if(currentPoint == -1
+        if(currentPoint == -1){
           edited = True
           masterWords(point) += token
           currentPoint = masterWords(point).indexWhere(_ == token)
@@ -145,7 +145,7 @@ object MediaStream extends StreamUtils {
 
       val wordCount = masterWordsIndex.map(intersectCounts.getOrElse(_, 0))
 
-      masterAgg = masterAgg :+ wordCount      
+      masterAgg = masterAgg :+ wordCount
 
     })
 
@@ -153,15 +153,15 @@ object MediaStream extends StreamUtils {
       .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
       // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
-    var wordRDD =  preprocessDF.select("text_preprocess").
-                                flatMap( row => {
-                                    row.split(" ")
-                                } ).
-                                map( word => word ).
-                                reduceByKey( _ )
-                                // sortBy( z => (z._2, z._1), ascending = false )
-
-    println(wordRDD)
+    // var wordRDD =  preprocessDF.select("text_preprocess").
+    //                             flatMap( row => {
+    //                                 row.split(" ")
+    //                             } ).
+    //                             map( word => word ).
+    //                             reduceByKey( _ )
+    //                             // sortBy( z => (z._2, z._1), ascending = false )
+    //
+    // println(wordRDD)
 
     // =========================== SINK ====================================
 
