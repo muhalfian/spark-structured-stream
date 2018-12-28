@@ -24,7 +24,7 @@ object MediaStream extends StreamUtils {
 
   // aggregation
   // var masterWords = new Array[String](78000)
-  val masterWords = ArrayBuffer.fill["String"](26,1)(null)
+  val masterWords = ArrayBuffer.fill(26,1)("")
   var masterAgg = ArrayBuffer[Array[Int]]()
 
   def main(args: Array[String]): Unit = {
