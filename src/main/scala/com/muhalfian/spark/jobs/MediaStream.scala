@@ -137,7 +137,7 @@ object MediaStream extends StreamUtils {
     val aggregate = udf((content: String, link: String) => {
       val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
-      val counted = splits.groupBy(identity).mapValues(_.size)
+      val counted: Array[String] = splits.groupBy(identity).mapValues(_.size)
 
       // val temp = Array.empty[Type]()
       val intersectCounts: Map[String, Int] =
