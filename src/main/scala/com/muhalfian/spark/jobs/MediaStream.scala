@@ -23,7 +23,8 @@ import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, fr
 object MediaStream extends StreamUtils {
 
   // aggregation
-  var masterWords = new Array[String](78000)
+  // var masterWords = new Array[String](78000)
+  val masterWords = ArrayBuffer.fill(26,1)(null)
   var masterAgg = ArrayBuffer[Array[Int]]()
 
   def main(args: Array[String]): Unit = {
@@ -90,24 +91,16 @@ object MediaStream extends StreamUtils {
         var char = token.take(1)
         // println(token + " -> " + char)
 
-        var searchPoint = indexWords(char)
+        var point = indexWords(char)
 
-        var startPoint = searchPoint * 3000
-        var endPoint = startPoint + 2999
-
-        var index = masterWords.slice(startPoint, endPoint).indexWhere(_ == token)
-        if(index == -1){
-          var latest = masterWords.slice(startPoint, endPoint).indexWhere(_ == null)
-          // println(masterWords.slice(startPoint, endPoint).groupBy(identity).mapValues(_.size))
-          // println("latest null : " + latest)
-          currentPoint = startPoint + latest
-          masterWords(currentPoint) = token
-        } else {
-          currentPoint = startPoint + index
+        var currentPoint = masterWords(point).indexWhere(_ == token)
+        if(currentPoint == -1){
+          masterWords(point) += token
+          currentPoint = masterWords(point).indexWhere(_ == token)
         }
 
-        // println(link, currentPoint, count)
-        masterListAgg += ((link, currentPoint, count))
+        println(link, currentPoint, count)
+        // masterListAgg += ((link, currentPoint, count))
       }
 
       // extract data from List
