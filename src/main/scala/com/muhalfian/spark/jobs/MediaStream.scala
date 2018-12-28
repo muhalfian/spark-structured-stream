@@ -53,7 +53,7 @@ object MediaStream extends StreamUtils {
 
   // load dictionary stemming sastrawi
   // val filename = "/home/blade1/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
-  for (line <- Source.fromResources("kata-dasar.txt").getLines) {
+  for (line <- Source.fromResource("kata-dasar.txt").getLines) {
     dictionary.add(line)
   }
   val dict : java.util.Set[String] = dictionary.asJava
