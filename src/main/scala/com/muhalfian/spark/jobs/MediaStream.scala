@@ -55,7 +55,7 @@ object MediaStream extends StreamUtils {
     dictionary.add(line)
   }
   // val dict : java.util.Set[String] = dictionary.asJava
-  var lemmatizer = new DefaultLemmatizer(dict.asJava);
+  var lemmatizer = new DefaultLemmatizer(dictionary.asJava);
 
   var id = 0
 
