@@ -129,4 +129,19 @@ object TextTools {
     .setInputCol("text_regex")
     .setOutputCol("text_filter")
 
+  // ======================= STEMMING UDF ===============================
+
+  val stemming = udf ((words: String) => {
+    var filtered = words.replaceAll("[^A-Za-z]", " ");
+    var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
+    var hasil = ""
+
+    word.foreach{ row =>
+      var stemmed = lemmatizer.lemmatize(row)
+      hasil += stemmed + " "
+    }
+    hasil
+  })
+
+
 }

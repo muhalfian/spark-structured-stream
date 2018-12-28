@@ -54,30 +54,11 @@ object MediaStream extends StreamUtils {
     // =================== PREPROCESS SASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
+
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    val stemming = udf ((words: String) => {
-      // println(words)
-      var filtered = words.replaceAll("[^A-Za-z]", " ");
-      var word = filtered.split(" ")
-        .toSeq
-        .map(_.trim)
-        .filter(_ != "")
-
-      // var hasil = ArrayBuffer.empty[String]
-      var hasil = ""
-
-      word.foreach{ row =>
-        var stemmed = TextTools.lemmatizer.lemmatize(row)
-        hasil += stemmed + " "
-      }
-      hasil
-    })
-
-    val stemmedDF = filteredDF.withColumn("text_preprocess", stemming(col("text_filter").cast("string")))
-
-    val preprocessDF = stemmedDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-
+    val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text")
+                              .withColumn("text_preprocess", TextTools.stemming(col("text_filter").cast("string")))
 
     // ======================== AGGREGATION ================================
 
