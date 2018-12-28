@@ -26,6 +26,7 @@ object MediaStream extends StreamUtils {
   // var masterWords = new Array[String](78000)
   val masterWords = ArrayBuffer.fill(26,1)("")
   var masterWordsIndex = ArrayBuffer[String]()
+  var masterListAgg = ArrayBuffer[(String, Array[String])]()
   var masterAgg = Vector[Array[Int]]()
 
   def main(args: Array[String]): Unit = {
@@ -75,12 +76,9 @@ object MediaStream extends StreamUtils {
                          "v" -> 21, "w" -> 22, "x" -> 23,
                          "y" -> 24, "z" -> 25)
 
-    var masterListAgg = MutableList[(String, Int, Int)]()
-
     var currentPoint = 0
 
     val wordDict = udf((content: String, link: String) => {
-      var edited = false
       val splits = content.split(" ")
         .toSeq
         .map(_.trim)
@@ -96,37 +94,11 @@ object MediaStream extends StreamUtils {
 
         var currentPoint = masterWords(point).indexWhere(_ == token)
         if(currentPoint == -1){
-          edited = true
           masterWords(point) += token
-          currentPoint = masterWords(point).indexWhere(_ == token)
         }
         // println(link, currentPoint, count)
-        // masterListAgg += ((link, currentPoint, count))
+        masterListAgg += ((link, splits))
       }
-
-      if(edited){
-        masterWordsIndex.clear
-        for(row <- masterWords){
-          masterWordsIndex = masterWordsIndex ++ row
-        }
-        edited = false
-        // println(masterWordsIndex.mkString(" "))
-      }
-
-      // extract data from List
-      // var groupMasterList = masterListAgg.groupBy(_._1)
-      // // print(groupMasterList)
-      //
-      // for((group, content) <- groupMasterList){
-      //     var temp = Array.fill[Int](78000)(0)
-      //
-      //     for(row <- content){
-      //         temp(row._2) = row._3
-      //     }
-      //     masterAgg += temp
-      //     // println(temp)
-      // }
-
       content
     })
 
@@ -134,26 +106,27 @@ object MediaStream extends StreamUtils {
     val aggregateDF = preprocessDF
       .withColumn("text_preprocess", wordDict(col("text_preprocess").cast("string"), col("link").cast("string")))
 
-    val aggregate = udf((content: String, link: String) => {
-      val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
+    masterWordsIndex.clear
+    for(row <- masterWords){
+      masterWordsIndex = masterWordsIndex ++ row
+    }
 
-      // val counted = splits.groupBy(identity).mapValues(_.size)
+    // extract data from masterList
+    var groupMasterList = masterListAgg.groupBy(_._1)
 
-      // val temp = Array.empty[Type]()
+    masterAgg.clear
+    for((group, splits) <- groupMasterList){
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
-
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
 
       print(wordCount)
       masterAgg = masterAgg :+ wordCount
+    }
 
-      content
 
-    })
-
-    val aggregateDF2 = aggregateDF
-      .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string"), col("link").cast("string")))
+    // val aggregateDF2 = aggregateDF
+    //   .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
       // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
 
     // var wordRDD =  preprocessDF.select("text_preprocess").
@@ -169,7 +142,7 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    aggregateDF2.writeStream
+    aggregateDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
