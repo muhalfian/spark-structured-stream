@@ -25,7 +25,7 @@ object MediaStream extends StreamUtils {
   // aggregation
   // var masterWords = new Array[String](78000)
   val masterWords = ArrayBuffer.fill(26,1)("")
-  val masterWordsIndex = ArrayBuffer[String]()
+  var masterWordsIndex = ArrayBuffer[String]()
   var masterAgg = Vector[Array[Int]]()
 
   def main(args: Array[String]): Unit = {
@@ -110,7 +110,7 @@ object MediaStream extends StreamUtils {
           masterWordsIndex = masterWordsIndex ++ row
         }
         edited = false
-        println(masterWordsIndex.deep.mkString("\n"))
+        println(masterWordsIndex.mkString(" "))
       }
 
       // extract data from List
