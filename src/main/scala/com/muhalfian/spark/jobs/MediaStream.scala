@@ -50,15 +50,12 @@ object MediaStream extends StreamUtils {
   )
 
   val dictionary : Set[String] = HashSet[String]()
-
-  // load dictionary stemming sastrawi
-  // val filename = "/home/blade1/Documents/spark-structured-stream/src/main/scala/com/muhalfian/spark/data/kata-dasar.txt"
   val fileStream = getClass.getResourceAsStream("/kata-dasar.txt")
   for (line <- Source.fromInputStream(fileStream).getLines) {
     dictionary.add(line)
   }
-  val dict : java.util.Set[String] = dictionary.asJava
-  var lemmatizer = new DefaultLemmatizer(dict);
+  // val dict : java.util.Set[String] = dictionary.asJava
+  var lemmatizer = new DefaultLemmatizer(dict.asJava);
 
   var id = 0
 
