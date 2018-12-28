@@ -101,6 +101,17 @@ object MediaStream extends StreamUtils {
         // masterListAgg += ((link, splits.toArray))
       }
 
+      content
+    })
+
+    // Aggregate Running in DF
+    val aggregateDF = preprocessDF
+      .withColumn("text_preprocess", wordDict(col("text_preprocess").cast("string"), col("link").cast("string")))
+
+    val aggregation = udf((content: String) => {
+
+      val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
+
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
@@ -110,11 +121,10 @@ object MediaStream extends StreamUtils {
       masterAgg = masterAgg :+ wordCount
 
       content
-    })
 
-    // Aggregate Running in DF
-    val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", wordDict(col("text_preprocess").cast("string"), col("link").cast("string")))
+
+      aggregateDF = aggregateDF
+        .withColumn("text_preprocess", aggregation(col("text_preprocess").cast("string")))
 
     // masterWordsIndex.clear
     // for(row <- masterWords){
