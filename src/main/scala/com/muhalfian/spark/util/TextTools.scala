@@ -5,6 +5,7 @@ import jsastrawi.morphology.DefaultLemmatizer
 import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
 
 import scala.io.Source
+import scala.collection.JavaConverters._
 import scala.collection.mutable.{Set, HashSet}
 
 object TextTools {

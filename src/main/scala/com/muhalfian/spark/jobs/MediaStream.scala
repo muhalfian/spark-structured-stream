@@ -9,7 +9,6 @@ import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 
-import scala.collection.JavaConverters._
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 
 import org.apache.spark.sql.types._
