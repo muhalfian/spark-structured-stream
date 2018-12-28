@@ -95,27 +95,12 @@ object MediaStream extends StreamUtils {
         var currentPoint = masterWords(point).indexWhere(_ == token)
         if(currentPoint == -1){
           masterWords(point) += token
+          masterWordsIndex += token
         }
         // println(link, currentPoint, count)
-        masterListAgg += ((link, splits.toArray))
+        // masterListAgg += ((link, splits.toArray))
       }
-      content
-    })
 
-    // Aggregate Running in DF
-    val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", wordDict(col("text_preprocess").cast("string"), col("link").cast("string")))
-
-    masterWordsIndex.clear
-    for(row <- masterWords){
-      masterWordsIndex = masterWordsIndex ++ row
-    }
-
-    // extract data from masterList
-    var groupMasterList = masterListAgg.groupBy(_._1)
-
-    masterAgg = Vector[Array[Int]]()
-    for((group, splits) <- groupMasterList){
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
@@ -123,22 +108,32 @@ object MediaStream extends StreamUtils {
       println(wordCount.mkString(" "))
       println("Size : " + wordCount.size)
       masterAgg = masterAgg :+ wordCount
-    }
 
+      content
+    })
 
-    // val aggregateDF2 = aggregateDF
-    //   .withColumn("text_preprocess", aggregate(col("text_preprocess").cast("string")))
-      // .withColumn("text_aggregate", aggregate(col("text_preprocess").cast("string")))
+    // Aggregate Running in DF
+    val aggregateDF = preprocessDF
+      .withColumn("text_preprocess", wordDict(col("text_preprocess").cast("string"), col("link").cast("string")))
 
-    // var wordRDD =  preprocessDF.select("text_preprocess").
-    //                             flatMap( row => {
-    //                                 row.split(" ")
-    //                             } ).
-    //                             map( word => word ).
-    //                             reduceByKey( _ )
-    //                             // sortBy( z => (z._2, z._1), ascending = false )
+    // masterWordsIndex.clear
+    // for(row <- masterWords){
+    //   masterWordsIndex = masterWordsIndex ++ row
+    // }
+
+    // // extract data from masterList
+    // var groupMasterList = masterListAgg.groupBy(_._1)
     //
-    // println(wordRDD)
+    // masterAgg = Vector[Array[Int]]()
+    // for((group, splits) <- groupMasterList){
+    //   val intersectCounts: Map[String, Int] =
+    //     masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
+    //   val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
+    //
+    //   println(wordCount.mkString(" "))
+    //   println("Size : " + wordCount.size)
+    //   masterAgg = masterAgg :+ wordCount
+    // }
 
     // =========================== SINK ====================================
 
