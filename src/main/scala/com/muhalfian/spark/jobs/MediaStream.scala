@@ -100,7 +100,7 @@ object MediaStream extends StreamUtils {
         // println(link, currentPoint, count)
         // masterListAgg += ((link, splits.toArray))
       }
-
+      println("Building Dictionary : " + masterWordsIndex.size)
       content
     })
 
@@ -116,8 +116,8 @@ object MediaStream extends StreamUtils {
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
 
-      println(wordCount.mkString(" "))
-      println("Size : " + wordCount.size)
+      // println(wordCount.mkString(" "))
+      println("Aggregate array : " + wordCount.size)
       masterAgg = masterAgg :+ wordCount
 
       content
