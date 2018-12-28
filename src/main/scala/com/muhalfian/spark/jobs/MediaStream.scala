@@ -120,7 +120,7 @@ object MediaStream extends StreamUtils {
         masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
       val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
 
-      print(wordCount)
+      print(wordCount.mkString(" "))
       masterAgg = masterAgg :+ wordCount
     }
 
