@@ -20,7 +20,7 @@ object AggTools {
   val masterWords = ArrayBuffer.fill(26,1)("")
   var masterWordsIndex = ArrayBuffer[String]()
   var masterAgg = ArrayBuffer[Vector]()
-  var masterListAgg = ArrayBuffer[(String, Int, Int)]()
+  // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
@@ -42,7 +42,7 @@ object AggTools {
 
       // println(wordCount.mkString(" "))
       println("Aggregate array : " + wordCount.size)
-      masterAgg += wordCount
+      masterAgg = masterAgg +: wordCount
     }
 
     // masterListAgg += (splits.to[ArrayBuffer])
