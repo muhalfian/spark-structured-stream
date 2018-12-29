@@ -22,13 +22,6 @@ import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, fr
 
 object MediaStream extends StreamUtils {
 
-  // aggregation
-  // var masterWords = new Array[String](78000)
-  val masterWords = ArrayBuffer.fill(26,1)("")
-  var masterWordsIndex = ArrayBuffer[String]()
-  var masterListAgg = ArrayBuffer[(String, Array[String])]()
-  var masterAgg = Vector[Array[Int]]()
-
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
@@ -61,7 +54,7 @@ object MediaStream extends StreamUtils {
     val filteredDF = TextTools.remover.transform(regexDF)
 
     val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                              .withColumn("text_preprocess", TextTools.saggregationtemming(col("text_preprocess").cast("string")))
+                              .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess").cast("string")))
 
     // ======================== AGGREGATION ================================
 

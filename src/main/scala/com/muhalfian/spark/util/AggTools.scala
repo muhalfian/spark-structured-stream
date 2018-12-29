@@ -11,6 +11,9 @@ object AggTools {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
+  val masterWords = ArrayBuffer.fill(26,1)("")
+  var masterWordsIndex = ArrayBuffer[String]()
+  var masterAgg = Vector[Array[Int]]()
 
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
