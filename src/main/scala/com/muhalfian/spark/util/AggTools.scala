@@ -39,7 +39,7 @@ object AggTools {
 
     }
 
-    masterListAgg += (splits.to[mutable.ArrayBuffer])
+    masterListAgg += (splits.to[ArrayBuffer])
 
     for(row <- masterListAgg){
       val intersectCounts: Map[String, Int] =
