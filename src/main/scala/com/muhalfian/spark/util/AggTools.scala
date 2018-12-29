@@ -4,6 +4,8 @@ import org.apache.spark.sql.functions.{split, col, udf}
 
 import scala.collection.mutable.ArrayBuffer
 
+import org.apache.spark.ml.linalg._
+
 object AggTools {
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
                        "d" -> 3, "e" -> 4, "f" -> 5,
@@ -17,7 +19,7 @@ object AggTools {
 
   val masterWords = ArrayBuffer.fill(26,1)("")
   var masterWordsIndex = ArrayBuffer[String]()
-  var masterAgg = Vector[Array[Int]]()
+  var masterAgg = ArrayBuffer[Vector]()
 
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
@@ -38,7 +40,7 @@ object AggTools {
 
     val intersectCounts: Map[String, Int] =
       masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
-    val wordCount: Array[Int] = masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).toArray
+    val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)))
 
     // println(wordCount.mkString(" "))
     println("Aggregate array : " + wordCount.size)
