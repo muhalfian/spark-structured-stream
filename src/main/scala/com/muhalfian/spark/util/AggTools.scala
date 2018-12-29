@@ -42,7 +42,7 @@ object AggTools {
 
       // println(wordCount.mkString(" "))
       println("Aggregate array : " + wordCount.size)
-      masterAgg = masterAgg +: wordCount
+      masterAgg = masterAgg :+ wordCount
     }
 
     // masterListAgg += (splits.to[ArrayBuffer])
