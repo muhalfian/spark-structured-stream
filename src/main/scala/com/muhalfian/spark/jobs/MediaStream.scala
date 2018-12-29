@@ -77,7 +77,7 @@ object MediaStream extends StreamUtils {
       //   masterAggUpdate += vecZeros
       // }
 
-      print("Dimension array - 0 : " + masterAggUpdate(0).size)
+      // print("Dimension array - 0 : " + masterAggUpdate(0).size)
       content
     })
 

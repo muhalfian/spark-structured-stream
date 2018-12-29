@@ -20,7 +20,7 @@ object AggTools {
   val masterWords = ArrayBuffer.fill(26,1)("")
   var masterWordsIndex = ArrayBuffer[String]()
   var masterAgg = ArrayBuffer[Vector]()
-  var masterListAgg = ArrayBuffer[(String, ArrayBuffer[String])]()
+  var masterListAgg = ArrayBuffer[ArrayBuffer[String]]()
 
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
@@ -39,7 +39,7 @@ object AggTools {
 
     }
 
-    masterListAgg += ((link, splits.toArray))
+    masterListAgg += splits.toArray
 
     for(row <- masterListAgg){
       val intersectCounts: Map[String, Int] =
