@@ -14,7 +14,7 @@ import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
 
-
+import org.apache.spark.ml.linalg._
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
 // import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
