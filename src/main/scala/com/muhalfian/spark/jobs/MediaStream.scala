@@ -78,6 +78,13 @@ object MediaStream extends StreamUtils {
 
     var currentPoint = 0
 
+    preprocessDF.map(row => {
+      val row1 = row.getAs[String]("text_preprocess")
+      // val make = if (row1.toLowerCase == "125") "S" else "its 123"
+      println("map text preprocess")
+      (row(0),row1,row(0)) }).collect().foreach(println)
+
+
     val wordDict = udf((content: String, link: String) => {
       val splits = content.split(" ")
         .toSeq
