@@ -49,7 +49,7 @@ object AggTools {
 
       // println(wordCount.mkString(" "))
       println("Aggregate array : " + wordCount.size)
-      masterAgg = masterAgg :+ wordCount
+      masterAgg += wordCount
     }
     content
   })
