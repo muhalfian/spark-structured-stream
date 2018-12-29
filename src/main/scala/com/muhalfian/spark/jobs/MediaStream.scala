@@ -64,20 +64,20 @@ object MediaStream extends StreamUtils {
     // ============================ CLUSTERING =================================
 
     val clustering = udf((content: String) => {
+      var masterAggUpdate = ArrayBuffer[Vector]()
       val dimension = AggTools.masterWordsIndex.size
 
-      var i = 0
-      while(i < AggTools.masterAgg.size){
+      for(row <- AggTools.masterAgg){
         var vecZeros = Vectors.zeros(dimension)
         var key = 0
-        while(key < AggTools.masterAgg(i).size){
-          vecZeros.toArray(key) = AggTools.masterAgg(i)(key)
+        while(key < row.size){
+          vecZeros.toArray(key) = row(key)
           key += 1
         }
-        AggTools.masterAgg(i) = vecZeros
+        masterAggUpdate += vecZeros
       }
 
-      print("Dimension array - 0 : " + AggTools.masterAgg(0).size)
+      print("Dimension array - 0 : " + AggTools.masterAggUpdate(0).size)
       content
     })
 
