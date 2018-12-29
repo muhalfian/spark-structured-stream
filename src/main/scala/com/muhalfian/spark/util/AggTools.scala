@@ -43,7 +43,7 @@ object AggTools {
 
     for(row <- masterListAgg){
       val intersectCounts: Map[String, Int] =
-        masterWordsIndex.intersect(row._2).map(s => s -> row._2.count(_ == s)).toMap
+        masterWordsIndex.intersect(row).map(s => s -> row.count(_ == s)).toMap
       val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
 
       // println(wordCount.mkString(" "))
