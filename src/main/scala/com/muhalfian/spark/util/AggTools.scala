@@ -20,6 +20,7 @@ object AggTools {
   val masterWords = ArrayBuffer.fill(26,1)("")
   var masterWordsIndex = ArrayBuffer[String]()
   var masterAgg = ArrayBuffer[Vector]()
+  var masterListAgg = ArrayBuffer[(String, ArrayBuffer[String])]()
 
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
@@ -35,17 +36,20 @@ object AggTools {
         masterWordsIndex += token
       }
       // println(link, currentPoint, count)
-      // masterListAgg += ((link, splits.toArray))
+
     }
 
-    val intersectCounts: Map[String, Int] =
-      masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
-    val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
+    masterListAgg += ((link, splits.toArray))
 
-    // println(wordCount.mkString(" "))
-    println("Aggregate array : " + wordCount.size)
-    masterAgg = masterAgg :+ wordCount
+    for(row <- masterListAgg){
+      val intersectCounts: Map[String, Int] =
+        masterWordsIndex.intersect(row._2).map(s => s -> row._2.count(_ == s)).toMap
+      val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
 
+      // println(wordCount.mkString(" "))
+      println("Aggregate array : " + wordCount.size)
+      masterAgg = masterAgg :+ wordCount
+    }
     content
   })
 }
