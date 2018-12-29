@@ -41,6 +41,7 @@ object AggTools {
 
     masterListAgg += (splits.to[ArrayBuffer])
 
+    masterAgg.clear
     for(row <- masterListAgg){
       val intersectCounts: Map[String, Int] =
         masterWordsIndex.intersect(row).map(s => s -> row.count(_ == s)).toMap
