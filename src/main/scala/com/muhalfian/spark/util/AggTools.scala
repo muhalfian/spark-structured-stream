@@ -19,6 +19,8 @@ object AggTools {
 
   val masterWords = ArrayBuffer.fill(26,1)(("",0))
   var masterWordsIndex = ArrayBuffer[String]()
+  var countWords = 0
+  var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
@@ -33,8 +35,13 @@ object AggTools {
       var currentPoint = masterWords(point).indexWhere(_._1 == token)
       if(currentPoint == -1){
         masterWordsIndex += token
-        masterWords(point) += ((token, masterWordsIndex.size))
+        currentPoint = masterWordsIndex.size - 1
+        masterWords(point) += ((token, currentPoint))
       }
+
+
+
+
       // // println(link, currentPoint, count)
       // val intersectCounts: Map[String, Int] =
       //     masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
@@ -44,6 +51,8 @@ object AggTools {
       // println("Aggregate array : " + wordCount.size)
       // masterAgg = masterAgg :+ wordCount
     }
+
+    countWords = masterWordsIndex.size
 
     println("aggregate " + masterWordsIndex.size)
 
