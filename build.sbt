@@ -1,3 +1,6 @@
+import sbt._
+import Keys._
+
 name := "Prayuga-Streaming"
 
 version := "0.1"
@@ -21,6 +24,10 @@ libraryDependencies += "com.andylibrian.jsastrawi" % "jsastrawi" % "0.1"
 libraryDependencies += "com.typesafe" % "config" % "1.3.2"
 
 // libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "7.4.0"
+
+lazy val root = Project("root", file(".")) dependsOn(sparkProject)
+lazy val sparkProject = RootProject(uri("git://github.com/muhalfian/spark.git"))
+
 
 assemblyMergeStrategy in assembly := {
   {
