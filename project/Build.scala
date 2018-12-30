@@ -1,5 +1,4 @@
-import sbt._
-import Keys._
+import sbt.Build
 
 object MyBuild extends Build {
 
