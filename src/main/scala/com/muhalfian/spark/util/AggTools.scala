@@ -35,10 +35,10 @@ object AggTools {
         masterWordsIndex += token
         masterWords(point) += ((token, masterWordsIndex.size))
       }
-      // println(link, currentPoint, count)
-      val intersectCounts: Map[String, Int] =
-          masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
-      val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
+      // // println(link, currentPoint, count)
+      // val intersectCounts: Map[String, Int] =
+      //     masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
+      // val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
 
       // println(wordCount.mkString(" "))
       // println("Aggregate array : " + wordCount.size)
