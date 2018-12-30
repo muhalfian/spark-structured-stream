@@ -25,9 +25,9 @@ object AggTools {
   val aggregate = udf((content: String) => {
     val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
-    val grouped = splits.groupBy(identity)
+    val grouped = splits.groupBy(identity).mapValues(_.size)
 
-    for ((token,tokenArr) <- grouped) {
+    for ((token,count) <- grouped) {
       var point = indexWords(token.take(1))
 
       var currentPoint = masterWords(point).indexWhere(_._1 == token)
@@ -40,11 +40,12 @@ object AggTools {
           masterWordsIndex.intersect(splits).map(s => s -> splits.count(_ == s)).toMap
       val wordCount = Vectors.dense(masterWordsIndex.map(intersectCounts.getOrElse(_, 0)).map(_.toDouble).toArray)
 
-      print("aggregate " + masterWordsIndex.size)
       // println(wordCount.mkString(" "))
       // println("Aggregate array : " + wordCount.size)
       // masterAgg = masterAgg :+ wordCount
     }
+
+    println("aggregate " + masterWordsIndex.size)
 
     // masterListAgg += (splits.to[ArrayBuffer])
 
