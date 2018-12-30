@@ -17,7 +17,7 @@ object AggTools {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-  val masterWords = ArrayBuffer.fill(26,1)("")
+  val masterWords = ArrayBuffer.fill(26,1)(("",0))
   var masterWordsIndex = ArrayBuffer[String]()
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
