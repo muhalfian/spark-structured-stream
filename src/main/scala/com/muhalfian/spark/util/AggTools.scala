@@ -21,26 +21,29 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   var countWords = 0
   var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
+  var masterAgg = Dataset[LabeledPoint]
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
-  val aggregate = udf((content: Seq[String]) => {
+  val aggregate = udf((content: Seq[String], link: String) => {
     // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
     val grouped = content.groupBy(identity).mapValues(_.size)
+    var tempSeq = Seq[(Int, Double)]()
 
     for ((token,count) <- grouped) {
       var point = indexWords(token.take(1))
 
-      var currentPoint = masterWords(point).indexWhere(_._1 == token)
-      if(currentPoint == -1){
+      var index = masterWords(point).indexWhere(_._1 == token)
+      if(index == -1){
         masterWordsIndex += token
         currentPoint = masterWordsIndex.size - 1
         masterWords(point) += ((token, currentPoint))
+      } else {
+        currentPoint = masterWords(index)._2
       }
 
-
-
+      tempSeq = tempSeq +: (currentPoint, count.toDouble)
 
       // // println(link, currentPoint, count)
       // val intersectCounts: Map[String, Int] =
@@ -53,6 +56,8 @@ object AggTools {
     }
 
     countWords = masterWordsIndex.size
+
+    masterAgg = masterAgg +: Seq(LabeledPoint(link, Vectors.sparse(countWords, tempSeq))).toDS
 
     println("aggregate " + masterWordsIndex.size)
 

@@ -64,7 +64,7 @@ object MediaStream extends StreamUtils {
     //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
     val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess")))
+      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
     // ============================ CLUSTERING =================================
 

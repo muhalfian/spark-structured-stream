@@ -133,20 +133,13 @@ object TextTools {
   // ======================= STEMMING UDF ===============================
 
   val stemming = udf ((words: Seq[String]) => {
-    // var filtered = words.replaceAll("[^A-Za-z]", " ");
-    // var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
-    // var hasil = ""
-    var filtered = words.map(_.replaceAll("[^A-Za-z]", "")).map(_.trim).filter(_ != "")
-    var hasil = filtered.map(row => lemmatizer.lemmatize(row))
 
-    // var hasil = Seq[String]()
-    //
-    // filtered.foreach{ row =>
-    //   var stemmed = lemmatizer.lemmatize(row)
-    //   // hasil += stemmed + " "
-    //   hasil = hasil :+ stemmed
-    // }
-    hasil
+    var stemmed = words
+                  .map(_.replaceAll("[^A-Za-z]", ""))     // replace all non - char
+                  .map(_.trim).filter(_ != "")            // remove null list
+                  .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
+
+    stemmed
   })
 
 
