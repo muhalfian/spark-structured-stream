@@ -25,7 +25,7 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   var countWords = 0
   var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
-  var masterAgg = Dataset[LabeledPoint]
+  var masterAgg : Dataset[LabeledPoint] = Seq(LabeledPoint("", Vectors.sparse(1, Seq((0, 0.0)))))
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
@@ -61,7 +61,13 @@ object AggTools {
 
     countWords = masterWordsIndex.size
 
-    masterAgg = masterAgg +: Seq(LabeledPoint(link, Vectors.sparse(countWords, tempSeq))).toDS
+    var dataset: Dataset[LabeledPoint] = Seq(LabeledPoint(link, Vectors.sparse(countWords, tempSeq))).toDS
+
+    if(masterAgg){
+      masterAgg = masterAgg.union(dataset)
+    } else {
+      masterAgg = dataset
+    }
 
     println("aggregate " + masterWordsIndex.size)
 
