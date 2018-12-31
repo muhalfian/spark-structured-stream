@@ -121,7 +121,7 @@ object TextTools {
     .setInputCol("raw_text")
     .setOutputCol("text_regex")
     .setPattern("\\d*\\W+")
-    .minTokenLength(2)
+    .setMinTokenLength(2)
 
   // =================== STOPWORD CONFIGURATION =========================
 
