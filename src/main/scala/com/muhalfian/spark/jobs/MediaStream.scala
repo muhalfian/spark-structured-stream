@@ -42,7 +42,7 @@ object MediaStream extends StreamUtils {
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
   var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
-  var masterAgg : Dataset[LabeledPoint] = temp.toDS
+  var masterAgg : Dataset[LabeledPoint] = temp.toDS()
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
@@ -123,7 +123,7 @@ object MediaStream extends StreamUtils {
       countWords = masterWordsIndex.size
 
       var temp: Seq[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq)))
-      var dataset: Dataset[LabeledPoint] = temp.toDS
+      var dataset: Dataset[LabeledPoint] = temp.toDS()
 
       masterAgg = masterAgg.union(dataset)
 
