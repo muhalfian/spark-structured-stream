@@ -4,7 +4,11 @@ import org.apache.spark.sql.functions.{split, col, udf}
 
 import scala.collection.mutable.ArrayBuffer
 
-import org.apache.spark.ml.linalg._
+// import org.apache.spark.ml.linalg._
+
+import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.LabeledPoint
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 object AggTools {
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
