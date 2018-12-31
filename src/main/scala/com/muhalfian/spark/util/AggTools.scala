@@ -26,7 +26,8 @@ object AggTools {
   val masterWords = ArrayBuffer.fill(26,1)(("",0))
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
-  var masterAgg : Dataset[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
+  var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
+  var masterAgg : Dataset[LabeledPoint] = temp.toDS
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
@@ -66,7 +67,8 @@ object AggTools {
 
     countWords = masterWordsIndex.size
 
-    var dataset: Dataset[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq)))
+    var temp: Seq[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq)))
+    var dataset: Dataset[LabeledPoint] = temp.toDS
 
     masterAgg = masterAgg.union(dataset)
 
