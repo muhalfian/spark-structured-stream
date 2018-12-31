@@ -53,13 +53,18 @@ object MediaStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
+    // val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+    //                           .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess").cast("string")))
     val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                              .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess").cast("string")))
+                              .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
 
     // ======================== AGGREGATION ================================
 
+    // val aggregateDF = preprocessDF
+    //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
+
     val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
+      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess")))
 
     // ============================ CLUSTERING =================================
 

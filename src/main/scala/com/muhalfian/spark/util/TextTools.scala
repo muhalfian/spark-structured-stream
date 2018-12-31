@@ -132,14 +132,16 @@ object TextTools {
 
   // ======================= STEMMING UDF ===============================
 
-  val stemming = udf ((words: String) => {
-    var filtered = words.replaceAll("[^A-Za-z]", " ");
-    var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
-    var hasil = ""
+  val stemming = udf ((words: Seq[String]) => {
+    // var filtered = words.replaceAll("[^A-Za-z]", " ");
+    // var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
+    // var hasil = ""
+    var hasil = Seq("")
 
-    word.foreach{ row =>
+    words.foreach{ row =>
       var stemmed = lemmatizer.lemmatize(row)
-      hasil += stemmed + " "
+      // hasil += stemmed + " "
+      hasil = hasil :+ stemmed
     }
     hasil
   })

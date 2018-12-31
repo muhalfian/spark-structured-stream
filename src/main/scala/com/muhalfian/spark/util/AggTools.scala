@@ -24,10 +24,10 @@ object AggTools {
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
-  val aggregate = udf((content: String) => {
-    val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
+  val aggregate = udf((content: Seq[String]) => {
+    // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
-    val grouped = splits.groupBy(identity).mapValues(_.size)
+    val grouped = content.groupBy(identity).mapValues(_.size)
 
     for ((token,count) <- grouped) {
       var point = indexWords(token.take(1))
