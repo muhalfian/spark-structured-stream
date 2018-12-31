@@ -45,7 +45,7 @@ object AggTools {
         currentPoint = masterWordsIndex.size - 1
         masterWords(point) += ((token, currentPoint))
       } else {
-        currentPoint = masterWords(index)._2
+        currentPoint = masterWords(point)(index)._2
       }
 
       tempSeq = tempSeq +: (currentPoint, count.toDouble)
