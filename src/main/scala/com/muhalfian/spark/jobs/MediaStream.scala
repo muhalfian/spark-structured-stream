@@ -101,7 +101,7 @@ object MediaStream extends StreamUtils {
       var dataset: Dataset[LabeledPoint] = temp.toDS
 
       masterAgg = masterAgg.union(dataset)
-      println("aggregate " + masterWordsIndex.size
+      println("aggregate " + masterWordsIndex.size)
       content
     })
 
