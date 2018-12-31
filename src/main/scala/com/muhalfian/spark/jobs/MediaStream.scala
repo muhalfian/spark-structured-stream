@@ -47,7 +47,7 @@ object MediaStream extends StreamUtils {
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
 
-    // =================== PREPROCESS SASTRAWI =============================
+    // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
 
@@ -66,7 +66,7 @@ object MediaStream extends StreamUtils {
 
 
     val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess"), col("link").cast("string"), spark))
+      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
     // ============================ CLUSTERING =================================
 

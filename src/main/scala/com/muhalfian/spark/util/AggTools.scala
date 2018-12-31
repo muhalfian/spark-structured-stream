@@ -5,12 +5,14 @@ import org.apache.spark.sql.functions.{split, col, udf}
 import scala.collection.mutable.ArrayBuffer
 
 // import org.apache.spark.ml.linalg._
-import org.apache.spark.sql.SparkSession
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
-object AggTools {
+object AggTools extends StreamUtils {
+  val spark = getSparkSession(args)
+  import spark.implicits._
+
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
                        "d" -> 3, "e" -> 4, "f" -> 5,
                        "g" -> 6, "h" -> 7, "i" -> 8,
@@ -31,10 +33,8 @@ object AggTools {
   // var masterAgg = ArrayBuffer[Vector]()
   // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
-  val aggregate = udf((content: Seq[String], link: String, spark : SparkSession) => {
+  val aggregate = udf((content: Seq[String], link: String) => {
     // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
-
-    import spark.implicits._
 
     val grouped = content.groupBy(identity).mapValues(_.size)
     var tempSeq = Seq[(Int, Double)]()
