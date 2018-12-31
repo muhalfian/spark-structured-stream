@@ -30,7 +30,6 @@ object AggTools {
     val grouped = content.groupBy(identity).mapValues(_.size)
 
     for ((token,count) <- grouped) {
-      println(token)
       var point = indexWords(token.take(1))
 
       var currentPoint = masterWords(point).indexWhere(_._1 == token)

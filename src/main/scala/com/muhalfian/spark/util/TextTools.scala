@@ -137,14 +137,15 @@ object TextTools {
     // var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
     // var hasil = ""
     var filtered = words.map(_.replaceAll("[^A-Za-z]", "")).map(_.trim).filter(_ != "")
+    var hasil = filtered.map(row => lemmatizer.lemmatize(row))
 
-    var hasil = Seq[String]()
-
-    filtered.foreach{ row =>
-      var stemmed = lemmatizer.lemmatize(row)
-      // hasil += stemmed + " "
-      hasil = hasil :+ stemmed
-    }
+    // var hasil = Seq[String]()
+    //
+    // filtered.foreach{ row =>
+    //   var stemmed = lemmatizer.lemmatize(row)
+    //   // hasil += stemmed + " "
+    //   hasil = hasil :+ stemmed
+    // }
     hasil
   })
 
