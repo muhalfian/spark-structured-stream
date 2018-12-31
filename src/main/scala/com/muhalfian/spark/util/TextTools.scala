@@ -136,13 +136,9 @@ object TextTools {
     // var filtered = words.replaceAll("[^A-Za-z]", " ");
     // var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
     // var hasil = ""
-
-    print(words)
     var filtered = words.map(_.replaceAll("[^A-Za-z]", "")).map(_.trim).filter(_ != "")
 
-    println(filtered)
-
-    var hasil = Seq("")
+    var hasil = Seq[String]
 
     filtered.foreach{ row =>
       var stemmed = lemmatizer.lemmatize(row)
