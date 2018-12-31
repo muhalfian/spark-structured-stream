@@ -121,7 +121,7 @@ object TextTools {
     .setInputCol("raw_text")
     .setOutputCol("text_regex")
     .setPattern("\\d*\\W+")
-    .setGaps(true)
+    .minTokenLength(2)
 
   // =================== STOPWORD CONFIGURATION =========================
 
@@ -136,7 +136,7 @@ object TextTools {
     // var filtered = words.replaceAll("[^A-Za-z]", " ");
     // var word = filtered.split(" ").toSeq.map(_.trim).filter(_ != "")
     // var hasil = ""
-    var filtered = words.map(_.replaceAll("[^A-Za-z]", ""))
+    var filtered = words.map(_.replaceAll("[^A-Za-z]", "")).map(_.trim).filter(_ != "")
 
     var hasil = Seq("")
 
