@@ -63,10 +63,50 @@ object MediaStream extends StreamUtils {
     // val aggregateDF = preprocessDF
     //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
+    var masterLink = ArrayBuffer[String]()
+    val masterWords = ArrayBuffer.fill(26,1)(("",0))
+    var masterWordsIndex = ArrayBuffer[String]()
+    var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
+    var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
+    var masterAgg : Dataset[LabeledPoint] = temp.toDS
 
+    val aggregate = udf((content: Seq[String], link: String) => {
+      // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
+
+      val grouped = content.groupBy(identity).mapValues(_.size)
+      var tempSeq = Seq[(Int, Double)]()
+
+      for ((token,count) <- grouped) {
+        var point = indexWords(token.take(1))
+
+        var index = masterWords(point).indexWhere(_._1 == token)
+        var currentPoint = 0
+        if(index == -1){
+          masterWordsIndex += token
+          currentPoint = masterWordsIndex.size - 1
+          masterWords(point) += ((token, currentPoint))
+
+        } else {
+          currentPoint = masterWords(point)(index)._2
+        }
+
+        tempSeq = tempSeq :+ (currentPoint, count.toDouble)
+      }
+
+      masterLink += link
+
+      countWords = masterWordsIndex.size
+
+      var temp: Seq[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq)))
+      var dataset: Dataset[LabeledPoint] = temp.toDS
+
+      masterAgg = masterAgg.union(dataset)
+      println("aggregate " + masterWordsIndex.size
+      content
+    })
 
     val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
+      .withColumn("text_preprocess", aggregate(col("text_preprocess"), col("link").cast("string")))
 
     // ============================ CLUSTERING =================================
 

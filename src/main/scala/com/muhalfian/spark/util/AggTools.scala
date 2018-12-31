@@ -10,8 +10,6 @@ import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 object AggTools extends StreamUtils {
-  val spark = getSparkSession(args)
-  import spark.implicits._
 
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
                        "d" -> 3, "e" -> 4, "f" -> 5,
@@ -24,14 +22,14 @@ object AggTools extends StreamUtils {
                        "y" -> 24, "z" -> 25)
 
   var countWords = 0
-  var masterLink = ArrayBuffer[String]()
-  val masterWords = ArrayBuffer.fill(26,1)(("",0))
-  var masterWordsIndex = ArrayBuffer[String]()
-  var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
-  var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
-  var masterAgg : Dataset[LabeledPoint] = temp.toDS
-  // var masterAgg = ArrayBuffer[Vector]()
-  // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
+  // var masterLink = ArrayBuffer[String]()
+  // val masterWords = ArrayBuffer.fill(26,1)(("",0))
+  // var masterWordsIndex = ArrayBuffer[String]()
+  // var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
+  // var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
+  // var masterAgg : Dataset[LabeledPoint] = temp.toDS
+  // // var masterAgg = ArrayBuffer[Vector]()
+  // // var masterListAgg = ArrayBuffer[(String, Int, Int)]()
 
   val aggregate = udf((content: Seq[String], link: String) => {
     // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
