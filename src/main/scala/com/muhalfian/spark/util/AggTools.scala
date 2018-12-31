@@ -48,7 +48,7 @@ object AggTools {
         currentPoint = masterWords(point)(index)._2
       }
 
-      tempSeq = tempSeq +: (currentPoint, count.toDouble)
+      tempSeq = tempSeq :+ (currentPoint, count.toDouble)
 
       // // println(link, currentPoint, count)
       // val intersectCounts: Map[String, Int] =
