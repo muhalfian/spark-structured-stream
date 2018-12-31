@@ -66,7 +66,7 @@ object AggTools {
 
     countWords = masterWordsIndex.size
 
-    var dataset: Dataset[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))).toDS
+    var dataset: Dataset[LabeledPoint] = Seq(LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq)))
 
     masterAgg = masterAgg.union(dataset)
 
