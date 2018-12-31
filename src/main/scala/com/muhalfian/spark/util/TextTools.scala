@@ -145,6 +145,7 @@ object TextTools {
       // hasil += stemmed + " "
       hasil = hasil :+ stemmed
     }
+    println(hasil)
     hasil
   })
 
