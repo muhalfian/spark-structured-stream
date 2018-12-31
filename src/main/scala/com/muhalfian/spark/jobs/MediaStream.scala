@@ -84,7 +84,7 @@ object MediaStream extends StreamUtils {
     var masterWordsIndex = ArrayBuffer[String]()
     var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
     var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
-    var masterAgg : Dataset[LabeledPoint] = temp.
+    var masterAgg : Dataset[LabeledPoint] = temp.toDS
     var seqLabel = Seq[LabeledPoint]()
 
     val aggregate = udf((content: Seq[String], link: String) => {
