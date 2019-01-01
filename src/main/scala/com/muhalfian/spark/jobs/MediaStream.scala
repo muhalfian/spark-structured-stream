@@ -121,36 +121,41 @@ object MediaStream extends StreamUtils {
       //
       // println(dataset.select("*").show(false))
       // masterAgg = masterAgg.union(dataset)
-      println("aggregate " + masterWordsIndex.size)
+      println("aggregate " + countWords)
       // content
       vectorData
     })
 
     val aggregateDF = preprocessDF
-      .withColumn("text_preprocess", aggregate(col("text_preprocess"), col("link").cast("string")))
+      .withColumn("text_aggregate", aggregate(col("text_preprocess"), col("link").cast("string")))
 
     // ============================ CLUSTERING =================================
 
-    val clustering = udf((content: String) => {
-      // var masterAggUpdate = ArrayBuffer[Vector]()
-      // val dimension = AggTools.masterWordsIndex.size
-      //
-      // for(row <- AggTools.masterAgg){
-      //   var vecZeros = Vectors.zeros(dimension)
-      //   var key = 0
-      //   while(key < row.size){
-      //     vecZeros.toArray(key) = row(key)
-      //     key += 1
-      //   }
-      //   masterAggUpdate += vecZeros
-      // }
+    // val clustering = udf((content: String) => {
+    //   // var masterAggUpdate = ArrayBuffer[Vector]()
+    //   // val dimension = AggTools.masterWordsIndex.size
+    //   //
+    //   // for(row <- AggTools.masterAgg){
+    //   //   var vecZeros = Vectors.zeros(dimension)
+    //   //   var key = 0
+    //   //   while(key < row.size){
+    //   //     vecZeros.toArray(key) = row(key)
+    //   //     key += 1
+    //   //   }
+    //   //   masterAggUpdate += vecZeros
+    //   // }
+    //
+    //   // print("Dimension array - 0 : " + masterAggUpdate(0).size)
+    //   content
+    // })
+    //
+    // val clusterDF = aggregateDF
+    //     .withColumn("text_aggregate", clustering(col("text_aggregate").cast("string")))
 
-      // print("Dimension array - 0 : " + masterAggUpdate(0).size)
-      content
-    })
-
-    val clusterDF = aggregateDF
-        .withColumn("text_preprocess", clustering(col("text_preprocess").cast("string")))
+    val kmeans = new KMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
+    val model = kmeans.fit(aggregateDF)
+    val predicted = model.transform(aggregateDF)
+    println(predicted.show)
 
     // =========================== SINK ====================================
 
