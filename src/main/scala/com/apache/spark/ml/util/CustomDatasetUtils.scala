@@ -17,15 +17,9 @@
 
 package com.apache.spark.ml.util
 
-import org.apache.spark.ml.linalg.{Vector, Vectors, VectorUDT}
-import org.apache.spark.mllib.linalg.{Vector => OldVector, Vectors => OldVectors}
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{Column, Dataset, Row}
-import org.apache.spark.sql.functions.{col, udf}
-import org.apache.spark.sql.types.{ArrayType, DoubleType, FloatType}
+import org.apache.spark.ml.util.DatasetUtils
 
-
-private[spark] object DatasetUtils {
+object CustomDatasetUtils extends DatasetUtils {
 
   /**
    * Cast a column in a Dataset to Vector type.
