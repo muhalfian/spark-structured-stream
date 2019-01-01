@@ -20,6 +20,8 @@ import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
+import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans}
+
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
 // import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 
