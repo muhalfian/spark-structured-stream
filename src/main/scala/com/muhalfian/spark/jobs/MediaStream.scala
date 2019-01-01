@@ -156,8 +156,8 @@ object MediaStream extends StreamUtils {
 
     val kmeans = new KMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
     val model = kmeans.fit(aggregateDF)
-    val predicted = model.transform(aggregateDF)
-    println(predicted.show)
+    val clusterDF = model.transform(aggregateDF)
+    // println(predicted.show)
 
     // =========================== SINK ====================================
 
