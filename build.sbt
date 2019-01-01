@@ -32,6 +32,7 @@ libraryDependencies += "com.typesafe" % "config" % "1.3.2"
 // ======================== SPARK ==================================
 
 // addSbtPlugin("com.etsy" % "sbt-checkstyle-plugin" % "3.1.1")
+libraryDependencies += "com.etsy" % "sbt-checkstyle-plugin" % "3.1.1"
 
 // sbt-checkstyle-plugin uses an old version of checkstyle. Match it to Maven's.
 libraryDependencies += "com.puppycrawl.tools" % "checkstyle" % "8.14"
