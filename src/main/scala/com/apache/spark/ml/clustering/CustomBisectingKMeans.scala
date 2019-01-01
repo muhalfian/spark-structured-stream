@@ -66,8 +66,4 @@ class CustomBisectingKMeans extends BisectingKMeans {
     model.setSummary(Some(summary))
   }
 
-  @Since("2.0.0")
-  override def transformSchema(schema: StructType): StructType = {
-    validateAndTransformSchema(schema)
-  }
 }
