@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.apache.spark.ml.
+package com.apache.spark.ml.clustering
 
 import org.apache.spark.ml.clustering.BisectingKMeans
 import com.apache.spark.ml.util.CustomDatasetUtils
