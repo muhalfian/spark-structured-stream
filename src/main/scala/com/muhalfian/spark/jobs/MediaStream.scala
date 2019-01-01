@@ -110,17 +110,20 @@ object MediaStream extends StreamUtils {
         tempSeq = tempSeq :+ (currentPoint, count.toDouble)
       }
 
-      masterLink += link
+      // masterLink += link
 
       countWords = masterWordsIndex.size
 
-      seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
-      var dataset: Dataset[LabeledPoint] = temp.toDS
+      val vectorData = Vectors.sparse(countWords, tempSeq)
 
-      println(dataset.select("*").show(false))
-      masterAgg = masterAgg.union(dataset)
+      // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
+      // var dataset: Dataset[LabeledPoint] = temp.toDS
+      //
+      // println(dataset.select("*").show(false))
+      // masterAgg = masterAgg.union(dataset)
       println("aggregate " + masterWordsIndex.size)
-      content
+      // content
+      vectorData
     })
 
     val aggregateDF = preprocessDF
