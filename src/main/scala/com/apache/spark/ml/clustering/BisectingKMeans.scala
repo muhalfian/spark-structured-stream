@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.spark.ml.clustering
+package com.apache.spark.ml.clustering
 
 import org.apache.hadoop.fs.Path
 
@@ -26,6 +26,7 @@ import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.param.shared._
 import org.apache.spark.ml.util._
+import com.apache.spark.ml.util._
 import org.apache.spark.ml.util.Instrumentation.instrumented
 import org.apache.spark.mllib.clustering.{BisectingKMeans => MLlibBisectingKMeans,
   BisectingKMeansModel => MLlibBisectingKMeansModel}

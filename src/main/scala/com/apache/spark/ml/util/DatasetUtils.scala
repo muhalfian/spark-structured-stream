@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.apache.spark.ml.util
+package com.apache.spark.ml.util
 
 import org.apache.spark.ml.linalg.{Vector, Vectors, VectorUDT}
 import org.apache.spark.mllib.linalg.{Vector => OldVector, Vectors => OldVectors}
