@@ -106,7 +106,7 @@ object MediaStream extends StreamUtils {
     //Show Data after processed
     aggregateDF.writeStream
       .format("console")
-      .option("truncate","false")
+      // .option("truncate","false")
       .start()
       .awaitTermination()
   }
