@@ -115,7 +115,7 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    val printConsole = aggregateDF.writeStream
+    val printConsole = customDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
@@ -131,9 +131,8 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-
-    aggregateSave.awaitTermination()
     printConsole.awaitTermination()
+    aggregateSave.awaitTermination()
   }
 
 
