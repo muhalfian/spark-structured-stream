@@ -58,7 +58,9 @@ object AggTools extends StreamUtils {
 
     countWords = masterWordsIndex.size
 
-    val vectorData : Vector = Vectors.sparse(countWords, tempSeq.sortWith(_._1 < _._1))
+    val vectorSparse = Vectors.sparse(countWords, tempSeq.sortWith(_._1 < _._1))
+    val inputArray = Array.fill[Double](vectorSparse.size)(0.0)
+    val vectorData : Vector = Vectors.dense(vectorSparse.indices.foreach(idx => inputArray(idx) = vectorSparse(idx).toDouble))
 
     // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
     // var dataset: Dataset[LabeledPoint] = temp.toDS
