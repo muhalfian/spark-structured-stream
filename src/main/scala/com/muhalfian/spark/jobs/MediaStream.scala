@@ -116,7 +116,10 @@ object MediaStream extends StreamUtils {
 
     aggregateDF.writeStream
       .format("csv")
-      .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+      .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
+      .option("path","hdfs://blade1-node:9000/online_media/aggregation")
+      .outputMode("append")
+      // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
       // .option("truncate","false")
       .start()
       .awaitTermination()
