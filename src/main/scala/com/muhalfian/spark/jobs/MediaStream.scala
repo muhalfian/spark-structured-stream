@@ -109,6 +109,14 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
       .awaitTermination()
+
+
+    aggregateDF.writeStream
+      .format("csv")
+      .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+      // .option("truncate","false")
+      .start()
+      .awaitTermination()
   }
 
 
