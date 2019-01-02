@@ -92,7 +92,15 @@ lazy val sparkProject = RootProject(uri("git://github.com/muhalfian/custom-spark
 //
 // // =======================================================
 
-assemblyMergeStrategy in assembly := {
+// assemblyMergeStrategy in assembly := {
+//   {
+//     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
+//     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+//     case x => MergeStrategy.first
+//   }
+// }
+
+mergeStrategy in assembly := {
   {
     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
