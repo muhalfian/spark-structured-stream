@@ -92,23 +92,23 @@ libraryDependencies += "com.typesafe" % "config" % "1.3.2"
 //
 // // =======================================================
 
-// assemblyMergeStrategy in assembly := {
-//   {
-//     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
-//     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-//     case x => MergeStrategy.first
-//   }
-// }
-
-import sbtassembly.AssemblyUtils._
-import sbtassembly.Plugin._
-import AssemblyKeys._
-
-
-mergeStrategy in assembly := {
+assemblyMergeStrategy in assembly := {
   {
     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
     case x => MergeStrategy.first
   }
 }
+
+// import sbtassembly.AssemblyUtils._
+// import sbtassembly.Plugin._
+// import AssemblyKeys._
+//
+//
+// mergeStrategy in assembly := {
+//   {
+//     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
+//     case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+//     case x => MergeStrategy.first
+//   }
+// }
