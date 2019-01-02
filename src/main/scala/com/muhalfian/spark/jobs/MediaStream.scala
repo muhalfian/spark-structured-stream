@@ -21,7 +21,7 @@ import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 // import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
-import com.apache.spark.ml.clustering.CustomBisectingKMeans
+import org.apache.spark.ml.clustering.BisectingKMeans
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
 // import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
@@ -71,7 +71,7 @@ object MediaStream extends StreamUtils {
     //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
     val aggregateDF = preprocessDF
-      .withColumn("text_aggregate", aggregate(col("text_preprocess"), col("link").cast("string")))
+      .withColumn("text_aggregate", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
     // ============================ CLUSTERING =================================
 
@@ -96,7 +96,7 @@ object MediaStream extends StreamUtils {
     // val clusterDF = aggregateDF
     //     .withColumn("text_aggregate", clustering(col("text_aggregate").cast("string")))
 
-    val kmeans = new CustomBisectingKMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
+    val kmeans = new BisectingKMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
     val model = kmeans.fit(aggregateDF)
     val clusterDF = model.transform(aggregateDF)
     // println(predicted.show)
