@@ -96,17 +96,17 @@ object MediaStream extends StreamUtils {
     // val clusterDF = aggregateDF
     //     .withColumn("text_aggregate", clustering(col("text_aggregate").cast("string")))
 
-    val kmeans = new BisectingKMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
-    val model = kmeans.fit(aggregateDF)
-    val clusterDF = model.transform(aggregateDF)
-    // println(predicted.show)
+    // val kmeans = new BisectingKMeans().setK(3).setFeaturesCol("text_aggregate").setPredictionCol("prediction")
+    // val model = kmeans.fit(aggregateDF)
+    // val clusterDF = model.transform(aggregateDF)
+    // // println(predicted.show)
 
     // =========================== SINK ====================================
 
     //Show Data after processed
-    clusterDF.writeStream
+    aggregateDF.writeStream
       .format("console")
-      // .option("truncate","false")
+      .option("truncate","false")
       .start()
       .awaitTermination()
   }
