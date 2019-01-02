@@ -47,6 +47,7 @@ object MediaStream extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", PropertiesLoader.kafkaStartingOffset)
+      .option("maxFilesPerTrigger", "100")
       .load()
 
     // Transform data stream to Dataframe
@@ -116,7 +117,6 @@ object MediaStream extends StreamUtils {
     aggregateDF.writeStream
       .format("csv")
       .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-      .trigger(Trigger.ProcessingTime("10 seconds"))
       // .option("truncate","false")
       .start()
       .awaitTermination()
