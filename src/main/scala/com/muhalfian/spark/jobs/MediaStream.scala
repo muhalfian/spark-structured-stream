@@ -20,6 +20,8 @@ import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
+import org.apache.spark.sql.streaming.Trigger
+
 // import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
 
@@ -114,6 +116,7 @@ object MediaStream extends StreamUtils {
     aggregateDF.writeStream
       .format("csv")
       .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+      .trigger(Trigger.ProcessingTime("10 seconds"))
       // .option("truncate","false")
       .start()
       .awaitTermination()
