@@ -100,6 +100,11 @@ lazy val sparkProject = RootProject(uri("git://github.com/muhalfian/custom-spark
 //   }
 // }
 
+import sbtassembly.AssemblyUtils._
+import sbtassembly.Plugin._
+import AssemblyKeys._
+
+
 mergeStrategy in assembly := {
   {
     case "META-INF/services/org.apache.spark.sql.sources.DataSourceRegister" => MergeStrategy.concat
