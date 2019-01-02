@@ -107,22 +107,25 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    aggregateDF.writeStream
+    val printConsole = aggregateDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
-      .awaitTermination()
 
 
-    aggregateDF.writeStream
-      .format("csv")
+
+    val aggregateSave = aggregateDF.writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
       .option("path","hdfs://blade1-node:9000/online_media/aggregation")
       .outputMode("append")
+      .format("csv")
       // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
       // .option("truncate","false")
       .start()
-      .awaitTermination()
+
+
+    aggregateSave.awaitTermination()
+    printConsole.awaitTermination()
   }
 
 
