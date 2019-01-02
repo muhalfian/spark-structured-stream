@@ -76,13 +76,12 @@ object MediaStream extends StreamUtils {
     val aggregateDF = preprocessDF
       .withColumn("text_aggregate", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
-    // val stringify = udf((vs: Seq[String]) => vs match {
-    //   case null => null
-    //   case _    => s"""[${vs.mkString(",")}]"""
-    // })
-    //
-    // val customDF = aggregateDF
-    //   .withColumn("text_aggregate", stringify(col("text_aggregate")))
+    val stringify = udf((vs: String) => {
+      vs.replaceAll("[\\]\\[]", "")
+    })
+
+    val customDF = aggregateDF
+      .withColumn("text_aggregate", stringify(col("text_aggregate").cast("string")))
 
     // ============================ CLUSTERING =================================
 
@@ -115,14 +114,14 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    val printConsole = aggregateDF.writeStream
+    val printConsole = customDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
 
 
 
-    val aggregateSave = aggregateDF.writeStream
+    val aggregateSave = customDF.writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
       .option("path","hdfs://blade1-node:9000/online_media/aggregation")
       .outputMode("append")
