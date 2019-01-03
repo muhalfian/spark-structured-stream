@@ -141,7 +141,8 @@ object TextTools {
   })
 
   val stringify = udf((word: String) => {
-    word.replaceAll("[\\]\\[\\"]", " ")
+    word.replaceAll("[\\]\\[]", "")
+        .replaceAll("\"", " ")
   })
 
 }
