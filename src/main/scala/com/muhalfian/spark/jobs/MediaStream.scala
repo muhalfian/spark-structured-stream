@@ -83,7 +83,7 @@ object MediaStream extends StreamUtils {
     val customDF = aggregateDF
       .withColumn("text_aggregate", stringify(col("text_aggregate").cast("string")))
       .withColumn("text_preprocess", stringify(col("text_preprocess").cast("string")))
-      // .withColumn("text", TextTools.stringify(col("text").cast("string")))
+      .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // ============================ CLUSTERING =================================
 
