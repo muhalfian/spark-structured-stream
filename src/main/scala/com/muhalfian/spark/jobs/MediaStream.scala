@@ -112,12 +112,12 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    val printConsole = aggregateDF.writeStream
+    val printConsole = customDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
 
-    val aggregateSave = aggregateDF
+    val aggregateSave = customDF
       .select("link", "text_aggregate")
       .writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
@@ -128,7 +128,7 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-    val masterSave = aggregateDF
+    val masterSave = customDF
       .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
       .writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
