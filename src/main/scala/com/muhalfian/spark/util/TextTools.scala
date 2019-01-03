@@ -140,8 +140,6 @@ object TextTools {
                   .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
   })
 
-  val stringify = udf((word: String) => {
-    word.replaceAll("[\\]\\[]", "").replaceAll("\"", " ")
-  })
+
 
 }
