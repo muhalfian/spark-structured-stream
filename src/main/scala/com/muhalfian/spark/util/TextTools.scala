@@ -141,6 +141,9 @@ object TextTools {
     stemmed
   })
 
+  val stringify = udf((word: String) => {
+    word.replaceAll("[\\]\\[]", "").replaceAll("\"", " ")
+  })
 
 
 }
