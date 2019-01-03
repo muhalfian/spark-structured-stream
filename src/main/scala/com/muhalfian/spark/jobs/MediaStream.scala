@@ -77,10 +77,10 @@ object MediaStream extends StreamUtils {
       .withColumn("text_aggregate", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
 
-    val customDF = aggregateDF
-      .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-      .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-      .withColumn("text", TextTools.stringify(col("text").cast("string")))
+    // val customDF = aggregateDF
+    //   .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+    //   .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+    //   .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // ============================ CLUSTERING =================================
 
@@ -113,12 +113,12 @@ object MediaStream extends StreamUtils {
     // =========================== SINK ====================================
 
     //Show Data after processed
-    val printConsole = customDF.writeStream
+    val printConsole = aggregateDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
 
-    val aggregateSave = customDF
+    val aggregateSave = aggregateDF
       .select("link", "text_aggregate")
       .writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
@@ -129,7 +129,7 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-    val masterSave = customDF
+    val masterSave = aggregateDF
       .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
       .writeStream
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
