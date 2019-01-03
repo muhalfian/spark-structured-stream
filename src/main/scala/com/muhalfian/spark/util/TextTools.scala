@@ -134,13 +134,14 @@ object TextTools {
 
   val stemming = udf ((words: Seq[String]) => {
 
-    var stemmed = words
+    val stemmed = words
                   .map(_.replaceAll("[^A-Za-z]", ""))     // replace all non - char
                   .map(_.trim).filter(_ != "")            // remove null list
                   .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
-
-    stemmed
   })
 
+  val stringify = udf((word: String) => {
+    word.replaceAll("[\\]\\[\\"]", " ")
+  })
 
 }
