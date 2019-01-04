@@ -47,7 +47,7 @@ object MediaStream extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", PropertiesLoader.kafkaStartingOffset)
-      .option("maxOffsetsPerTrigger", "100")
+      .option("maxOffsetsPerTrigger", "500")
       .load()
 
     // Transform data stream to Dataframe
