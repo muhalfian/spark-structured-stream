@@ -108,98 +108,71 @@ object MediaStream extends StreamUtils {
 
 
     // ======================== TO DATAFRAME ============================
-    // val aggregateSave = customDF
-    //   .select("link", "text_aggregate")
-    //   .writeStream
-    //   // .trigger(Trigger.ProcessingTime("5 seconds"))
-    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
-    //   .option("path","hdfs://blade1-node:9000/online_media/aggregation")
-    //   .outputMode("append")
-    //   .format("sink")
-    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-    //   // .option("truncate","false")
-    //   .start()
-    //
-    // val masterSave = customDF
-    //   .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-    //   .writeStream
-    //   // .trigger(Trigger.ProcessingTime("5 seconds"))
-    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
-    //   .option("path","hdfs://blade1-node:9000/online_media/master")
-    //   .outputMode("append")
-    //   .format("csv")
-    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-    //   // .option("truncate","false")
-    //   .start()
-
-    //Sink to Mongodb
     val aggregateSave = customDF
-                        .writeStream
-                        .outputMode("append")
-                        .foreach(new ForeachWriter[Row] {
-                            val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
-                            var mongoConnector: MongoConnector = _
-                            var ConnCounts: ArrayBuffer[ConnCountObj] = _
+      .select("link", "text_aggregate")
+      .writeStream
+      // .trigger(Trigger.ProcessingTime("5 seconds"))
+      .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
+      .option("path","hdfs://blade1-node:9000/online_media/aggregation")
+      .outputMode("append")
+      .format("json")
+      // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+      // .option("truncate","false")
+      .start()
 
-                            override def process(value: ConnCountObj): Unit = {
-                              ConnCounts.append(value)
-                            }
+    val masterSave = customDF
+      .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+      .writeStream
+      // .trigger(Trigger.ProcessingTime("5 seconds"))
+      .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
+      .option("path","hdfs://blade1-node:9000/online_media/master")
+      .outputMode("append")
+      .format("json")
+      // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+      // .option("truncate","false")
+      .start()
 
-                            override def close(errorOrNull: Throwable): Unit = {
-                              if (ConnCounts.nonEmpty) {
-                                mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                                  collection.insertMany(ConnCounts.map(sc => {
-                                    var doc = new Document()
-                                    doc.put("link", sc.link)
-                                    doc.put("source", sc.source)
-                                    doc.put("authors", sc.authors)
-                                    doc.put("image", sc.authors)
-                                    doc.put("publish_date", sc.publish_date)
-                                    doc.put("title", sc.title)
-                                    doc.put("text", sc.text)
-                                    doc.put("text_preprocess", sc.text_preprocess)
-                                    doc.put("text_aggregation", sc.text_aggregation)
-                                    doc
-                                  }).asJava)
-                                })
-                              }
-                            }
-
-                            override def open(partitionId: Long, version: Long): Boolean = {
-                              mongoConnector = MongoConnector(writeConfig.asOptions)
-                              ConnCounts = new ArrayBuffer[ConnCountObj]()
-                              true
-                            }
-
-                        }).start()
-
-    // val aggregateSave = customDF.writeStream
-    //                       .outputMode("append")
-    //                       .foreach(new ForeachWriter[Row] {
-    //
-    //                         val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://localhost/test.coll"))
+    // //Sink to Mongodb
+    // val aggregateSave = customDF
+    //                     .writeStream
+    //                     .outputMode("append")
+    //                     .foreach(new ForeachWriter[Row] {
+    //                         val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
     //                         var mongoConnector: MongoConnector = _
-    //                         var wordCounts: ArrayBuffer[WordCount] = _
+    //                         var ConnCounts: ArrayBuffer[ConnCountObj] = _
     //
-    //                         override def process(value: WordCount): Unit = {
-    //                           wordCounts.append(value)
+    //                         override def process(value: ConnCountObj): Unit = {
+    //                           ConnCounts.append(value)
     //                         }
     //
     //                         override def close(errorOrNull: Throwable): Unit = {
-    //                           if (wordCounts.nonEmpty) {
-    //                             mongoConnector.withCollectionDo(writeConfig, {collection: MongoCollection[Document] =>
-    //                               collection.insertMany(wordCounts.map(wc => { new Document(wc.word, wc.count)}).asJava)
+    //                           if (ConnCounts.nonEmpty) {
+    //                             mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+    //                               collection.insertMany(ConnCounts.map(sc => {
+    //                                 var doc = new Document()
+    //                                 doc.put("link", sc.link)
+    //                                 doc.put("source", sc.source)
+    //                                 doc.put("authors", sc.authors)
+    //                                 doc.put("image", sc.authors)
+    //                                 doc.put("publish_date", sc.publish_date)
+    //                                 doc.put("title", sc.title)
+    //                                 doc.put("text", sc.text)
+    //                                 doc.put("text_preprocess", sc.text_preprocess)
+    //                                 doc.put("text_aggregation", sc.text_aggregation)
+    //                                 doc
+    //                               }).asJava)
     //                             })
     //                           }
     //                         }
     //
     //                         override def open(partitionId: Long, version: Long): Boolean = {
     //                           mongoConnector = MongoConnector(writeConfig.asOptions)
-    //                           wordCounts = new ArrayBuffer[WordCount]()
+    //                           ConnCounts = new ArrayBuffer[ConnCountObj]()
     //                           true
     //                         }
-    //                       })
-    //                 .start()
+    //
+    //                     }).start()
+
 
     //Show Data after processed
     val printConsole = customDF.writeStream
@@ -208,20 +181,7 @@ object MediaStream extends StreamUtils {
         .start()
 
     printConsole.awaitTermination()
-    // masterSave.awaitTermination()
+    masterSave.awaitTermination()
     aggregateSave.awaitTermination()
   }
-
-  case class ConnCountObj(
-    link: String,
-    source: String,
-    authors: String,
-    image: String,
-    publish_date: String,
-    title: String,
-    text: String,
-    text_preprocess: String,
-    text_aggregation: String
-  )
-
 }
