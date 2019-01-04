@@ -169,7 +169,7 @@ object MediaStream extends StreamUtils {
                                   }).asJava)
                                 })
                               }
-                            }
+                            } 
 
                             override def open(partitionId: Long, version: Long): Boolean = {
                               mongoConnector = MongoConnector(writeConfig.asOptions)
