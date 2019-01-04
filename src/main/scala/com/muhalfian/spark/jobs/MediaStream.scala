@@ -142,46 +142,46 @@ object MediaStream extends StreamUtils {
     //   // .option("truncate","false")
     //   .start()
 
-    //Sink to Mongodb
-    val ConnCountQuery = customDF
-          .writeStream
-          .outputMode("append")
-          .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
-
-              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
-              var mongoConnector: MongoConnector = _
-              var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
-
-              override def process(value: ColsArtifact.ConnCountObj): Unit = {
-                ConnCounts.append(value)
-              }
-
-              override def close(errorOrNull: Throwable): Unit = {
-                if (ConnCounts.nonEmpty) {
-                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                    collection.insertMany(ConnCounts.map(sc => {
-                      var doc = new Document()
-                      doc.put("link", sc.link)
-                      doc.put("source", sc.source)
-                      doc.put("authors", sc.authors)
-                      doc.put("image", sc.authors)
-                      doc.put("publish_date", sc.publish_date)
-                      doc.put("title", sc.title)
-                      doc.put("text", sc.text)
-                      doc.put("text_preprocess", sc.text_preprocess)
-                      doc.put("text_aggregate", sc.text_aggregate)
-                      doc
-                    }).asJava)
-                  })
-                }
-              }
-
-              override def open(partitionId: Long, version: Long): Boolean = {
-                mongoConnector = MongoConnector(writeConfig.asOptions)
-                ConnCounts = new ArrayBuffer[ColsArtifact.ConnCountObj]()
-                true
-              }
-            }).start()
+    // //Sink to Mongodb
+    // val ConnCountQuery = customDF
+    //       .writeStream
+    //       .outputMode("append")
+    //       .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
+    //
+    //           val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
+    //           var mongoConnector: MongoConnector = _
+    //           var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
+    //
+    //           override def process(value: ColsArtifact.ConnCountObj): Unit = {
+    //             ConnCounts.append(value)
+    //           }
+    //
+    //           override def close(errorOrNull: Throwable): Unit = {
+    //             if (ConnCounts.nonEmpty) {
+    //               mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+    //                 collection.insertMany(ConnCounts.map(sc => {
+    //                   var doc = new Document()
+    //                   doc.put("link", sc.link)
+    //                   doc.put("source", sc.source)
+    //                   doc.put("authors", sc.authors)
+    //                   doc.put("image", sc.authors)
+    //                   doc.put("publish_date", sc.publish_date)
+    //                   doc.put("title", sc.title)
+    //                   doc.put("text", sc.text)
+    //                   doc.put("text_preprocess", sc.text_preprocess)
+    //                   doc.put("text_aggregate", sc.text_aggregate)
+    //                   doc
+    //                 }).asJava)
+    //               })
+    //             }
+    //           }
+    //
+    //           override def open(partitionId: Long, version: Long): Boolean = {
+    //             mongoConnector = MongoConnector(writeConfig.asOptions)
+    //             ConnCounts = new ArrayBuffer[ColsArtifact.ConnCountObj]()
+    //             true
+    //           }
+    //         }).start()
 
     printConsole.awaitTermination()
     // masterSave.awaitTermination()
