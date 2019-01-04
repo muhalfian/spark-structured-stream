@@ -142,10 +142,10 @@ object MediaStream extends StreamUtils {
     val aggregateSave = connDf
                         .writeStream
                         .outputMode("append")
-                        .foreach(new ForeachWriter[ConnCountObj] {
+                        .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
                             val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
                             var mongoConnector: MongoConnector = _
-                            var ConnCounts: mutable.ArrayBuffer[ConnCountObj] = _
+                            var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
 
                             override def process(value: ConnCountObj): Unit = {
                               ConnCounts.append(value)
@@ -169,11 +169,11 @@ object MediaStream extends StreamUtils {
                                   }).asJava)
                                 })
                               }
-                            } 
+                            }
 
                             override def open(partitionId: Long, version: Long): Boolean = {
                               mongoConnector = MongoConnector(writeConfig.asOptions)
-                              ConnCounts = new mutable.ArrayBuffer[ConnCountObj]()
+                              ConnCounts = new ArrayBuffer[ColsArtifact.ConnCountObj]()
                               true
                             }
 
