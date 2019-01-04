@@ -175,11 +175,11 @@ object MediaStream extends StreamUtils {
 
     val aggregateSave = customDF.writeStream
                           .outputMode("append")
-                          .foreach(new ForeachWriter[WordCount] {
+                          .foreach(new ForeachWriter[Row] {
 
                             val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://localhost/test.coll"))
                             var mongoConnector: MongoConnector = _
-                            var wordCounts: mutable.ArrayBuffer[WordCount] = _
+                            var wordCounts: ArrayBuffer[WordCount] = _
 
                             override def process(value: WordCount): Unit = {
                               wordCounts.append(value)
@@ -195,7 +195,7 @@ object MediaStream extends StreamUtils {
 
                             override def open(partitionId: Long, version: Long): Boolean = {
                               mongoConnector = MongoConnector(writeConfig.asOptions)
-                              wordCounts = new mutable.ArrayBuffer[WordCount]()
+                              wordCounts = new ArrayBuffer[WordCount]()
                               true
                             }
                           })
