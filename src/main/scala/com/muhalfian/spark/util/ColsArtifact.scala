@@ -22,7 +22,7 @@ object ColsArtifact {
     publish_date: String,
     title: String,
     text: String,
-    text_preprocess: String
+    text_preprocess: String,
     text_aggregate: String
   )
 }
