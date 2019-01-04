@@ -13,4 +13,16 @@ object ColsArtifact {
     StructField("text", StringType, true)
     )
   )
+
+  case class ConnCountObj(
+    link: String,
+    source: String,
+    authors: String,
+    image: String,
+    publish_date: String,
+    title: String,
+    text: String,
+    text_preprocess: String
+    text_aggregate: String
+  )
 }
