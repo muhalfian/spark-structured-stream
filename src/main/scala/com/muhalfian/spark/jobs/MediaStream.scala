@@ -2,44 +2,31 @@ package com.muhalfian.spark.jobs
 
 import com.muhalfian.spark.util._
 
-// import com.mongodb.client.MongoCollection
-// import com.mongodb.spark.MongoConnector
-// import com.mongodb.spark.config.WriteConfig
-//
-// import org.apache.spark.{SparkContext, SparkConf}
-// import org.apache.spark.sql._
-//
-// import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
-//
-// import org.apache.spark.sql.types._
-// import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
-//
-// import org.apache.spark.ml.linalg._
-//
-// import org.apache.spark.ml.linalg.Vectors
-// import org.apache.spark.ml.feature.LabeledPoint
-// import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
-//
-// import org.apache.spark.sql.streaming.Trigger
-//
-// // import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
-// import org.apache.spark.ml.clustering.BisectingKMeans
-//
-// import org.bson._
-// import scala.collection.JavaConverters._
-
 import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
+
+import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
-import org.apache.spark.sql.functions._
+
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
+
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.from_json
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
+
+import org.apache.spark.ml.linalg._
+
+import org.apache.spark.ml.linalg.Vectors
+import org.apache.spark.ml.feature.LabeledPoint
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
+
+import org.apache.spark.sql.streaming.Trigger
+
+// import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
+import org.apache.spark.ml.clustering.BisectingKMeans
+
 import org.bson._
-
 import scala.collection.JavaConverters._
-import scala.collection.mutable._
-
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
 // import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
