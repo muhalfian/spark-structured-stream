@@ -37,7 +37,7 @@ object BroStream extends StreamUtils {
         .format("kafka")
         .option("kafka.bootstrap.servers",kafkaUrl)
         .option("subscribe", topic)
-        .option("startingOffsets","latest")
+        .option("startingOffsets","earliest")
         .load()
 
       val kafkaStream = kafkaStreamDF.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
@@ -84,6 +84,12 @@ object BroStream extends StreamUtils {
       println(connDf)
       println(textDf)
       println(connDf.show())
+
+      var printConsole = connDf.writeStream
+        .format("console")
+        // .option("truncate","false")
+        .start()
+
 
       //Sink to Mongodb
       val ConnCountQuery = connDf
@@ -135,6 +141,7 @@ object BroStream extends StreamUtils {
       //        .start()
 
         ConnCountQuery.awaitTermination()
+        printConsole.awaitTermination()
         // parsedRawToHDFSQuery.awaitTermination()
     }
 }
