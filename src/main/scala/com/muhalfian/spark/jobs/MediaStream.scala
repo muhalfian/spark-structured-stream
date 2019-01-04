@@ -143,7 +143,7 @@ object MediaStream extends StreamUtils {
     //   .start()
 
     //Sink to Mongodb
-    val ConnCountQuery = connDf
+    val ConnCountQuery = customDF
           .writeStream
           .outputMode("append")
           .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
