@@ -8,6 +8,7 @@ import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.from_json
 import org.bson._
+import com.muhalfian.spark.util.StreamUtils
 
 import scala.collection.JavaConverters._
 import scala.collection.mutable
