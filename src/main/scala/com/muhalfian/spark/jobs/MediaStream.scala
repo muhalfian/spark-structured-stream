@@ -25,6 +25,18 @@ import scala.collection.JavaConverters._
 
 object MediaStream extends StreamUtils {
 
+  case class ConnCountObj(
+    link: String,
+    source: String,
+    authors: String,
+    image: String,
+    publish_date: String,
+    title: String,
+    text: String,
+    text_preprocess: String,
+    text_aggregation: String
+  )
+
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
@@ -136,12 +148,12 @@ object MediaStream extends StreamUtils {
     val aggregateSave = customDF
                         .writeStream
                         .outputMode("append")
-                        .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
+                        .foreach(new ForeachWriter[ConnCountObj] {
                             val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
                             var mongoConnector: MongoConnector = _
-                            var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
+                            var ConnCounts: ArrayBuffer[ConnCountObj] = _
 
-                            override def process(value: ColsArtifact.ConnCountObj): Unit = {
+                            override def process(value: ConnCountObj): Unit = {
                               ConnCounts.append(value)
                             }
 
@@ -167,7 +179,7 @@ object MediaStream extends StreamUtils {
 
                             override def open(partitionId: Long, version: Long): Boolean = {
                               mongoConnector = MongoConnector(writeConfig.asOptions)
-                              ConnCounts = new ArrayBuffer[ColsArtifact.ConnCountObj]()
+                              ConnCounts = new ArrayBuffer[ConnCountObj]()
                               true
                             }
 
