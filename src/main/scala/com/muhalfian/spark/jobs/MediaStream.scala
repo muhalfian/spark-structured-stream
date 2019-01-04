@@ -21,6 +21,8 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.ml.clustering.BisectingKMeans
 
+import scala.collection.JavaConverters._
+
 object MediaStream extends StreamUtils {
 
   def main(args: Array[String]): Unit = {
