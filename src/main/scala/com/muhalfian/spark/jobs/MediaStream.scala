@@ -162,7 +162,7 @@ object MediaStream extends StreamUtils {
           .outputMode("append")
           .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
 
-              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/spark.broisot"))
+              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
               var mongoConnector: MongoConnector = _
               var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
 
