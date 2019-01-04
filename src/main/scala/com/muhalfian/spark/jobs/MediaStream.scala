@@ -38,7 +38,7 @@ import org.apache.spark.sql.functions.from_json
 import org.bson._
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable
+import scala.collection.mutable._
 
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
