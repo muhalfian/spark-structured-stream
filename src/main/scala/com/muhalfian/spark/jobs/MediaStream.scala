@@ -120,27 +120,27 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-    val aggregateSave = customDF
-      .select("link", "text_aggregate")
-      .writeStream
-      .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
-      .option("path","hdfs://blade1-node:9000/online_media/aggregation")
-      .outputMode("append")
-      .format("json")
-      // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-      // .option("truncate","false")
-      .start()
-
-    val masterSave = customDF
-      .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-      .writeStream
-      .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
-      .option("path","hdfs://blade1-node:9000/online_media/master")
-      .outputMode("append")
-      .format("json")
-      // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-      // .option("truncate","false")
-      .start()
+    // val aggregateSave = customDF
+    //   .select("link", "text_aggregate")
+    //   .writeStream
+    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
+    //   .option("path","hdfs://blade1-node:9000/online_media/aggregation")
+    //   .outputMode("append")
+    //   .format("json")
+    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+    //   // .option("truncate","false")
+    //   .start()
+    //
+    // val masterSave = customDF
+    //   .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+    //   .writeStream
+    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
+    //   .option("path","hdfs://blade1-node:9000/online_media/master")
+    //   .outputMode("append")
+    //   .format("json")
+    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
+    //   // .option("truncate","false")
+    //   .start()
 
     //Sink to Mongodb
 
@@ -198,6 +198,7 @@ object MediaStream extends StreamUtils {
             }).start()
 
     printConsole.awaitTermination()
+    ConnCountQuery.awaitTermination()
     // masterSave.awaitTermination()
     // aggregateSave.awaitTermination()
   }
