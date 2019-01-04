@@ -78,13 +78,13 @@ object BroStream extends StreamUtils {
           r.getAs[String](6)
         ))
 
-      println(kafkaStreamDF)
-      println(kafkaStream)
-      println(parsedLogData)
-      print(parsedRawDf)
-      println(connDf)
-      println(textDf)
-      println(connDf.show())
+      // println(kafkaStreamDF)
+      // println(kafkaStream)
+      // println(parsedLogData)
+      // print(parsedRawDf)
+      // println(connDf)
+      // println(textDf)
+      // println(connDf.show())
 
       var printConsole = connDf.writeStream
         .format("console")
