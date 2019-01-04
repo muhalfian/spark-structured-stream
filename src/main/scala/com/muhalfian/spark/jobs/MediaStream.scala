@@ -145,7 +145,7 @@ object MediaStream extends StreamUtils {
     //Sink to Mongodb
 
     val connDf = customDF
-      .map((r:Row) => ConnCountObj(
+      .map((r:Row) => ColsArtifact.ConnCountObj(
         r.getAs[String](0),
         r.getAs[String](1),
         r.getAs[String](2),
