@@ -111,12 +111,15 @@ object MediaStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
-
+    //Show Data after processed
+    val printConsole = customDF.writeStream
+      .format("console")
+      // .option("truncate","false")
+      .start()
 
     val aggregateSave = customDF
       .select("link", "text_aggregate")
       .writeStream
-      // .trigger(Trigger.ProcessingTime("5 seconds"))
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
       .option("path","hdfs://blade1-node:9000/online_media/aggregation")
       .outputMode("append")
@@ -128,7 +131,6 @@ object MediaStream extends StreamUtils {
     val masterSave = customDF
       .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
       .writeStream
-      // .trigger(Trigger.ProcessingTime("5 seconds"))
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
       .option("path","hdfs://blade1-node:9000/online_media/master")
       .outputMode("append")
@@ -136,13 +138,6 @@ object MediaStream extends StreamUtils {
       // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
       // .option("truncate","false")
       .start()
-
-    //Show Data after processed
-    val printConsole = customDF.writeStream
-        // .trigger(Trigger.ProcessingTime("5 seconds"))
-        .format("console")
-        // .option("truncate","false")
-        .start()
 
     printConsole.awaitTermination()
     masterSave.awaitTermination()
