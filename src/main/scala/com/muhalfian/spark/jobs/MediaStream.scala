@@ -8,26 +8,18 @@ import com.mongodb.spark.config.WriteConfig
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
+import org.apache.spark.sql.streaming.Trigger
 
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 
-import org.apache.spark.sql.types._
-import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
-
 import org.apache.spark.ml.linalg._
-
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
-import org.apache.spark.sql.streaming.Trigger
-
-// import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
-
-// import org.apache.lucene.analysis.id.IndonesianAnalyzer
-// import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
-
 
 object MediaStream extends StreamUtils {
 
@@ -139,7 +131,7 @@ object MediaStream extends StreamUtils {
     //   .start()
 
     //Sink to Mongodb
-    val aggregateSave = connDf
+    val aggregateSave = customDF
                         .writeStream
                         .outputMode("append")
                         .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
