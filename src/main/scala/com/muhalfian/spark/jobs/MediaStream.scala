@@ -47,7 +47,7 @@ object MediaStream extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", PropertiesLoader.kafkaStartingOffset)
-      .option("maxOffsetsPerTrigger", "500")
+      .option("maxOffsetsPerTrigger", "100")
       .load()
 
     // Transform data stream to Dataframe
@@ -120,7 +120,7 @@ object MediaStream extends StreamUtils {
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
       .option("path","hdfs://blade1-node:9000/online_media/aggregation")
       .outputMode("append")
-      .format("csv")
+      .format("parquet")
       // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
       // .option("truncate","false")
       .start()
@@ -132,7 +132,7 @@ object MediaStream extends StreamUtils {
       .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
       .option("path","hdfs://blade1-node:9000/online_media/master")
       .outputMode("append")
-      .format("csv")
+      .format("parquet")
       // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
       // .option("truncate","false")
       .start()
