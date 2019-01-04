@@ -147,7 +147,7 @@ object MediaStream extends StreamUtils {
                             var mongoConnector: MongoConnector = _
                             var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
 
-                            override def process(value: ConnCountObj): Unit = {
+                            override def process(value: ColsArtifact.ConnCountObj): Unit = {
                               ConnCounts.append(value)
                             }
 
