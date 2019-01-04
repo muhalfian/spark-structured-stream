@@ -5,7 +5,6 @@ import com.muhalfian.spark.util._
 import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
-import org.mongodb.scala.Document
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
