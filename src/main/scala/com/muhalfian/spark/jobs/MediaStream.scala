@@ -8,20 +8,26 @@ import com.mongodb.spark.config.WriteConfig
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
+
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
+
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
 
-import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
-import org.bson.Document
-
 import org.apache.spark.ml.linalg._
+
 import org.apache.spark.ml.linalg.Vectors
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
+import org.apache.spark.sql.streaming.Trigger
+
+// import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
 
-import scala.collection.JavaConverters._
+// import org.apache.lucene.analysis.id.IndonesianAnalyzer
+// import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
+
 
 object MediaStream extends StreamUtils {
 
@@ -107,7 +113,6 @@ object MediaStream extends StreamUtils {
 
 
 
-    // ======================== TO DATAFRAME ============================
     val aggregateSave = customDF
       .select("link", "text_aggregate")
       .writeStream
@@ -132,50 +137,9 @@ object MediaStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-    // //Sink to Mongodb
-    // val aggregateSave = customDF
-    //                     .writeStream
-    //                     .outputMode("append")
-    //                     .foreach(new ForeachWriter[Row] {
-    //                         val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
-    //                         var mongoConnector: MongoConnector = _
-    //                         var ConnCounts: ArrayBuffer[ConnCountObj] = _
-    //
-    //                         override def process(value: ConnCountObj): Unit = {
-    //                           ConnCounts.append(value)
-    //                         }
-    //
-    //                         override def close(errorOrNull: Throwable): Unit = {
-    //                           if (ConnCounts.nonEmpty) {
-    //                             mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-    //                               collection.insertMany(ConnCounts.map(sc => {
-    //                                 var doc = new Document()
-    //                                 doc.put("link", sc.link)
-    //                                 doc.put("source", sc.source)
-    //                                 doc.put("authors", sc.authors)
-    //                                 doc.put("image", sc.authors)
-    //                                 doc.put("publish_date", sc.publish_date)
-    //                                 doc.put("title", sc.title)
-    //                                 doc.put("text", sc.text)
-    //                                 doc.put("text_preprocess", sc.text_preprocess)
-    //                                 doc.put("text_aggregation", sc.text_aggregation)
-    //                                 doc
-    //                               }).asJava)
-    //                             })
-    //                           }
-    //                         }
-    //
-    //                         override def open(partitionId: Long, version: Long): Boolean = {
-    //                           mongoConnector = MongoConnector(writeConfig.asOptions)
-    //                           ConnCounts = new ArrayBuffer[ConnCountObj]()
-    //                           true
-    //                         }
-    //
-    //                     }).start()
-
-
     //Show Data after processed
     val printConsole = customDF.writeStream
+        // .trigger(Trigger.ProcessingTime("5 seconds"))
         .format("console")
         // .option("truncate","false")
         .start()
@@ -184,4 +148,7 @@ object MediaStream extends StreamUtils {
     masterSave.awaitTermination()
     aggregateSave.awaitTermination()
   }
+
+
+
 }
