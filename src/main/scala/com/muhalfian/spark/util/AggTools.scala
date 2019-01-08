@@ -38,18 +38,23 @@ object AggTools extends StreamUtils {
     //   }
     // }
 
-    var tempSeq = content
-    .map(row => {
-      var index = masterWordsIndex.indexWhere(_ == row._1)
-      if(index == -1){
-        masterWordsIndex += row._1
-        index = masterWordsIndex.size - 1
-      }
+    content.foreach { (row :(String, Double)) =>
+      println(row)
+    }
 
-      (index, row._2.toDouble)
-    }).toSeq
-
-    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    // var tempSeq = content
+    // .map(row => {
+    //   var index = masterWordsIndex.indexWhere(_ == row._1)
+    //   if(index == -1){
+    //     masterWordsIndex += row._1
+    //     index = masterWordsIndex.size - 1
+    //   }
+    //
+    //   (index, row._2.toDouble)
+    // }).toSeq
+    //
+    // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    val vectorData = ""
     // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
     // var dataset: Dataset[LabeledPoint] = temp.toDS
     //
