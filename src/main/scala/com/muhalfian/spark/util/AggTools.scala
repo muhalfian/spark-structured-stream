@@ -40,7 +40,7 @@ object AggTools extends StreamUtils {
     tempSeq = grouped.map(row => {
       var index = masterWordsIndex.indexWhere(_._1 == row._1)
       if(index == -1){
-        masterWordsIndex += token
+        masterWordsIndex += row._1
         index = masterWordsIndex.size - 1
       }
 
