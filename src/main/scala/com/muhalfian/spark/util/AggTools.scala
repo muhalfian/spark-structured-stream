@@ -39,7 +39,7 @@ object AggTools extends StreamUtils {
     // }
 
     println(content)
-    println(content.split("\\(|\\)|\\,")
+    println(content.split("\\(|\\)|\\,"))
     // content.foreach(row => { println(row.toString) })
 
     // var new_content = content.map(_._1)
