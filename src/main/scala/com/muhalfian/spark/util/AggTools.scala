@@ -40,7 +40,6 @@ object AggTools extends StreamUtils {
     var grouped : Seq[(String, Double)] = content.toSeq
 
     var tempSeq = grouped
-    .getOrElse(Seq[(String, Double)]())
     .map(row => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
