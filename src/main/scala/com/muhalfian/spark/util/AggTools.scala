@@ -34,8 +34,30 @@ object AggTools extends StreamUtils {
   val aggregate = udf((content: Seq[String], link: String) => {
     // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
-    val grouped = content.groupBy(identity).mapValues(_.size)
+    var grouped = content.groupBy(identity).mapValues(_.size).toSeq
     var tempSeq = Seq[(Int, Double)]()
+
+    // tempSeq = grouped.map(row => {
+    //   var index = masterWordsIndex.indexWhere(_ == row._1)
+    //   if(index == -1){
+    //     masterWordsIndex += row._1
+    //     index = masterWordsIndex.size - 1
+    //   }
+    //
+    //   (index, row._2.toDouble)
+    // }).toSeq
+
+    // filter under max value / 2
+    // println(tempSeq)
+    try {
+      var threshold = grouped.maxBy(_._2)._2 / 2
+      grouped = grouped.filter(_._2 > threshold)
+    } catch {
+      case _: Throwable => {
+        grouped = Seq((0, 0.0))
+        println("Error in Data")
+      }
+    }
 
     tempSeq = grouped.map(row => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
@@ -46,18 +68,6 @@ object AggTools extends StreamUtils {
 
       (index, row._2.toDouble)
     }).toSeq
-
-    // filter under max value / 2
-    println(tempSeq)
-    try {
-      var threshold = tempSeq.maxBy(_._2)._2 / 2
-      tempSeq = tempSeq.filter(_._2 > threshold)
-    } catch {
-      case _: Throwable => {
-        tempSeq = Seq((0, 0.0))
-        println("Error in Data")
-      }
-    }
 
 
     // for ((token,count) <- grouped) {
