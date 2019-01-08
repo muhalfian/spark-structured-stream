@@ -21,34 +21,14 @@ object AggTools extends StreamUtils {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-  var countWords = 0
 
-  // var masterLink = ArrayBuffer[String]()
-  // val masterWords = ArrayBuffer.fill(26,1)(("",0))
   var masterWordsIndex = ArrayBuffer[String]()
-  // var masterWordsCount = ArrayBuffer[(String, Seq[(Int, Double)])]()
-  // var temp : Seq[LabeledPoint] = Seq(LabeledPoint(0, Vectors.sparse(1, Seq((0, 0.0)))))
-  // var masterAgg : Dataset[LabeledPoint] = temp.toDS
-  // var seqLabel = Seq[LabeledPoint]()
 
   val aggregate = udf((content: Seq[String], link: String) => {
-    // val splits = content.split(" ").toSeq.map(_.trim).filter(_ != "")
 
     var grouped = content.groupBy(identity).mapValues(_.size).toSeq
-    var tempSeq = Seq[(Int, Double)]()
 
-    // tempSeq = grouped.map(row => {
-    //   var index = masterWordsIndex.indexWhere(_ == row._1)
-    //   if(index == -1){
-    //     masterWordsIndex += row._1
-    //     index = masterWordsIndex.size - 1
-    //   }
-    //
-    //   (index, row._2.toDouble)
-    // }).toSeq
-
-    // filter under max value / 2
-    // println(tempSeq)
+    // filtered word less than max value / 2
     try {
       var threshold = grouped.maxBy(_._2)._2 / 2
       grouped = grouped.filter(_._2 > threshold)
@@ -58,7 +38,7 @@ object AggTools extends StreamUtils {
       }
     }
 
-    tempSeq = grouped.map(row => {
+    var tempSeq = grouped.map(row => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1
@@ -68,32 +48,13 @@ object AggTools extends StreamUtils {
       (index, row._2.toDouble)
     }).toSeq
 
-
-    // for ((token,count) <- grouped) {
-    //   // var point = indexWords(token.take(1))
-    //
-    //   var index = masterWordsIndex.indexWhere(_._1 == token)
-    //   var currentPoint = 0
-    //   if(index == -1){
-    //     masterWordsIndex += token
-    //     index = masterWordsIndex.size - 1
-    //     // masterWords(point) += ((token, currentPoint))
-    //   }
-    //
-    //   tempSeq = tempSeq :+ (index, count.toDouble)
-    // }
-
-    // masterLink += link
-
-    countWords = masterWordsIndex.size
-
-    val vectorData = Vectors.sparse(countWords, tempSeq.sortWith(_._1 < _._1)).toDense
+    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense
     // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
     // var dataset: Dataset[LabeledPoint] = temp.toDS
     //
     // println(dataset.select("*").show(false))
     // masterAgg = masterAgg.union(dataset)
-    println("aggregate " + countWords)
+    println("aggregate " + masterWordsIndex.size)
     // content
     vectorData
   })

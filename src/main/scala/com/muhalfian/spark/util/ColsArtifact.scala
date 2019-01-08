@@ -14,7 +14,7 @@ object ColsArtifact {
     )
   )
 
-  case class ConnCountObj(
+  case class masterData(
     link: String,
     source: String,
     authors: String,

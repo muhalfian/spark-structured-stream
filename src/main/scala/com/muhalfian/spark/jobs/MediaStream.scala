@@ -2,10 +2,6 @@ package com.muhalfian.spark.jobs
 
 import com.muhalfian.spark.util._
 
-import com.mongodb.client.MongoCollection
-import com.mongodb.spark.MongoConnector
-import com.mongodb.spark.config.WriteConfig
-
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 
@@ -25,7 +21,6 @@ import org.apache.spark.sql.streaming.Trigger
 // import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
 
-import org.bson._
 import scala.collection.JavaConverters._
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
@@ -143,66 +138,17 @@ object MediaStream extends StreamUtils {
     //   .start()
 
     //Sink to Mongodb
-
     val connDf = customDF
-      .map((r:Row) => ColsArtifact.ConnCountObj(
-        r.getAs[String](0),
-        r.getAs[String](1),
-        r.getAs[String](2),
-        r.getAs[String](3),
-        r.getAs[String](4),
-        r.getAs[String](5),
-        r.getAs[String](6),
-        r.getAs[String](7),
-        r.getAs[String](8)
-      ))
+      .map((r:Row) => RowArtifact.rowMasterData(r))
 
-    val ConnCountQuery = connDf
+    val saveMasterData = connDf
           .writeStream
           .outputMode("append")
-          .foreach(new ForeachWriter[ColsArtifact.ConnCountObj] {
-
-              val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga.master_data"))
-              var mongoConnector: MongoConnector = _
-              var ConnCounts: ArrayBuffer[ColsArtifact.ConnCountObj] = _
-
-              override def process(value: ColsArtifact.ConnCountObj): Unit = {
-                ConnCounts.append(value)
-              }
-
-              override def close(errorOrNull: Throwable): Unit = {
-                if (ConnCounts.nonEmpty) {
-                  mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
-                    collection.insertMany(ConnCounts.map(sc => {
-                      var doc = new Document()
-                      doc.put("link", sc.link)
-                      doc.put("source", sc.source)
-                      doc.put("authors", sc.authors)
-                      doc.put("image", sc.authors)
-                      doc.put("publish_date", sc.publish_date)
-                      doc.put("title", sc.title)
-                      doc.put("text", sc.text)
-                      doc.put("text_preprocess", sc.text_preprocess)
-                      doc.put("text_aggregate", sc.text_aggregate)
-                      doc
-                    }).asJava)
-                  })
-                }
-              }
-
-              override def open(partitionId: Long, version: Long): Boolean = {
-                mongoConnector = MongoConnector(writeConfig.asOptions)
-                ConnCounts = new ArrayBuffer[ColsArtifact.ConnCountObj]()
-                true
-              }
-            }).start()
+          .foreach(WriterUtil.masterData)
+          .start()
 
     printConsole.awaitTermination()
-    ConnCountQuery.awaitTermination()
-    // masterSave.awaitTermination()
-    // aggregateSave.awaitTermination()
+    saveMasterData.awaitTermination()
   }
-
-
 
 }
