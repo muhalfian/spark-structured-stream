@@ -38,6 +38,7 @@ object AggTools extends StreamUtils {
     //   }
     // }
     var grouped : Seq[(String, Double)] = content.toSeq
+    print(grouped)
 
     var tempSeq = grouped
     .map(row => {
