@@ -40,6 +40,7 @@ object AggTools extends StreamUtils {
 
     var tempSeq = content
     .map(row:(String, Double) => {
+      println(row)
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1
