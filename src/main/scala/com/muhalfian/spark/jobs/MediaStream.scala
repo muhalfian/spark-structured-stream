@@ -139,9 +139,8 @@ object MediaStream extends StreamUtils {
     //Sink to Mongodb
     val connDf = customDF
       .map(r => RowArtifact.rowMasterData(r))
- 
+
     val saveMasterData = connDf
-          .map((r:Row) => RowArtifact.rowMasterData(r))
           .writeStream
           .outputMode("append")
           .foreach(WriterUtil.masterData)
