@@ -154,7 +154,7 @@ object TextTools {
         println("Error in Data")
       }
     }
-
+    println(grouped)
     grouped
   })
 
