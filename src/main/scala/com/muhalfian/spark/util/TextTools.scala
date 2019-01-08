@@ -154,8 +154,8 @@ object TextTools {
         println("Error in Data")
       }
     }
-    println(grouped.toSeq)
-    grouped.toSeq
+    println(grouped.toList)
+    grouped.toList
   })
 
   val stringify = udf((word: String) => {
