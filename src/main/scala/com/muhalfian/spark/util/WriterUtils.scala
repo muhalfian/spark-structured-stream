@@ -3,14 +3,17 @@ package com.muhalfian.spark.util
 import com.mongodb.client.MongoCollection
 import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
+import org.apache.spark.sql.ForeachWriter
 import org.bson._
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
-import com.muhalfian.spark.utils.PropertiesLoader
+import scala.collection.JavaConverters._
+import com.muhalfian.spark.util.PropertiesLoader
 
 object WriterUtil {
 
   val masterData = new ForeachWriter[ColsArtifact.masterData] {
-    val writeConfig: WriteConfig = WriteConfig(Map("uri" -> PropertiesLoader.mongoUrl + "master_data"))
+    val collectionName: String = PropertiesLoader.mongoUrl + "master_data"
+    val writeConfig: WriteConfig = WriteConfig(Map("uri" -> collectionName))
     var mongoConnector: MongoConnector = _
     var masterDataCounts: ArrayBuffer[ColsArtifact.masterData] = _
 

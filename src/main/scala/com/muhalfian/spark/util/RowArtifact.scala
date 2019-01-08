@@ -1,6 +1,7 @@
 package com.muhalfian.spark.util
 
-import com.muhalfian.spark.util.ColsArtifact
+// import com.muhalfian.spark.util.ColsArtifact
+import org.apache.spark.sql.Row
 
 object RowArtifact {
 
