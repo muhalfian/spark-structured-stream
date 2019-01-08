@@ -48,11 +48,15 @@ object AggTools extends StreamUtils {
     }).toSeq
 
     // filter under max value / 2
+    println(tempSeq)
     try {
       var threshold = tempSeq.maxBy(_._2)._2 / 2
       tempSeq = tempSeq.filter(_._2 > threshold)
     } catch {
-      case _: Throwable => println("Error in Data")
+      case _: Throwable => {
+        tempSeq = ()
+        println("Error in Data")
+      }
     }
 
 
