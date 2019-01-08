@@ -7,7 +7,6 @@ import org.apache.spark.sql.ForeachWriter
 import org.bson._
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 import scala.collection.JavaConverters._
-import com.muhalfian.spark.util.PropertiesLoader
 
 object WriterUtil {
 
