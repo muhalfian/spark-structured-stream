@@ -11,7 +11,7 @@ import scala.collection.JavaConverters._
 object WriterUtil {
 
   val masterData = new ForeachWriter[ColsArtifact.masterData] {
-    val collectionName: String = PropertiesLoader.mongoUrl + "master_data"
+    val collectionName: String = "mongodb://10.252.37.112/master_data"
     val writeConfig: WriteConfig = WriteConfig(Map("uri" -> collectionName))
     var mongoConnector: MongoConnector = _
     var masterDataCounts: ArrayBuffer[ColsArtifact.masterData] = _
