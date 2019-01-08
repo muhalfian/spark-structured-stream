@@ -26,18 +26,6 @@ object AggTools extends StreamUtils {
 
   val aggregate = udf((content: Seq[String], link: String) => {
 
-    // var grouped = content.groupBy(identity).mapValues(_.size).toSeq
-    //
-    // // filtered word less than max value / 2
-    // try {
-    //   var threshold = grouped.maxBy(_._2)._2 / 2
-    //   grouped = grouped.filter(_._2 > threshold)
-    // } catch {
-    //   case _: Throwable => {
-    //     println("Error in Data")
-    //   }
-    // }
-
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       var index = masterWordsIndex.indexWhere(_ == word(0))
@@ -49,25 +37,7 @@ object AggTools extends StreamUtils {
       (index, word(1).toDouble)
     }).toSeq
 
-    // println(content)
-    // var baru = content.split("\\[|\\]|\\,"))
-    // println(baru.deep.mkString("\n"))
-    // // content.foreach(row => { println(row.toString) })
-    //
-    // // var new_content = content.map(_._1)
-    // // println(new_content)
-    //
-    // var tempSeq = content
-    // .map(row => {
-    //   var index = masterWordsIndex.indexWhere(_ == row._1)
-    //   if(index == -1){
-    //     masterWordsIndex += row._1
-    //     index = masterWordsIndex.size - 1
-    //   }
-    //
-    //   (index, row._2.toDouble)
-    // }).toSeq
-    //
+
     val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
     // val vectorData = ""
     // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))

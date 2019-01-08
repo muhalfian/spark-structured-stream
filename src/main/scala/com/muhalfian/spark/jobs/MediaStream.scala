@@ -18,12 +18,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.sql.streaming.Trigger
 
-// import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
-
-
-// import org.apache.lucene.analysis.id.IndonesianAnalyzer
-// import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
 
 
 object MediaStream extends StreamUtils {
@@ -60,8 +55,6 @@ object MediaStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    // val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-    //                           .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess").cast("string")))
     val preprocessDF = filteredDF
                         .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
 
@@ -69,9 +62,6 @@ object MediaStream extends StreamUtils {
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     // ======================== AGGREGATION ================================
-
-    // val aggregateDF = preprocessDF
-    //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
@@ -117,28 +107,6 @@ object MediaStream extends StreamUtils {
       .format("console")
       // .option("truncate","false")
       .start()
-
-    // val aggregateSave = customDF
-    //   .select("link", "text_aggregate")
-    //   .writeStream
-    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/aggregation")
-    //   .option("path","hdfs://blade1-node:9000/online_media/aggregation")
-    //   .outputMode("append")
-    //   .format("json")
-    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-    //   // .option("truncate","false")
-    //   .start()
-    //
-    // val masterSave = customDF
-    //   .select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-    //   .writeStream
-    //   .option("checkpointLocation", "hdfs://blade1-node:9000/checkpoint/online_media/master")
-    //   .option("path","hdfs://blade1-node:9000/online_media/master")
-    //   .outputMode("append")
-    //   .format("json")
-    //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
-    //   // .option("truncate","false")
-    //   .start()
 
     val saveMasterData = customDF
           .map(r => RowArtifact.rowMasterData(r))

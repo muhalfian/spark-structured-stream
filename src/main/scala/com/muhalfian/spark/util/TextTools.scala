@@ -141,20 +141,20 @@ object TextTools {
     stemmed
   })
 
+  // ====================== TEXT MINING =================================
+
   val select = udf( (words: Seq[String]) => {
-
     var grouped = words.groupBy(identity).mapValues(_.size.toDouble).toSeq
-
-    // filtered word less than max value / 2
     try {
-      var threshold = grouped.maxBy(_._2)._2 / 2
+      var threshold = grouped.maxBy(_._2)._2 / 2  // filter data from max / 2
       grouped = grouped.filter(_._2 > threshold)
     } catch {
       case _: Throwable => println("Error in Data")
     }
-    // println(grouped)
     grouped.map(_.toString)
   })
+
+  // ========================= STRINGIFY ================================
 
   val stringify = udf((word: String) => {
     var result = word.replaceAll("[\\]\\[]", "")
