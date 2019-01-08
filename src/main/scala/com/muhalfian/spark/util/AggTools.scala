@@ -39,7 +39,9 @@ object AggTools extends StreamUtils {
     // }
     print(content)
 
-    var tempSeq = content.map(row => {
+    var tempSeq = content
+    .getOrElse(Seq[(String, Double)]())
+    .map(row => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1
