@@ -54,7 +54,6 @@ object AggTools extends StreamUtils {
       grouped = grouped.filter(_._2 > threshold)
     } catch {
       case _: Throwable => {
-        grouped = Seq((0, 0.0))
         println("Error in Data")
       }
     }
