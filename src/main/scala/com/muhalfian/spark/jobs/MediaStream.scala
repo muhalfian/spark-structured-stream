@@ -21,7 +21,6 @@ import org.apache.spark.sql.streaming.Trigger
 // import org.apache.spark.ml.clustering.{BisectingKMeans, KMeans
 import org.apache.spark.ml.clustering.BisectingKMeans
 
-import scala.collection.JavaConverters._
 
 // import org.apache.lucene.analysis.id.IndonesianAnalyzer
 // import org.apache.lucene.analysis.tokenattributes.CharTermAttribute
@@ -138,10 +137,11 @@ object MediaStream extends StreamUtils {
     //   .start()
 
     //Sink to Mongodb
-    val connDf = customDF
-      .map((r:Row) => RowArtifact.rowMasterData(r))
+    // val connDf = customDF
+    //   .map((r:Row) => RowArtifact.rowMasterData(r))
 
-    val saveMasterData = connDf
+    val saveMasterData = customDF
+          .map((r:Row) => RowArtifact.rowMasterData(r))
           .writeStream
           .outputMode("append")
           .foreach(WriterUtil.masterData)
