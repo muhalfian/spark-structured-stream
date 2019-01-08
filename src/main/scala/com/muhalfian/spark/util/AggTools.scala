@@ -37,11 +37,9 @@ object AggTools extends StreamUtils {
     //     println("Error in Data")
     //   }
     // }
-    var grouped : Seq[(String, Double)] = content.toSeq
-    print(grouped)
 
-    var tempSeq = grouped
-    .map(row => {
+    var tempSeq = content
+    .map(row:(String, Double) => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1
