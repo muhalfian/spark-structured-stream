@@ -26,19 +26,20 @@ object AggTools extends StreamUtils {
 
   val aggregate = udf((content: Seq[String], link: String) => {
 
-    var grouped = content.groupBy(identity).mapValues(_.size).toSeq
+    // var grouped = content.groupBy(identity).mapValues(_.size).toSeq
+    //
+    // // filtered word less than max value / 2
+    // try {
+    //   var threshold = grouped.maxBy(_._2)._2 / 2
+    //   grouped = grouped.filter(_._2 > threshold)
+    // } catch {
+    //   case _: Throwable => {
+    //     println("Error in Data")
+    //   }
+    // }
+    print(content)
 
-    // filtered word less than max value / 2
-    try {
-      var threshold = grouped.maxBy(_._2)._2 / 2
-      grouped = grouped.filter(_._2 > threshold)
-    } catch {
-      case _: Throwable => {
-        println("Error in Data")
-      }
-    }
-
-    var tempSeq = grouped.map(row => {
+    var tempSeq = content.map(row => {
       var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1

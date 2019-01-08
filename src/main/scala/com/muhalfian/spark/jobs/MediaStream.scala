@@ -62,15 +62,18 @@ object MediaStream extends StreamUtils {
 
     // val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
     //                           .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess").cast("string")))
-    val preprocessDF = filteredDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
-                              .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
+    val preprocessDF = filteredDF
+                        .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
+
+    val selectedDF = preprocessDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     // ======================== AGGREGATION ================================
 
     // val aggregateDF = preprocessDF
     //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
-    val aggregateDF = preprocessDF
+    val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregate(col("text_preprocess"), col("link").cast("string")))
 
     val customDF = aggregateDF
@@ -135,7 +138,6 @@ object MediaStream extends StreamUtils {
     //   // .option("data", "/home/blade1/Documents/spark-structured-stream/data/")
     //   // .option("truncate","false")
     //   .start()
-
 
     val saveMasterData = customDF
           .map(r => RowArtifact.rowMasterData(r))

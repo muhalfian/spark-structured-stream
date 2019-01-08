@@ -23,6 +23,7 @@ object ColsArtifact {
     title: String,
     text: String,
     text_preprocess: String,
-    text_aggregate: String
+    text_aggregate: String,
+    text_selected: String
   )
 }

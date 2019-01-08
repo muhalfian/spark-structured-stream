@@ -34,6 +34,7 @@ object WriterUtil {
             doc.put("text", sc.text)
             doc.put("text_preprocess", sc.text_preprocess)
             doc.put("text_aggregate", sc.text_aggregate)
+            doc.put("text_selected", sc.text_selected)
             doc
           }).asJava)
         })

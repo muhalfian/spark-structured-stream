@@ -14,7 +14,8 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      r.getAs[String](8)
+      r.getAs[String](8),
+      r.getAs[String](9)
     )
   }
 

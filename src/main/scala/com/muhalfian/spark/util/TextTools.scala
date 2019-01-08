@@ -141,6 +141,23 @@ object TextTools {
     stemmed
   })
 
+  val select = udf( (words: Seq[String]) => {
+
+    var grouped = words.groupBy(identity).mapValues(_.size).toSeq
+
+    // filtered word less than max value / 2
+    try {
+      var threshold = grouped.maxBy(_._2)._2 / 2
+      grouped = grouped.filter(_._2 > threshold)
+    } catch {
+      case _: Throwable => {
+        println("Error in Data")
+      }
+    }
+
+    grouped
+  })
+
   val stringify = udf((word: String) => {
     var result = word.replaceAll("[\\]\\[]", "")
     result = result.replaceAll("\"", " ")
