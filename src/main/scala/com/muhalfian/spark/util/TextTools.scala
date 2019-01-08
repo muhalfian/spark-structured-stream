@@ -150,12 +150,10 @@ object TextTools {
       var threshold = grouped.maxBy(_._2)._2 / 2
       grouped = grouped.filter(_._2 > threshold)
     } catch {
-      case _: Throwable => {
-        println("Error in Data")
-      }
+      case _: Throwable => println("Error in Data")
     }
-    println(grouped.toList)
-    grouped.toList
+    println(grouped)
+    grouped
   })
 
   val stringify = udf((word: String) => {

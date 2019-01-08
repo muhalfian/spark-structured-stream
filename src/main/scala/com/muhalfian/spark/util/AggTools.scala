@@ -24,7 +24,7 @@ object AggTools extends StreamUtils {
 
   var masterWordsIndex = ArrayBuffer[String]()
 
-  val aggregate = udf((content: Seq[(String, Double)], link: String) => {
+  val aggregate = udf((content: String, link: String) => {
 
     // var grouped = content.groupBy(identity).mapValues(_.size).toSeq
     //
@@ -39,11 +39,11 @@ object AggTools extends StreamUtils {
     // }
 
     println(content)
-
+    println(content.split("\\(|\\)|\\,")
     // content.foreach(row => { println(row.toString) })
 
-    var new_content = content.map(_._1)
-    println(new_content)
+    // var new_content = content.map(_._1)
+    // println(new_content)
 
     // var tempSeq = content
     // .map(row => {
