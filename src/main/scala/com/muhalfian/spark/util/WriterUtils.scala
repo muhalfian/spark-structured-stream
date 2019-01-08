@@ -11,8 +11,9 @@ import scala.collection.JavaConverters._
 object WriterUtil {
 
   val masterData = new ForeachWriter[ColsArtifact.masterData] {
-    val writeConfig: WriteConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_data"))
-    var mongoConnector: MongoConnector = _ 
+    var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_data"
+    val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
+    var mongoConnector: MongoConnector = _
     var masterDataCounts: ArrayBuffer[ColsArtifact.masterData] = _
 
     override def process(value: ColsArtifact.masterData): Unit = {
