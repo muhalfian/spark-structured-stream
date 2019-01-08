@@ -38,7 +38,7 @@ object AggTools extends StreamUtils {
     var tempSeq = Seq[(Int, Double)]()
 
     tempSeq = grouped.map(row => {
-      var index = masterWordsIndex.indexWhere(_._1 == row._1)
+      var index = masterWordsIndex.indexWhere(_ == row._1)
       if(index == -1){
         masterWordsIndex += row._1
         index = masterWordsIndex.size - 1
