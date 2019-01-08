@@ -48,8 +48,8 @@ object AggTools extends StreamUtils {
     }).toSeq
 
     // filter under max value / 2
-    var threshold = tempSeq.maxBy(_._2)
-    tempSeq = tempSeq.filter(_._2 > threshold / 2)
+    var threshold = tempSeq.maxBy(_._2)._2 / 2
+    tempSeq = tempSeq.filter(_._2 > threshold)
 
     // for ((token,count) <- grouped) {
     //   // var point = indexWords(token.take(1))
