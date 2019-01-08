@@ -24,7 +24,7 @@ object AggTools extends StreamUtils {
 
   var masterWordsIndex = ArrayBuffer[String]()
 
-  val aggregate = udf((content: Seq[(String, Double)], link: String) => {
+  val aggregate = udf((content: Seq[String], link: String) => {
 
     // var grouped = content.groupBy(identity).mapValues(_.size).toSeq
     //
