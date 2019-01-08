@@ -24,7 +24,7 @@ object AggTools extends StreamUtils {
 
   var masterWordsIndex = ArrayBuffer[String]()
 
-  val aggregate = udf((content: String, link: String) => {
+  val aggregate = udf((content: Seq(String), link: String) => {
 
     // var grouped = content.groupBy(identity).mapValues(_.size).toSeq
     //
@@ -38,13 +38,25 @@ object AggTools extends StreamUtils {
     //   }
     // }
 
-    println(content)
-    println(content.split("\\(|\\)|\\,"))
-    // content.foreach(row => { println(row.toString) })
+    var baru = content.map(row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      var index = masterWordsIndex.indexWhere(_ == word(0))
+      if(index == -1){
+        masterWordsIndex += word(0)
+        index = masterWordsIndex.size - 1
+      }
 
-    // var new_content = content.map(_._1)
-    // println(new_content)
+      (index, word(1).toDouble)
+    }).toSeq
 
+    // println(content)
+    // var baru = content.split("\\[|\\]|\\,"))
+    // println(baru.deep.mkString("\n"))
+    // // content.foreach(row => { println(row.toString) })
+    //
+    // // var new_content = content.map(_._1)
+    // // println(new_content)
+    //
     // var tempSeq = content
     // .map(row => {
     //   var index = masterWordsIndex.indexWhere(_ == row._1)
@@ -56,8 +68,8 @@ object AggTools extends StreamUtils {
     //   (index, row._2.toDouble)
     // }).toSeq
     //
-    // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
-    val vectorData = ""
+    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    // val vectorData = ""
     // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
     // var dataset: Dataset[LabeledPoint] = temp.toDS
     //

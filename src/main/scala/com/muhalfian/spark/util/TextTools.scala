@@ -152,8 +152,8 @@ object TextTools {
     } catch {
       case _: Throwable => println("Error in Data")
     }
-    println(grouped)
-    grouped
+    // println(grouped)
+    grouped.map(_.toString)
   })
 
   val stringify = udf((word: String) => {
