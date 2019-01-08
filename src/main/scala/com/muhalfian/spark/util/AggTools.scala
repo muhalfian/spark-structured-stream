@@ -38,9 +38,9 @@ object AggTools extends StreamUtils {
     //   }
     // }
 
-    content.foreach { (row :(String, Double)) =>
+    content.foreach(row => {
       println(row)
-    }
+    })
 
     // var tempSeq = content
     // .map(row => {
