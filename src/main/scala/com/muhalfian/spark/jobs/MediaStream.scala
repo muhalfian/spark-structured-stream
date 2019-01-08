@@ -74,7 +74,7 @@ object MediaStream extends StreamUtils {
     //   .withColumn("text_preprocess", AggTools.aggregate(col("text_preprocess").cast("string")))
 
     val aggregateDF = selectedDF
-      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link").cast("string")))
+      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
 
     val customDF = aggregateDF
       .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
