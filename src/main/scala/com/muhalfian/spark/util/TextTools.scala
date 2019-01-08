@@ -143,7 +143,7 @@ object TextTools {
 
   val select = udf( (words: Seq[String]) => {
 
-    var grouped = words.groupBy(identity).mapValues(_.size).toSeq
+    var grouped = words.groupBy(identity).mapValues(_.size.toDouble).toSeq
 
     // filtered word less than max value / 2
     try {
