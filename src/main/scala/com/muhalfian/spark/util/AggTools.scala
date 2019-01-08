@@ -38,7 +38,7 @@ object AggTools extends StreamUtils {
     //   }
     // }
 
-    var baru = content.map(row => {
+    var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       var index = masterWordsIndex.indexWhere(_ == word(0))
       if(index == -1){
