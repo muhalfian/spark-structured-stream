@@ -54,7 +54,7 @@ object AggTools extends StreamUtils {
       tempSeq = tempSeq.filter(_._2 > threshold)
     } catch {
       case _: Throwable => {
-        tempSeq = ()
+        tempSeq = (0, 0.0)
         println("Error in Data")
       }
     }
