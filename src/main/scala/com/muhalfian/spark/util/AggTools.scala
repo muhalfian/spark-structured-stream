@@ -37,7 +37,7 @@ object AggTools extends StreamUtils {
     //     println("Error in Data")
     //   }
     // }
-    print(content)
+    var grouped : Seq[(String, Double)] = content.toSeq
 
     var tempSeq = content
     .getOrElse(Seq[(String, Double)]())
