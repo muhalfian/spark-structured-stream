@@ -29,14 +29,15 @@ object AggTools extends StreamUtils {
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       var index = masterWordsIndex.indexWhere(_ == word(0))
-      println(word(0) + "[" + word(1) + "]" + " => " index)
       if(index == -1){
         masterWordsIndex += word(0)
         index = masterWordsIndex.size - 1
       }
 
-      (index, word(1).toDouble)
+      (index, word(0), word(1).toDouble, index)
     }).toSeq
+
+    println(tempSeq)
 
 
     val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
