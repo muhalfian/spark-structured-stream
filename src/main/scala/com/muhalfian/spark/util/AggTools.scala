@@ -37,16 +37,6 @@ object AggTools extends StreamUtils {
       (index, word(1).toDouble)
     }).toSeq
 
-    content.foreach{ row => {
-      var word = row.drop(1).dropRight(1).split("\\,")
-      var index = masterWordsIndex.indexWhere(_ == word(0))
-      if(index == -1){
-        masterWordsIndex += word(0)
-        index = masterWordsIndex.size - 1
-      }
-      println(word(0) + "[" + word(1) + "]" + " => " + index)
-    }}
-
 
     val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
     // val vectorData = ""
