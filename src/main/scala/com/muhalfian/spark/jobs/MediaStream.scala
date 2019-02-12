@@ -58,7 +58,7 @@ object MediaStream extends StreamUtils {
     val preprocessDF = filteredDF
                         .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
 
-    val selectedDF = preprocessDF.select("link", "source", "authors", "image", "publish_date", "title", "text", "text_preprocess")
+    val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     // ======================== AGGREGATION ================================
