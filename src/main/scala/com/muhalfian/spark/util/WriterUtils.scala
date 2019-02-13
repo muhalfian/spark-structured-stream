@@ -28,7 +28,7 @@ object WriterUtil {
             doc.put("link", sc.link)
             doc.put("source", sc.source)
             doc.put("description", sc.description)
-            doc.put("image", sc.description)
+            doc.put("image", sc.image)
             doc.put("publish_date", sc.publish_date)
             doc.put("title", sc.title)
             doc.put("text", sc.text)

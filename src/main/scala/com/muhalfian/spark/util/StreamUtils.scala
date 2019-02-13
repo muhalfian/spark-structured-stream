@@ -16,7 +16,7 @@ private[spark] trait StreamUtils {
 
     val conf = new SparkConf()
       .setMaster(master)
-      .setAppName("StreamProtocolCountToMongo")
+      .setAppName("PrayugaStream")
       .set("spark.app.id", "StreamProtocolCountToMongo")
       .set("spark.mongodb.input.uri", uri)
       .set("spark.mongodb.output.uri", uri)
