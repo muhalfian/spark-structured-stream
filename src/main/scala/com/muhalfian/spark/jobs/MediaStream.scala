@@ -18,7 +18,8 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.sql.streaming.Trigger
 
-import org.apache.spark.ml.clustering.BisectingKMeans
+// import org.apache.spark.ml.clustering.BisectingKMeans
+// import com.muhalfian.spark.ml.BisectingKMeans
 
 
 object MediaStream extends StreamUtils {
@@ -102,11 +103,21 @@ object MediaStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
+
     //Show Data after processed
     val printConsole = customDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
+
+    // val automaticClustering = customDF
+    //   .map(r => RowArtifact.clusterData(r))
+    //   .writeStream
+    //   .format("console")
+    //   .outputMode("append")
+    //   .trigger(Trigger.Once())
+    //   .foreach(WriteUtil.clustering)
+    //   .start()
 
     val saveMasterData = customDF
           .map(r => RowArtifact.rowMasterData(r))
