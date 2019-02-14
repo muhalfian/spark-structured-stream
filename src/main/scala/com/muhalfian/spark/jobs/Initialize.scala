@@ -41,7 +41,7 @@ object Initialize extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
       .option("startingOffsets", "earliest")
-      .option("endingOffsets", "latest")
+      .option("endingOffsets", "1000")
       .load()
 
     // Transform data stream to Dataframe
@@ -114,6 +114,9 @@ object Initialize extends StreamUtils {
     //
     // println(customDF)
     customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
+
+    customDF.cache()
+    customDF.count()
 
     //
     // // val automaticClustering = customDF
