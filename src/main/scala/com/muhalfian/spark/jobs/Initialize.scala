@@ -113,10 +113,10 @@ object Initialize extends StreamUtils {
     //   .start()
     //
     // println(customDF)
-    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
 
     customDF.cache()
     customDF.count()
+    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
 
     //
     // // val automaticClustering = customDF
