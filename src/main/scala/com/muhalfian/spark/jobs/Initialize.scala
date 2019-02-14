@@ -104,31 +104,32 @@ object Initialize extends StreamUtils {
 
     // =========================== SINK ====================================
 
+    println(customDF)
 
-    //Show Data after processed
-    val printConsole = customDF.writeStream
-      .format("console")
-      // .option("truncate","false")
-      .start()
-
-    // val automaticClustering = customDF
-    //   .map(r => RowArtifact.clusterData(r))
-    //   .writeStream
+    // //Show Data after processed
+    // val printConsole = customDF.writeStream
     //   .format("console")
-    //   .outputMode("append")
-    //   .trigger(Trigger.Once())
-    //   .foreach(WriteUtil.clustering)
+    //   // .option("truncate","false")
     //   .start()
-
-    val saveMasterData = customDF
-          .map(r => RowArtifact.rowMasterData(r))
-          .writeStream
-          .outputMode("append")
-          .foreach(WriterUtil.masterData)
-          .start()
-
-    printConsole.awaitTermination()
-    saveMasterData.awaitTermination()
+    //
+    // // val automaticClustering = customDF
+    // //   .map(r => RowArtifact.clusterData(r))
+    // //   .writeStream
+    // //   .format("console")
+    // //   .outputMode("append")
+    // //   .trigger(Trigger.Once())
+    // //   .foreach(WriteUtil.clustering)
+    // //   .start()
+    //
+    // val saveMasterData = customDF
+    //       .map(r => RowArtifact.rowMasterData(r))
+    //       .writeStream
+    //       .outputMode("append")
+    //       .foreach(WriterUtil.masterData)
+    //       .start()
+    //
+    // printConsole.awaitTermination()
+    // saveMasterData.awaitTermination()
   }
 
 }
