@@ -39,10 +39,9 @@ object Initialize extends StreamUtils {
       .read
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-      .option("auto.offset.reset", "earliest")
-      .option("subscribe", PropertiesLoader.kafkaTopic)
-      .option("startingOffsets", """ {"online_media" : { "0" : 1 } } """)
-      .option("endingOffsets", """ {"online_media" : { "0" : 100 } } """)
+      .option("subscribePattern", "online_media.*")
+      .option("startingOffsets", "earliest")
+      .option("endingOffsets", "latest")
       .load()
 
     // Transform data stream to Dataframe
