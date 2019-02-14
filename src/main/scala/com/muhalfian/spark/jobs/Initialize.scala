@@ -106,13 +106,14 @@ object Initialize extends StreamUtils {
 
 
 
-    //Show Data after processed
-    val printConsole = customDF.write
-      .format("console")
-      // .option("truncate","false")
-      .start()
-
-    println(customDF)
+    // //Show Data after processed
+    // val printConsole = customDF.write
+    //   .format("console")
+    //   // .option("truncate","false")
+    //   .start()
+    //
+    // println(customDF)
+    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
 
     //
     // // val automaticClustering = customDF
