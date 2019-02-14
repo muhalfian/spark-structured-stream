@@ -104,13 +104,16 @@ object Initialize extends StreamUtils {
 
     // =========================== SINK ====================================
 
+
+
+    //Show Data after processed
+    val printConsole = customDF.write
+      .format("console")
+      // .option("truncate","false")
+      .start()
+
     println(customDF)
 
-    // //Show Data after processed
-    // val printConsole = customDF.writeStream
-    //   .format("console")
-    //   // .option("truncate","false")
-    //   .start()
     //
     // // val automaticClustering = customDF
     // //   .map(r => RowArtifact.clusterData(r))
