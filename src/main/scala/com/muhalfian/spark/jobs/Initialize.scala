@@ -65,10 +65,11 @@ object Initialize extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val rows = selectedDF.count()
-    val rddDF = selectedDF.flatMap(row => {
-      val x = row.getAs[String]("text_selected")
-      x
-    }).map((_,1)).reduceByKey(_ + _).collect
+    // val rddDF = selectedDF.flatMap(row => {
+    //   val x = row.getAs[String]("text_selected")
+    //   x
+    // }).map((_,1)).reduceByKey(_ + _).collect
+    val rddDF = df.map(r => (r.getString(2),r.getString(2).length))
 
     rddDF.show()
 
