@@ -49,7 +49,8 @@ object Initialize extends StreamUtils {
       .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
-      .show()
+
+    kafkaDF.show()
 
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
