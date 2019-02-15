@@ -144,8 +144,8 @@ object Initialize extends StreamUtils {
 
 
     // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
-    val aggList = customDF.select("text_aggregate").map(r => r(0)).collect()
-    println(aggList)
+    val aggList = customDF.select("text_aggregate").show()
+    // println(aggList)
 
     //
     // // val automaticClustering = customDF
