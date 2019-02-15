@@ -67,6 +67,7 @@ object Initialize extends StreamUtils {
     val rows = selectedDF.count()
     val rddDF = selectedDF.flatMap(row => {
       val x = row.getAs[String]("text_selected")
+      x
     }).map((_,1)).reduceByKey(_ + _).collect
 
     rddDF.show()
