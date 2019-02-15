@@ -69,7 +69,11 @@ object Initialize extends StreamUtils {
     //   val x = row.getAs[String]("text_selected")
     //   x
     // }).map((_,1)).reduceByKey(_ + _).collect
-    val rddDF = selectedDF.map(r => (r.getString(7),r.getString(7).length))
+    val rddDF = selectedDF.map(r => {
+      r.getSeq(8).map(row => {
+        (row._1,row_2)
+      })
+    })
 
     rddDF.show()
 
