@@ -77,7 +77,7 @@ object Initialize extends StreamUtils {
     //   })
     // })
 
-    val rddDF = selectedDF.map(r => {
+    val rddDF = selectedDF.limit(rows).map(r => {
       r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
