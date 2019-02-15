@@ -144,7 +144,11 @@ object Initialize extends StreamUtils {
 
 
     // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
-    val aggList = customDF.select("text_aggregate").rdd.map(r => r(0).asInstanceOf[DenseVector]).collect()
+    val aggList = customDF.select("text_aggregate").rdd.map(r => {
+      val row = r(0).asInstanceOf[DenseVector]
+      println(row)
+      row
+    }).collect()
     println(aggList)
 
     //
