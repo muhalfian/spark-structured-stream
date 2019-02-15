@@ -66,10 +66,11 @@ object Initialize extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val aggregateDF = selectedDF
-      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
+    val rows = selectedDF.count()
+    println(rows)
 
-    println(selectedDF.count())
+    val aggregateDF = selectedDF
+      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link"), rows))
 
     val customDF = aggregateDF
       // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
