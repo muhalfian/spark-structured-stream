@@ -85,7 +85,7 @@ object Initialize extends StreamUtils {
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
         }
-        println(word)
+        println(AggTools.masterWordsIndex.size)
         word(0)
       })
     })
