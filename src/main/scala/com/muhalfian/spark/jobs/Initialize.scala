@@ -65,22 +65,22 @@ object Initialize extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val rows = selectedDF.count()
-    // val rddDF = selectedDF.flatMap(row => {
-    //   val x = row.getAs[String]("text_selected")
-    //   x
-    // }).map((_,1)).reduceByKey(_ + _).collect
-    val rddDF = selectedDF.map(r => {
+    val rddDF = selectedDF.flatMap(r => {
+      r.getString(6).split(" ")
+    }).toDF
 
-      r.getAs[WrappedArray[String]](8).map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = AggTools.masterWordsIndex.size - 1
-        }
-        word(0)
-      })
-    })
+    // val rddDF = selectedDF.map(r => {
+    //
+    //   r.getAs[WrappedArray[String]](8).map( row => {
+    //     var word = row.drop(1).dropRight(1).split("\\,")
+    //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+    //     if(index == -1){
+    //       AggTools.masterWordsIndex += word(0)
+    //       index = AggTools.masterWordsIndex.size - 1
+    //     }
+    //     word(0)
+    //   })
+    // })
 
     rddDF.show()
 
