@@ -70,10 +70,10 @@ object Initialize extends StreamUtils {
     //   x
     // }).map((_,1)).reduceByKey(_ + _).collect
     val rddDF = selectedDF.map(r => {
-      r.getMap(8)
-      // r.getSeq(8).map(s => {
-      //   s._1
-      // })
+      r.getSeq(8).map(row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        word(0)
+      })
     })
 
     rddDF.show()
