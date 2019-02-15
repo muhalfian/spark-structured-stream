@@ -71,7 +71,7 @@ object Initialize extends StreamUtils {
     // }).map((_,1)).reduceByKey(_ + _).collect
     val rddDF = selectedDF.map(r => {
 
-      r.getAs[WrappedArray[String]](8).drop(1).dropRight(1).split("\\,").map( row => {
+      r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         word(0)
       })
