@@ -66,7 +66,15 @@ object Initialize extends StreamUtils {
 
     val rows = selectedDF.count()
     val rddDF = selectedDF.flatMap(r => {
-      r.getString(6).split(" ")
+      r.getAs[WrappedArray[String]](8).map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = AggTools.masterWordsIndex.size - 1
+        }
+        word(0)
+      })
     }).toDF
 
     // val rddDF = selectedDF.map(r => {
