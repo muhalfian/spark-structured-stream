@@ -5,7 +5,7 @@ import com.muhalfian.spark.util._
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 
-import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet, WrappedArray}
 
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
@@ -70,7 +70,8 @@ object Initialize extends StreamUtils {
     //   x
     // }).map((_,1)).reduceByKey(_ + _).collect
     val rddDF = selectedDF.map(r => {
-      r.getSeq(8).map(row => {
+
+      r.getAs[WrappedArray[(String,Int)]](8).map(row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         word(0)
       })
