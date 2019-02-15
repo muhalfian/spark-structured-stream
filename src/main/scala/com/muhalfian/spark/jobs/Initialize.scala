@@ -76,7 +76,7 @@ object Initialize extends StreamUtils {
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
           AggTools.masterWordsIndex += word(0)
-          index = masterWordsIndex.size - 1
+          index = AggTools.masterWordsIndex.size - 1
         }
         word(0)
       })
