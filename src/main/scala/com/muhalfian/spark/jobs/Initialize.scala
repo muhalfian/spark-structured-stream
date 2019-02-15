@@ -73,6 +73,11 @@ object Initialize extends StreamUtils {
 
       r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = masterWordsIndex.size - 1
+        }
         word(0)
       })
     })
@@ -82,7 +87,7 @@ object Initialize extends StreamUtils {
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
 
-    println(selectedDF.count())
+    println("count row : " + selectedDF.count())
 
     val customDF = aggregateDF
       // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
@@ -131,7 +136,7 @@ object Initialize extends StreamUtils {
     // println(customDF)
 
 
-    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_selected").show()
+    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
 
     //
     // // val automaticClustering = customDF
