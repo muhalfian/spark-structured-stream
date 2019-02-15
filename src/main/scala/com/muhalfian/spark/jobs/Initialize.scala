@@ -50,8 +50,6 @@ object Initialize extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
-    kafkaDF.show()
-
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
@@ -67,10 +65,14 @@ object Initialize extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val rows = selectedDF.count()
-    println(rows)
+    val rddDF = selectedDF.rdd.flatmap(_._9)
+
+    rddDF.show()
 
     val aggregateDF = selectedDF
-      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link"), rows))
+      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
+
+    println(selectedDF.count())
 
     val customDF = aggregateDF
       // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))

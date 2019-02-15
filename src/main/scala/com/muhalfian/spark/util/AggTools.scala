@@ -24,7 +24,7 @@ object AggTools extends StreamUtils {
 
   var masterWordsIndex = ArrayBuffer[String]()
 
-  val aggregate = udf((content: Seq[String], link: String, rows: Int) => {
+  val aggregate = udf((content: Seq[String], link: String) => {
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
@@ -39,8 +39,7 @@ object AggTools extends StreamUtils {
 
     println(tempSeq)
     println(masterWordsIndex.size)
-    val vectorData = Vectors.sparse(rows, tempSeq.sortWith(_._1 < _._1)).toDense
-    // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1))
+    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1))
     // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
     // val vectorData = ""
