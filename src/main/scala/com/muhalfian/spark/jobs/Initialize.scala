@@ -90,6 +90,7 @@ object Initialize extends StreamUtils {
     })
 
     rddDF.show()
+    println("counting " + AggTools.masterWordsIndex.size)
 
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
@@ -146,7 +147,7 @@ object Initialize extends StreamUtils {
     // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
     val aggList = customDF.select("text_aggregate").rdd.map(r => {
       val row = r(0).asInstanceOf[DenseVector]
-      println("size : " + row.size)
+      // println("size : " + row.size)
       row
     }).collect()
     println(aggList)
