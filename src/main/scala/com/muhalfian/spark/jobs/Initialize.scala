@@ -85,6 +85,7 @@ object Initialize extends StreamUtils {
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
         }
+        println(word)
         word(0)
       })
     })
@@ -144,12 +145,12 @@ object Initialize extends StreamUtils {
 
 
     // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
-    val aggList = customDF.select("text_aggregate").map(r => {
-      val row = r(0).asInstanceOf[DenseVector]
-      println(row)
-      row
-    }).collect()
-    println(aggList)
+    // val aggList = customDF.select("text_aggregate").map(r => {
+    //   val row = r(0).asInstanceOf[DenseVector]
+    //   println(row)
+    //   row
+    // }).collect()
+    // println(aggList)
 
     //
     // // val automaticClustering = customDF
