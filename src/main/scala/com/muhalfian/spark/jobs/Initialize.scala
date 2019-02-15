@@ -65,7 +65,7 @@ object Initialize extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val rows = selectedDF.count()
-    val rddDF = selectedDF.flatMap(_._9)
+    val rddDF = selectedDF.rdd.flatMap(_._9)
 
     rddDF.show()
 
