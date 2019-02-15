@@ -144,7 +144,7 @@ object Initialize extends StreamUtils {
 
 
     // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
-    aggDF = customDF.select("text_selected")
+    val aggDF = customDF.select("text_selected")
     aggDF.show()
     println(aggDF.rdd)
 
