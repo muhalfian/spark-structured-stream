@@ -71,7 +71,7 @@ object Initialize extends StreamUtils {
     // }).map((_,1)).reduceByKey(_ + _).collect
     val rddDF = selectedDF.map(r => {
       r.getSeq(8).map(row => {
-        (row._1,row_2)
+        row._1
       })
     })
 
