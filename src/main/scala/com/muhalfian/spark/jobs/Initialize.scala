@@ -114,7 +114,7 @@ object Initialize extends StreamUtils {
     //
     // println(customDF)
 
-    customDF.count().show()
+    println(customDF.count())
     customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
 
     //
