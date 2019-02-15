@@ -37,8 +37,8 @@ object AggTools extends StreamUtils {
       (index, word(1).toDouble)
     }).toSeq
 
-    println(tempSeq)
-    println(masterWordsIndex.size)
+    // println(tempSeq)
+    // println(masterWordsIndex.size)
     val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense
     // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
