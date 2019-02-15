@@ -83,7 +83,7 @@ object Initialize extends StreamUtils {
     val customDF = aggregateDF
       // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
       .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-      .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+      // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
       .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // ============================ CLUSTERING =================================
@@ -127,7 +127,7 @@ object Initialize extends StreamUtils {
     // println(customDF)
 
 
-    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess").show()
+    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_selected").show()
 
     //
     // // val automaticClustering = customDF
