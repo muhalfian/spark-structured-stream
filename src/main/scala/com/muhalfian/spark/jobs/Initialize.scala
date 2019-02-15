@@ -65,20 +65,7 @@ object Initialize extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val rows = selectedDF.count()
-    val rddDF = selectedDF.flatMap(r => {
-      r.getAs[WrappedArray[String]](8).map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = AggTools.masterWordsIndex.size - 1
-        }
-        word(0)
-      })
-    })
-
-    // val rddDF = selectedDF.map(r => {
-    //
+    // val rddDF = selectedDF.flatMap(r => {
     //   r.getAs[WrappedArray[String]](8).map( row => {
     //     var word = row.drop(1).dropRight(1).split("\\,")
     //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
@@ -89,6 +76,18 @@ object Initialize extends StreamUtils {
     //     word(0)
     //   })
     // })
+
+    val rddDF = selectedDF.map(r => {
+      r.getAs[WrappedArray[String]](8).map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = AggTools.masterWordsIndex.size - 1
+        }
+        word(0)
+      })
+    })
 
     rddDF.show()
 
@@ -144,7 +143,10 @@ object Initialize extends StreamUtils {
     // println(customDF)
 
 
-    customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
+    // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
+    aggDF = customDF.select("text_selected")
+    aggDF.show()
+    println(aggDF.rdd)
 
     //
     // // val automaticClustering = customDF
