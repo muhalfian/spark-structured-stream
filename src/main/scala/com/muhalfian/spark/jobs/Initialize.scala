@@ -77,7 +77,7 @@ object Initialize extends StreamUtils {
     //   })
     // })
 
-    val rddDF = selectedDF.limit(rows.toInt).map(r => {
+    val rddDF = selectedDF.map(r => {
       r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
@@ -85,10 +85,10 @@ object Initialize extends StreamUtils {
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
         }
-        word(0)
+        AggTools.masterWordsIndex.size
       })
     })
-
+    rddDF.collect()
     rddDF.show()
     println("counting " + AggTools.masterWordsIndex.size)
 
