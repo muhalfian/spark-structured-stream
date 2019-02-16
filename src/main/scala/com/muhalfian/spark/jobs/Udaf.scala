@@ -98,4 +98,5 @@ object Udaf extends StreamUtils {
 
     // Invoke the UDAF by its assigned name.
     df.groupBy("group_id").agg(expr("gm(id) as GeometricMean")).show()
+  }
 }
