@@ -88,6 +88,8 @@ object Udaf extends StreamUtils {
     val df = spark.sql("select id, id % 3 as group_id from ids")
     df.registerTempTable("simple")
 
+    df.show()
+
     // Or use Dataframe syntax to call the aggregate function.
 
     // Create an instance of UDAF GeometricMean.
