@@ -96,7 +96,7 @@ object Dictionary extends StreamUtils {
 
     customRdd.show()
 
-    selected = customRdd.filter($"word" === "suwardi")
+    val selected = customRdd.filter($"word" === "suwardi")
     selected.show()
     println(selected.index)
 
