@@ -97,7 +97,7 @@ object Dictionary extends StreamUtils {
         println("doc save to mongodb : " + word)
         val kata = word(0)
         (index, word(0))
-        Document.parse(s"{index: $index, word: $kata}")
+        Document.parse(s"{index: $index, word: '$kata'}")
       })
 
       println(data)
