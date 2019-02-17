@@ -106,7 +106,9 @@ object Dictionary extends StreamUtils {
 
         if(index == masterWordCount){
           masterWordCount += 1
-
+        } else {
+          index = 0
+          word = null
         }
 
         var query = s"{index: $index, word: '$kata'}"
@@ -118,8 +120,10 @@ object Dictionary extends StreamUtils {
       data
     }).collect()).distinct
 
+    dictionary = dictionary.filter(x => x != Document.parse(s"{index: 0, word: 'null'}"))
+
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    MongoSpark.save(dictionary.write.mode("append"), writeConfig)
+    MongoSpark.save(dictionary, writeConfig)
 
 
     // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
