@@ -95,9 +95,8 @@ object Dictionary extends StreamUtils {
         }
         AggTools.masterWordsIndex.size
         println("doc save to mongodb : " + word)
-        // (index, word)
-        Document.parse(s"{index: $index, word: $word}")
-      })
+        (index, word)
+      }).map( row => Document.parse(s"{index: $row._1, word: $row._2}"))
 
       println(data)
       data
