@@ -58,47 +58,47 @@ object Dictionary extends StreamUtils {
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     AggTools.masterWordsIndex = MongoSpark.load(spark, readConfig)
 
-    // =================== PREPROCESS SSparkSessionASTRAWI =============================
-
-    val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
-
-    val filteredDF = TextTools.remover.transform(regexDF)
-
-    val preprocessDF = filteredDF
-                        .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
-
-    val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
-                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
-
-    // ======================== SAVE DICTIONARY ================================
-
-    val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-
-        var index = AggTools.masterWordsIndex
-                    .filter($"word" === word(0))
-                    .rdd.map(r => r.getInt(1))
-                    .collect.toList(0)
-
-        AggTools.masterWordsIndex += word(0)
-        // index = AggTools.masterWordsIndex.size - 1
-        // if(index == -1){
-        //   AggTools.masterWordsIndex += word(0)
-        //   index = AggTools.masterWordsIndex.size - 1
-        // } else {
-        //
-        // }
-        val kata = word(0)
-        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        Document.parse(s"{index: $index, word: '$kata'}")
-      })
-      data
-    }).collect()).distinct
-
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    MongoSpark.save(dictionary, writeConfig)
+    // // =================== PREPROCESS SSparkSessionASTRAWI =============================
+    //
+    // val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
+    //
+    // val filteredDF = TextTools.remover.transform(regexDF)
+    //
+    // val preprocessDF = filteredDF
+    //                     .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
+    //
+    // val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+    //                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+    //
+    // // ======================== SAVE DICTIONARY ================================
+    //
+    // val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
+    //   var data = r.getAs[WrappedArray[String]](8).map( row => {
+    //     var word = row.drop(1).dropRight(1).split("\\,")
+    //     // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+    //
+    //     var index = AggTools.masterWordsIndex
+    //                 .filter($"word" === word(0))
+    //                 .rdd.map(r => r.getInt(1))
+    //                 .collect.toList(0)
+    //
+    //     AggTools.masterWordsIndex += word(0)
+    //     // index = AggTools.masterWordsIndex.size - 1
+    //     // if(index == -1){
+    //     //   AggTools.masterWordsIndex += word(0)
+    //     //   index = AggTools.masterWordsIndex.size - 1
+    //     // } else {
+    //     //
+    //     // }
+    //     val kata = word(0)
+    //     println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+    //     Document.parse(s"{index: $index, word: '$kata'}")
+    //   })
+    //   data
+    // }).collect()).distinct
+    //
+    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    // MongoSpark.save(dictionary, writeConfig)
 
 
     // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
