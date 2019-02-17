@@ -118,8 +118,6 @@ object Dictionary extends StreamUtils {
       data
     }).collect()).distinct
 
-    dictionary = dictionary.map()
-
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     MongoSpark.save(dictionary, writeConfig).mode("append")
 
