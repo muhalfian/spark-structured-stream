@@ -86,18 +86,20 @@ object Dictionary extends StreamUtils {
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
     val rddDF = spark.sparkContext.parallelize(selectedDF.rdd.map(r => {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
+      var data = r.getAs[WrappedArray[String]](8).flatMap( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
+        word
+      }).map(row => {
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
         }
         AggTools.masterWordsIndex.size
-        (index, word)
+        println("doc save to mongodb : " + word)
+        // (index, word)
+        Document.parse(s"{index: $index, word: $word}")
       })
-
-      Document.parse(s"{index: $data(0), word: $data(1)}")
     }).collect())
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
