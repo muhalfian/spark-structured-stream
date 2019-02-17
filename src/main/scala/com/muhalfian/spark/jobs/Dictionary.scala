@@ -96,21 +96,21 @@ object Dictionary extends StreamUtils {
           index = AggTools.masterWordsIndex.size - 1
         }
         AggTools.masterWordsIndex.size
-        println("doc save to mongodb : " + word)
         val kata = word(0)
-        (index, word(0))
-        Document.parse(s"{index: $index, word: '$kata'}")
-      }).toSeq
+        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+        // (index, word(0))
+        // Document.parse(s"{index: $index, word: '$kata'}")
+
+      })
 
       println(data)
-      MongoSpark.save(data, writeConfig)
       data
     }).collect()
 
     println(rddDF)
 
     //
-    // MongoSpark.save(rddDF, writeConfig)
+    MongoSpark.save(rddDF, writeConfig)
 
     // MongoSpark.save(masterWordList)
     // rddDF.collect()
