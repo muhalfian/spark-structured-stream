@@ -88,7 +88,12 @@ object Dictionary extends StreamUtils {
                       .rdd.map(r => r.getInt(1))
                       .collect.toList(0)
         } catch {
-           index = masterWord.count.toInt
+           case _ : java.lang.NullPointerException => {
+             index = masterWord.count.toInt
+           }
+           case unknown => {
+             index = masterWord.count.toInt
+           }
         }
 
         // AggTools.masterWordsIndex += word(0)
