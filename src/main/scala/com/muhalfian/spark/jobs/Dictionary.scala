@@ -36,60 +36,63 @@ object Dictionary extends StreamUtils {
     import spark.implicits._
     spark.sparkContext.setLogLevel("ERROR")
 
-    // ======================== READ STREAM ================================
+    // // ======================== READ STREAM ================================
+    //
+    // // read data stream from Kafka
+    // val kafka = spark
+    //   .read
+    //   .format("kafka")
+    //   .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
+    //   .option("subscribePattern", "online_media.*")
+    //   .option("startingOffsets", """{"online_media":{"0":-2}}""")
+    //   .option("endingOffsets", """{"online_media":{"0":25500}}""")
+    //   .load()
+    //
+    // // Transform data stream to Dataframe
+    // val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
+    //   .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
+    //   .select("data.*")
+    //   .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
+    //
+    // // =================== PREPROCESS SSparkSessionASTRAWI =============================
+    //
+    // val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
+    //
+    // val filteredDF = TextTools.remover.transform(regexDF)
+    //
+    // val preprocessDF = filteredDF
+    //                     .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
+    //
+    // val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+    //                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+    //
+    // // ======================== SAVE DICTIONARY ================================
+    //
+    // val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
+    //   var data = r.getAs[WrappedArray[String]](8).map( row => {
+    //     var word = row.drop(1).dropRight(1).split("\\,")
+    //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+    //     if(index == -1){
+    //       AggTools.masterWordsIndex += word(0)
+    //       index = AggTools.masterWordsIndex.size - 1
+    //     }
+    //     val kata = word(0)
+    //     println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+    //     Document.parse(s"{index: $index, word: '$kata'}")
+    //   })
+    //   data
+    // }).collect()).distinct
+    //
+    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    // MongoSpark.save(dictionary, writeConfig)
 
-    // read data stream from Kafka
-    val kafka = spark
-      .read
-      .format("kafka")
-      .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-      .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":25500}}""")
-      .load()
 
-    // Transform data stream to Dataframe
-    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
-      .select("data.*")
-      .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word")))
+    val customRdd = MongoSpark.load(spark, readConfig)
 
-    // =================== PREPROCESS SSparkSessionASTRAWI =============================
-
-    val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
-
-    val filteredDF = TextTools.remover.transform(regexDF)
-
-    val preprocessDF = filteredDF
-                        .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
-
-    val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
-                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
-
-    // ======================== SAVE DICTIONARY ================================
-
-    val rddDF = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = AggTools.masterWordsIndex.size - 1
-
-        }
-        val kata = word(0)
-        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        Document.parse(s"{index: $index, word: '$kata'}")
-      })
-      data
-    }).collect())
-
-    val dictionary = rddDF.distinct
-
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    MongoSpark.save(dictionary, writeConfig)
-
+    println(customRdd)
+    println(customRdd.count)
+    println(customRdd.first.toJson)
 
   }
-
 }
