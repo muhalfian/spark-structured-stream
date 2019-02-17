@@ -89,7 +89,8 @@ object Dictionary extends StreamUtils {
                       .collect.toList(0)
         } catch {
            case unknown => {
-             index = masterWord.count.toInt
+             index = masterWord.count
+             index = index.toInt
            }
         }
 
