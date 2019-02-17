@@ -71,7 +71,6 @@ object Dictionary extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    println(masterWord.count.toInt)
     masterWord.show()
 
     // ======================== SAVE DICTIONARY ================================
@@ -90,6 +89,7 @@ object Dictionary extends StreamUtils {
                       .collect.toList(0)
         } catch {
            case unknown => {
+             println(masterWord.count.toInt)
              index = masterWord.count.toInt
            }
         }
