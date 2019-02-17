@@ -80,14 +80,16 @@ object Dictionary extends StreamUtils {
         var word = row.drop(1).dropRight(1).split("\\,")
         // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
 
+        var index = 0
+
         try {
-            var index = masterWord
+            index = masterWord
                       .filter($"word" === word(0))
                       .rdd.map(r => r.getInt(1))
                       .collect.toList(0)
         } catch {
-           case e : java.lang.NullPointerException => {
-             var index = masterWord.count
+           case e : NullPointerException => {
+             index = masterWord.count
            }
         }
 
