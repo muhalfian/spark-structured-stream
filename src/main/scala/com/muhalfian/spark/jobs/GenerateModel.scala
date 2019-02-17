@@ -1,4 +1,4 @@
-package com.muhalfian.spark.jobs
+lfiapackage com.muhalfian.spark.jobs
 
 import com.muhalfian.spark.util._
 
@@ -28,6 +28,48 @@ import org.apache.spark.sql.streaming.Trigger
 
 object GenerateModel extends StreamUtils {
 
+  // class AutomaticClustering extends UserDefinedAggregateFunction {
+  //   // This is the input fields for your aggregate function.
+  //   override def inputSchema: org.apache.spark.sql.types.StructType = ColsArtifact.preprocessSchema
+  //
+  //   // This is the internal fields you keep for computing your aggregate.
+  //   override def bufferSchema: StructType = StructType(
+  //     StructField("matrix", ArrayType(ArrayType(DoubleType))
+  //   )
+  //
+  //   // This is the output type of your aggregatation function.
+  //   override def dataType: DataType = DoubleType
+  //
+  //   override def deterministic: Boolean = true
+  //
+  //   // This is the initial value for your buffer schema.
+  //   override def initialize(buffer: MutableAggregationBuffer): Unit = {
+  //     println(s">>> initialize (buffer: $buffer)")
+  //     buffer(0) = 0L
+  //     buffer(1) = 1.0
+  //   }
+  //
+  //   // This is how to update your buffer schema given an input.
+  //   override def update(buffer: MutableAggregationBuffer, input: Row): Unit = {
+  //     println(s">>> update (buffer: $buffer -> input: $input)")
+  //     buffer(0) = buffer.getAs[Long](0) + 1
+  //     buffer(1) = buffer.getAs[Double](1) * input.getAs[Double](0)
+  //   }
+  //
+  //   // This is how to merge two objects with the bufferSchema type.
+  //   override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
+  //     println(s">>> merge (buffer1: $buffer1 -> buffer2: $buffer2)")
+  //     buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
+  //     buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
+  //   }
+  //
+  //   // This is where you output the final value, given the final value of your bufferSchema.
+  //   override def evaluate(buffer: Row): Any = {
+  //     println(s">>> evaluate (buffer: $buffer)")
+  //     math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
+  //   }
+  // }
+
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
@@ -44,8 +86,8 @@ object GenerateModel extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":25500}}""")
+      .option("startingOffsets", """{"online_media":{"0":25500}}""")
+      .option("endingOffsets", """{"online_media":{"0":26000}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -66,25 +108,34 @@ object GenerateModel extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    // ======================== SAVE DICTIONARY ================================
+    val df = selectedDF.withColumn("group", lit(0)).rdd
 
-    val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = AggTools.masterWordsIndex.size - 1
-        }
-        val kata = word(0)
-        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        Document.parse(s"{index: $index, word: '$kata'}")
-      })
-      data
-    }).collect()).distinct
+    df,show()
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    MongoSpark.save(dictionary, writeConfig)
+    // ====================== UDAF =========================
+
+    // spark.udf.register("ac", new AutomaticClustering)
+    //
+    // // Create a DataFrame and Spark SQL table
+    // import org.apache.spark.sql.functions._
+    //
+    // // val ids = spark.range(1, 20)
+    // // ids.registerTempTable("ids")
+    // // val df = spark.sql("select id, id % 3 as group_id from ids")
+    // // df.registerTempTable("simple")
+    //
+    // df.show()
+    //
+    // // Or use Dataframe syntax to call the aggregate function.
+    //
+    // // Create an instance of UDAF GeometricMean.
+    // val ac = new AutomaticClustering
+    //
+    // // Show the geometric mean of values of column "id".
+    // df.groupBy("_id").agg(ac(col("text_selected")).as("AutomaticClustering")).show()
+
+    // // Invoke the UDAF by its assigned name.
+    // df.groupBy("group_id").agg(expr("gm(id) as GeometricMean")).show()
 
   }
 }
