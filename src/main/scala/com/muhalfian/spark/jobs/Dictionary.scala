@@ -59,6 +59,7 @@ object Dictionary extends StreamUtils {
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     val masterWord = MongoSpark.load(spark, readConfig)
+    var masterWordCount = masterWord.count.toInt
 
     // =================== PREPROCESS SASTRAWI =============================
 
@@ -81,15 +82,12 @@ object Dictionary extends StreamUtils {
         var word = row.drop(1).dropRight(1).split("\\,")
         // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
 
-        var index = 0
-
-        println(masterWord.count)
-
+        // var index = null
         // try {
         //     index = masterWord
         //               .filter($"word" === word(0))
         //               .rdd.map(r => r.getInt(1))
-        //               .collect.toList(0)
+        //               .collect.toList(0).toInt
         // } catch {
         //    case unknown : Throwable
         // } finally {
@@ -99,14 +97,17 @@ object Dictionary extends StreamUtils {
         // }
 
 
-        index = Try(
+        var index = Try(
                   masterWord
                   .filter($"word" === word(0))
                   .rdd.map(r => r.getInt(1))
                   .collect.toList(0)
                 ).getOrElse(
-                  masterWord.count.toInt
+                  masterWordCount
                 )
+        if(index == masterWordCount){
+          masterWordCount += 1
+        }
 
         // AggTools.masterWordsIndex += word(0)
         // index = AggTools.masterWordsIndex.size - 1
