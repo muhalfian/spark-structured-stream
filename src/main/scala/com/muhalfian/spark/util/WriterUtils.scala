@@ -53,10 +53,10 @@ object WriterUtil {
     var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_word"
     val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
     var mongoConnector: MongoConnector = _
-    var masterDataCounts: ArrayBuffer[(String, Int)] = _
+    var masterDataCounts: ArrayBuffer[(Int, String)] = _
 
     override def process(value: WrappedArray[String]): Unit = {
-      value.map( row => {
+      value.map( row => {AggTools
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
@@ -83,7 +83,7 @@ object WriterUtil {
 
     override def open(partitionId: Long, version: Long): Boolean = {
       mongoConnector = MongoConnector(writeConfig.asOptions)
-      masterDataCounts = new ArrayBuffer[(String, Int)]()
+      masterDataCounts = new ArrayBuffer[(Int, String)]()
       true
     }
   }
