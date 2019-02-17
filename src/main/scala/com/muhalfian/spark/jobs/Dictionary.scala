@@ -100,7 +100,7 @@ object Dictionary extends StreamUtils {
         var index = Try(
                   masterWord.filter($"word" === word(0))
                   .rdd.map(r => r.getInt(1)).collect.toList(0)
-                ).getOrElse(
+                ).orElse(
                   masterWordCount
                 )
 
