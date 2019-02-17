@@ -66,26 +66,7 @@ object Dictionary extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    // ======================== AGGREGATION ================================
-
-    // val rows = selectedDF.count()
-    // // val rddDF = selectedDF.flatMap(r => {
-    // //   r.getAs[WrappedArray[String]](8).map( row => {
-    // //     var word = row.drop(1).dropRight(1).split("\\,")
-    // //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-    // //     if(index == -1){
-    // //       AggTools.masterWordsIndex += word(0)
-    // //       index = AggTools.masterWordsIndex.size - 1
-    // //     }
-    // //     word(0)
-    // //   })
-    // // })
-    //
-    // val masterWordList = new ArrayBuffer[Document]
-
-    // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
-
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    // ======================== SAVE DICTIONARY ================================
 
     val rddDF = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
@@ -94,47 +75,19 @@ object Dictionary extends StreamUtils {
         if(index == -1){
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
+
+          val kata = word(0)
+          println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+          Document.parse(s"{index: $index, word: '$kata'}")
         }
-        AggTools.masterWordsIndex.size
-        val kata = word(0)
-        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        // (index, word(0))
-        Document.parse(s"{index: $index, word: '$kata'}")
-
       })
-
-      println(data)
       data
     }).collect())
 
-    println(rddDF)
-
-    //
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     MongoSpark.save(rddDF, writeConfig)
 
-    // MongoSpark.save(masterWordList)
-    // rddDF.collect()
-    // rddDF.show()
-    // println("counting " + AggTools.masterWordsIndex.size)
 
-    // //Show Data after processed
-    // val printConsole = customDF.write
-    //   .format("console")
-    //   // .option("truncate","false")
-    //   .start()
-    //
-    // println(customDF)
-    //
-    // val saveMasterWord = selectedDF
-    //       .select("text_selected")
-    //       .map(r => r.getAs[WrappedArray[String]](0))
-    //       .writeStream
-    //       .outputMode("append")
-    //       .foreach(WriterUtil.masterWord)
-    //       .start()
-    //
-    // // printConsole.awaitTermination()
-    // saveMasterWord.awaitTermination()
   }
 
 }
