@@ -88,20 +88,18 @@ object Dictionary extends StreamUtils {
     val rddDF = selectedDF.rdd.map(r => {
       var data = r.getAs[WrappedArray[String]](8).flatMap( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
-        word
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = AggTools.masterWordsIndex.size - 1
+        }
+        AggTools.masterWordsIndex.size
+        println("doc save to mongodb : " + word)
+        // (index, word)
+        Document.parse(s"{index: $index, word: $word}")
       })
+
       println(data)
-      // .map(word => {
-      //   var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-      //   if(index == -1){
-      //     AggTools.masterWordsIndex += word(0)
-      //     index = AggTools.masterWordsIndex.size - 1
-      //   }
-      //   AggTools.masterWordsIndex.size
-      //   println("doc save to mongodb : " + word)
-      //   // (index, word)
-      //   Document.parse(s"{index: $index, word: $word}")
-      // })
     }).collect()
 
     println(rddDF)
