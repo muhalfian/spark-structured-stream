@@ -44,8 +44,8 @@ object Dictionary extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":25500}}""")
-      .option("endingOffsets", """{"online_media":{"0":26000}}""")
+      .option("startingOffsets", """{"online_media":{"0":-2}}""")
+      .option("endingOffsets", """{"online_media":{"0":25500}}""")
       .load()
 
     // Transform data stream to Dataframe
