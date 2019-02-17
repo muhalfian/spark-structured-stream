@@ -103,7 +103,7 @@ object Dictionary extends StreamUtils {
                   .collect.toList(0).toInt
                 ).getOrElse(
                   println(masterWord.count)
-                  // masterWord.count.toInt
+                  masterWord.count.toInt
                 )
 
         // AggTools.masterWordsIndex += word(0)
