@@ -111,8 +111,8 @@ object Dictionary extends StreamUtils {
           word = null
         }
 
-        var query = s"{index: $index, word: '$kata'}"
         val kata = word(0)
+        var query = s"{index: $index, word: '$kata'}"
         println(s"doc save to mongodb : {index: $index, word: '$kata'}")
         Document.parse(query)
 
