@@ -81,7 +81,7 @@ object Dictionary extends StreamUtils {
         var word = row.drop(1).dropRight(1).split("\\,")
         // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
 
-        var index = 0
+        var index = 0.0
 
         // try {
         //     index = masterWord
@@ -100,10 +100,9 @@ object Dictionary extends StreamUtils {
                   masterWord
                   .filter($"word" === word(0))
                   .rdd.map(r => r.getInt(1))
-                  .collect.toList(0).toInt
+                  .collect.toList(0)
                 ).getOrElse(
-                  println(masterWord.count)
-                  masterWord.count.toInt
+                  masterWord.count
                 )
 
         // AggTools.masterWordsIndex += word(0)
