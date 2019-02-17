@@ -35,7 +35,7 @@ object Dictionary extends StreamUtils {
     val spark = getSparkSession(args)
     import spark.implicits._
     spark.sparkContext.setLogLevel("ERROR")
-    sc = spark.sparkContext
+
 
     // ======================== READ STREAM ================================
     //
@@ -57,7 +57,7 @@ object Dictionary extends StreamUtils {
 
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    masterWord = MongoSpark.load(spark, readConfig)
+    val masterWord = MongoSpark.load(spark, readConfig)
 
     // // =================== PREPROCESS SASTRAWI =============================
     //
