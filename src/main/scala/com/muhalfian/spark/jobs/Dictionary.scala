@@ -93,7 +93,11 @@ object Dictionary extends StreamUtils {
     println(customRdd)
     println(customRdd.count)
     // println(customRdd.first.toJson)
+
     customRdd.show()
+
+    customRdd.filter($"word" == "suwardi").show()
+    println(customRdd.filter($"word" == "suwardi").collect())
 
   }
 }
