@@ -77,7 +77,7 @@ object Dictionary extends StreamUtils {
 
     // ======================== SAVE DICTIONARY ================================
 
-    val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
+    var dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
