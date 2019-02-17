@@ -89,7 +89,7 @@ object Dictionary extends StreamUtils {
                       .collect.toList(0)
         } catch {
            case e : NullPointerException => {
-             index = masterWord.count
+             index = masterWord.count.toInt
            }
         }
 
