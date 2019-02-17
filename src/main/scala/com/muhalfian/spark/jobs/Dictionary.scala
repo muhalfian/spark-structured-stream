@@ -101,7 +101,7 @@ object Dictionary extends StreamUtils {
     }).collect())
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
-    MongoSpark.saveToMongoDB(rddDF, writeConfig)
+    MongoSpark.save(rddDF, writeConfig)
 
     // MongoSpark.save(masterWordList)
     // rddDF.collect()
