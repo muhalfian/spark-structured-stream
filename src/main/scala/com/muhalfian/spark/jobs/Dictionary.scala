@@ -87,7 +87,7 @@ object Dictionary extends StreamUtils {
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
 
-    val rddDF = selectedDF.rdd.flatMap(r => {
+    val rddDF = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
@@ -105,7 +105,7 @@ object Dictionary extends StreamUtils {
 
       println(data)
       data
-    }).collect()
+    }).collect())
 
     println(rddDF)
 
