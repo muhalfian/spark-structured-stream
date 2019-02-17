@@ -1,4 +1,4 @@
-lfiapackage com.muhalfian.spark.jobs
+package com.muhalfian.spark.jobs
 
 import com.muhalfian.spark.util._
 
