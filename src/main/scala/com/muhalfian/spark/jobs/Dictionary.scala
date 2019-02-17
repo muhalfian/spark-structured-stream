@@ -98,7 +98,7 @@ object Dictionary extends StreamUtils {
       })
 
       Document.parse(s"{index: $data(0), word: $data(1)}")
-    })
+    }).collect()
   )
 
     rddDF.saveToMongoDB(WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word")))
