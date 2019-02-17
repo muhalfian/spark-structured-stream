@@ -9,6 +9,7 @@ import com.mongodb.spark.config._
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 
+import scala.util.Try
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet, WrappedArray}
 
 import org.apache.spark.sql.types._
@@ -82,18 +83,27 @@ object Dictionary extends StreamUtils {
 
         var index : Int = null
 
-        try {
-            index = masterWord
-                      .filter($"word" === word(0))
-                      .rdd.map(r => r.getInt(1))
-                      .collect.toList(0)
-        } catch {
-           case unknown : Throwable
-        } finally {
-            if(index == null){
-              index = masterWord.count.toInt
-            }
-        }
+        // try {
+        //     index = masterWord
+        //               .filter($"word" === word(0))
+        //               .rdd.map(r => r.getInt(1))
+        //               .collect.toList(0)
+        // } catch {
+        //    case unknown : Throwable
+        // } finally {
+        //     if(index == null){
+        //       index = masterWord.count.toInt
+        //     }
+        // }
+
+        index = Try(
+                  masterWord
+                  .filter($"word" === word(0))
+                  .rdd.map(r => r.getInt(1))
+                  .collect.toList(0)
+                ).getOrElse(
+                  masterWord.count.Int
+                )
 
         // AggTools.masterWordsIndex += word(0)
         // index = AggTools.masterWordsIndex.size - 1
