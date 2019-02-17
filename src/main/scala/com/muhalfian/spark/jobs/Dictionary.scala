@@ -22,7 +22,7 @@ import org.apache.spark.sql.streaming.Trigger
 // import com.muhalfian.spark.ml.BisectingKMeans
 
 
-object Initialize extends StreamUtils {
+object Dictionary extends StreamUtils {
 
   def main(args: Array[String]): Unit = {
 
