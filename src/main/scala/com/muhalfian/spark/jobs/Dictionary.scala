@@ -77,15 +77,17 @@ object Dictionary extends StreamUtils {
           index = AggTools.masterWordsIndex.size - 1
 
           val kata = word(0)
-          println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-          Document.parse(s"{index: $index, word: '$kata'}")
         }
+        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+        Document.parse(s"{index: $index, word: '$kata'}")
       })
       data
     }).collect())
 
+    dictionary = rddDF.distinct
+
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    MongoSpark.save(rddDF, writeConfig)
+    MongoSpark.save(dictionary, writeConfig)
 
 
   }
