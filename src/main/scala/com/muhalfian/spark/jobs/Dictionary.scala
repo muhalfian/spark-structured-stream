@@ -36,7 +36,7 @@ object Dictionary extends StreamUtils {
 
     // read data stream from Kafka
     val kafka = spark
-      .read
+      .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
