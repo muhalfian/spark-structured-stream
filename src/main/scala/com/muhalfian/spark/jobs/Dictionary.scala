@@ -86,8 +86,8 @@ object Dictionary extends StreamUtils {
                       .rdd.map(r => r.getInt(1))
                       .collect.toList(0)
         } catch {
-           case NullPointerException => {
-             var index = customRdd.count
+           case e : NullPointerException => {
+             var index = masterWord.count
            }
         }
 
