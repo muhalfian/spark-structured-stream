@@ -102,7 +102,7 @@ object Dictionary extends StreamUtils {
                   .rdd.map(r => r.getInt(1))
                   .collect.toList(0).toInt
                 ).getOrElse(
-                  masterWord.count.Int
+                  masterWord.count.toInt
                 )
 
         // AggTools.masterWordsIndex += word(0)
