@@ -64,7 +64,7 @@ object WriterUtil {
           index = AggTools.masterWordsIndex.size - 1
         }
 
-        masterDataCounts.append((index, word))
+        masterDataCounts.append((index, word(0)))
       })
     }
 
