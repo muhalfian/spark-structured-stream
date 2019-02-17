@@ -89,7 +89,7 @@ object Dictionary extends StreamUtils {
       var data = r.getAs[WrappedArray[String]](8).flatMap( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         word
-      }).map(row => {
+      }).map(word => {
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
           AggTools.masterWordsIndex += word(0)
@@ -101,6 +101,8 @@ object Dictionary extends StreamUtils {
         Document.parse(s"{index: $index, word: $word}")
       })
     }).collect())
+
+    println(rddDF)
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
     MongoSpark.save(rddDF, writeConfig)
