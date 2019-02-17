@@ -46,8 +46,8 @@ object Dictionary extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":25500}}""")
+      .option("startingOffsets", """{"online_media":{"0":25500}}""")
+      .option("endingOffsets", """{"online_media":{"0":26000}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -98,31 +98,29 @@ object Dictionary extends StreamUtils {
 
 
         var index = Try(
-                  masterWord
-                  .filter($"word" === word(0))
-                  .rdd.map(r => r.getInt(1))
-                  .collect.toList(0)
+                  masterWord.filter($"word" === word(0))
+                  .rdd.map(r => r.getInt(1)).collect.toList(0)
                 ).getOrElse(
                   masterWordCount
                 )
+
+
         if(index == masterWordCount){
           masterWordCount += 1
+        } else {
+          index = 0
+          word = null
         }
 
-        // AggTools.masterWordsIndex += word(0)
-        // index = AggTools.masterWordsIndex.size - 1
-        // if(index == -1){
-        //   AggTools.masterWordsIndex += word(0)
-        //   index = AggTools.masterWordsIndex.size - 1
-        // } else {
-        //
-        // }
         val kata = word(0)
         println(s"doc save to mongodb : {index: $index, word: '$kata'}")
         Document.parse(s"{index: $index, word: '$kata'}")
+
       })
       data
     }).collect()).distinct
+
+    dictionary = dictionary.drop()
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     MongoSpark.save(dictionary, writeConfig)
