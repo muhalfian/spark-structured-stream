@@ -87,7 +87,7 @@ object Dictionary extends StreamUtils {
     // MongoSpark.save(dictionary, writeConfig)
 
 
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word")))
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     val customRdd = MongoSpark.load(spark, readConfig)
 
     println(customRdd)
