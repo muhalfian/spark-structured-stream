@@ -85,8 +85,8 @@ object Dictionary extends StreamUtils {
 
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
-    val rddDF = selectedDF.rdd.map(r => {
-      var data = r.getAs[WrappedArray[String]](8).flatMap( row => {
+    val rddDF = selectedDF.rdd.flatMap(r => {
+      var data = r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
@@ -95,10 +95,12 @@ object Dictionary extends StreamUtils {
         }
         AggTools.masterWordsIndex.size
         println("doc save to mongodb : " + word)
-        (index, word)
-      }).map({ row => Document.parse(s"{index: $row._1, word: $row._2}") })
+        // (index, word)
+        Document.parse(s"{index: $index, word: $word}")
+      })
 
       println(data)
+      data
     }).collect()
 
     println(rddDF)
