@@ -86,7 +86,7 @@ object Dictionary extends StreamUtils {
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
     val rddDF = selectedDF.rdd.flatMap(r => {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
+      var data = r.getAs[WrappedArray[String]](8).flatMap( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
