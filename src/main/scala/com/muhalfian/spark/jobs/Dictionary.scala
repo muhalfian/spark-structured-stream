@@ -37,28 +37,28 @@ object Dictionary extends StreamUtils {
     spark.sparkContext.setLogLevel("ERROR")
 
     // ======================== READ STREAM ================================
-
-    // read data stream from Kafka
-    val kafka = spark
-      .read
-      .format("kafka")
-      .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-      .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":25500}}""")
-      .load()
-
-    // Transform data stream to Dataframe
-    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
-      .select("data.*")
-      .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
+    // 
+    // // read data stream from Kafka
+    // val kafka = spark
+    //   .read
+    //   .format("kafka")
+    //   .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
+    //   .option("subscribePattern", "online_media.*")
+    //   .option("startingOffsets", """{"online_media":{"0":-2}}""")
+    //   .option("endingOffsets", """{"online_media":{"0":25500}}""")
+    //   .load()
+    //
+    // // Transform data stream to Dataframe
+    // val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
+    //   .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
+    //   .select("data.*")
+    //   .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     AggTools.masterWordsIndex = MongoSpark.load(spark, readConfig)
 
-    // // =================== PREPROCESS SSparkSessionASTRAWI =============================
+    // // =================== PREPROCESS SASTRAWI =============================
     //
     // val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
     //
