@@ -7,6 +7,7 @@ import org.apache.spark.sql.ForeachWriter
 import org.bson._
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
 import scala.collection.JavaConverters._
+import com.muhalfian.spark.util.AggTools
 
 object WriterUtil {
 
@@ -44,6 +45,45 @@ object WriterUtil {
     override def open(partitionId: Long, version: Long): Boolean = {
       mongoConnector = MongoConnector(writeConfig.asOptions)
       masterDataCounts = new ArrayBuffer[ColsArtifact.masterData]()
+      true
+    }
+  }
+
+  val masterWord = new ForeachWriter[WrappedArray[String]] {
+    var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_word"
+    val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
+    var mongoConnector: MongoConnector = _
+    var masterDataCounts: ArrayBuffer[(String, Int)] = _
+
+    override def process(value: WrappedArray[String]): Unit = {
+      value.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = AggTools.masterWordsIndex.size - 1
+        }
+
+        masterDataCounts.append((index, word))
+      })
+    }
+
+    override def close(errorOrNull: Throwable): Unit = {
+      if (masterDataCounts.nonEmpty) {
+        mongoConnector.withCollectionDo(writeConfig, { collection: MongoCollection[Document] =>
+          collection.insertMany(masterDataCounts.map(sc => {
+            var doc = new Document()
+            doc.put("index", sc._1)
+            doc.put("word", sc._2)
+            doc
+          }).asJava)
+        })
+      }
+    }
+
+    override def open(partitionId: Long, version: Long): Boolean = {
+      mongoConnector = MongoConnector(writeConfig.asOptions)
+      masterDataCounts = new ArrayBuffer[(String, Int)]()
       true
     }
   }
