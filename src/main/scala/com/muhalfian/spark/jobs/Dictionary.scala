@@ -99,7 +99,7 @@ object Dictionary extends StreamUtils {
     val selected = customRdd.filter($"word" === "kabar")
     selected.show()
     val index = selected.rdd.map(r => r.getInt(1)).collect.toList
-    println(index)
+    println(index(0))
 
   }
 }
