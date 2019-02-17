@@ -96,6 +96,11 @@ object GenerateModel extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
+    // read master word
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    val masterWord = MongoSpark.load(spark, readConfig)
+    var masterWordCount = masterWord.count.toInt
+
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
@@ -110,7 +115,8 @@ object GenerateModel extends StreamUtils {
 
     val df = selectedDF.withColumn("group", lit(0)).rdd
 
-    df,show()
+    df.show()
+    println(masterWordCount)
 
     // ====================== UDAF =========================
 
