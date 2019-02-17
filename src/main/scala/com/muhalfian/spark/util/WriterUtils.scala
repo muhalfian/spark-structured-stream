@@ -5,9 +5,9 @@ import com.mongodb.spark.MongoConnector
 import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.sql.ForeachWriter
 import org.bson._
-import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet, WrappedArray}
 import scala.collection.JavaConverters._
-import com.muhalfian.spark.util.AggTools
+import com.muhalfian.spark.util._
 
 object WriterUtil {
 
