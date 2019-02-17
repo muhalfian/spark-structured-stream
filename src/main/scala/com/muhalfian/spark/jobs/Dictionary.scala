@@ -92,7 +92,8 @@ object Dictionary extends StreamUtils {
 
     println(customRdd)
     println(customRdd.count)
-    println(customRdd.first.toJson)
+    // println(customRdd.first.toJson)
+    customRdd.show()
 
   }
 }
