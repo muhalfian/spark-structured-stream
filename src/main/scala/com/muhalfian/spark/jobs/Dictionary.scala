@@ -71,6 +71,8 @@ object Dictionary extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
+    selectedDF.show()
+
     // ======================== SAVE DICTIONARY ================================
 
     val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
