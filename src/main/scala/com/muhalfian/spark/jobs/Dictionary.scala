@@ -85,7 +85,7 @@ object Dictionary extends StreamUtils {
 
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
 
     val rddDF = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
