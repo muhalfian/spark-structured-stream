@@ -4,6 +4,7 @@ import com.muhalfian.spark.util._
 
 import org.bson.Document
 import com.mongodb.spark.MongoSpark
+import com.mongodb.spark.config._
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
@@ -80,12 +81,12 @@ object Dictionary extends StreamUtils {
     // //   })
     // // })
     //
-    val masterWordList = new ArrayBuffer[Document]
+    // val masterWordList = new ArrayBuffer[Document]
 
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
-    val rddDF = selectedDF.map(r => {
-      r.getAs[WrappedArray[String]](8).map( row => {
+    val rddDF = selectedDF.rdd.map(r => {
+      data = r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
@@ -93,11 +94,15 @@ object Dictionary extends StreamUtils {
           index = AggTools.masterWordsIndex.size - 1
         }
         AggTools.masterWordsIndex.size
-        masterWordList.append(Document.parse(s"{index: $index, word: $word(0)}"))
+        (index, word)
       })
+
+      Document.parse(s"{index: $data(0), word: $data(1)}")
     })
 
-    MongoSpark.save(masterWordList)
+    rddDF.saveToMongoDB(WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word")))
+
+    // MongoSpark.save(masterWordList)
     // rddDF.collect()
     // rddDF.show()
     // println("counting " + AggTools.masterWordsIndex.size)
