@@ -76,8 +76,8 @@ object Dictionary extends StreamUtils {
           AggTools.masterWordsIndex += word(0)
           index = AggTools.masterWordsIndex.size - 1
 
-          val kata = word(0)
         }
+        val kata = word(0)
         println(s"doc save to mongodb : {index: $index, word: '$kata'}")
         Document.parse(s"{index: $index, word: '$kata'}")
       })
