@@ -21,7 +21,7 @@ object AggTools extends StreamUtils {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-
+  
   var masterWordsIndex = ArrayBuffer[String]()
 
   val aggregate = udf((content: Seq[String], link: String) => {

@@ -35,8 +35,9 @@ object Dictionary extends StreamUtils {
     val spark = getSparkSession(args)
     import spark.implicits._
     spark.sparkContext.setLogLevel("ERROR")
+    sc = spark.sparkContext
 
-    // // ======================== READ STREAM ================================
+    // ======================== READ STREAM ================================
     //
     // // read data stream from Kafka
     // val kafka = spark
@@ -53,8 +54,12 @@ object Dictionary extends StreamUtils {
     //   .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
     //   .select("data.*")
     //   .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
-    //
-    // // =================== PREPROCESS SSparkSessionASTRAWI =============================
+
+    // read master word
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    masterWord = MongoSpark.load(spark, readConfig)
+
+    // // =================== PREPROCESS SASTRAWI =============================
     //
     // val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
     //
@@ -71,11 +76,21 @@ object Dictionary extends StreamUtils {
     // val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
     //   var data = r.getAs[WrappedArray[String]](8).map( row => {
     //     var word = row.drop(1).dropRight(1).split("\\,")
-    //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-    //     if(index == -1){
-    //       AggTools.masterWordsIndex += word(0)
-    //       index = AggTools.masterWordsIndex.size - 1
-    //     }
+    //     // var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+    //
+    //     var index = AggTools.masterWordsIndex
+    //                 .filter($"word" === word(0))
+    //                 .rdd.map(r => r.getInt(1))
+    //                 .collect.toList(0)
+    //
+    //     AggTools.masterWordsIndex += word(0)
+    //     // index = AggTools.masterWordsIndex.size - 1
+    //     // if(index == -1){
+    //     //   AggTools.masterWordsIndex += word(0)
+    //     //   index = AggTools.masterWordsIndex.size - 1
+    //     // } else {
+    //     //
+    //     // }
     //     val kata = word(0)
     //     println(s"doc save to mongodb : {index: $index, word: '$kata'}")
     //     Document.parse(s"{index: $index, word: '$kata'}")
@@ -87,19 +102,19 @@ object Dictionary extends StreamUtils {
     // MongoSpark.save(dictionary, writeConfig)
 
 
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
-    val customRdd = MongoSpark.load(spark, readConfig)
-
-    println(customRdd)
-    println(customRdd.count)
-    // println(customRdd.first.toJson)
-
-    customRdd.show()
-
-    val selected = customRdd.filter($"word" === "kabar")
-    selected.show()
-    val index = selected.rdd.map(r => r.getInt(1)).collect.toList
-    println(index(0))
+    // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    // val customRdd = MongoSpark.load(spark, readConfig)
+    //
+    // println(customRdd)
+    // println(customRdd.count)
+    // // println(customRdd.first.toJson)
+    //
+    // customRdd.show()
+    //
+    //  selected = customRdd.filter($"word" === "kabar")
+    // selected.show()
+    // val index = selected.rdd.map(r => r.getInt(1)).collect.toList
+    // println(index(0))
 
   }
 }
