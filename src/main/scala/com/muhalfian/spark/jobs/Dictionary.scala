@@ -98,10 +98,10 @@ object Dictionary extends StreamUtils {
       })
 
       Document.parse(s"{index: $data(0), word: $data(1)}")
-    }).collect()
-  )
+    }).collect())
 
-    rddDF.saveToMongoDB(WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word")))
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
+    MongoSpark.saveToMongoDB(rddDF, writeConfig)
 
     // MongoSpark.save(masterWordList)
     // rddDF.collect()
