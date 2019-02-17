@@ -85,6 +85,8 @@ object Dictionary extends StreamUtils {
 
     // val writeConfig = WriteConfig(Map("collection" -> "master_word", "writeConcern.w" -> "majority"), Some(WriteConfig(sc)))
 
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
+
     val rddDF = selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
@@ -101,12 +103,13 @@ object Dictionary extends StreamUtils {
       }).toSeq
 
       println(data)
+      MongoSpark.save(data, writeConfig)
       data
     }).collect()
 
     println(rddDF)
 
-    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/master_word"))
+    //
     // MongoSpark.save(rddDF, writeConfig)
 
     // MongoSpark.save(masterWordList)
