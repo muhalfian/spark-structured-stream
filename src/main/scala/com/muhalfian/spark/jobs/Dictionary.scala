@@ -3,6 +3,7 @@ package com.muhalfian.spark.jobs
 import com.muhalfian.spark.util._
 
 import org.bson.Document
+import com.mongodb.spark.MongoSpark
 
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
