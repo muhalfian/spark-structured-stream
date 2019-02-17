@@ -98,7 +98,7 @@ object Dictionary extends StreamUtils {
 
     selected = customRdd.filter($"word" === "suwardi")
     selected.show()
-    println(selected['index'])
+    println(selected.index)
 
   }
 }
