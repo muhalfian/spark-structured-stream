@@ -42,7 +42,7 @@ object GenerateModel extends StreamUtils {
     ))
 
     // This is the output type of your aggregatation function.
-    override def dataType: DataType = DoubleType
+    override def dataType: DataType = WrappedArray[Double]
 
     override def deterministic: Boolean = true
 
@@ -89,8 +89,9 @@ object GenerateModel extends StreamUtils {
     // This is where you output the final value, given the final value of your bufferSchema.
     override def evaluate(buffer: Row): Any = {
       println(s">>> evaluate (buffer: $buffer)")
-      var example = Array(Array(1.0, 2.0))
-      example
+      // var example = Array(Array(1.0, 2.0))
+      // example
+      buffer(0)
       // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
 
     }
