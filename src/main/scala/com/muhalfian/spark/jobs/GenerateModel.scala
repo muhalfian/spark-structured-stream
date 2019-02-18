@@ -28,47 +28,66 @@ import org.apache.spark.sql.streaming.Trigger
 
 object GenerateModel extends StreamUtils {
 
-  // class AutomaticClustering extends UserDefinedAggregateFunction {
-  //   // This is the input fields for your aggregate function.
-  //   override def inputSchema: org.apache.spark.sql.types.StructType = ColsArtifact.preprocessSchema
-  //
-  //   // This is the internal fields you keep for computing your aggregate.
-  //   override def bufferSchema: StructType = StructType(
-  //     StructField("matrix", ArrayType(ArrayType(DoubleType))
-  //   )
-  //
-  //   // This is the output type of your aggregatation function.
-  //   override def dataType: DataType = DoubleType
-  //
-  //   override def deterministic: Boolean = true
-  //
-  //   // This is the initial value for your buffer schema.
-  //   override def initialize(buffer: MutableAggregationBuffer): Unit = {
-  //     println(s">>> initialize (buffer: $buffer)")
-  //     buffer(0) = 0L
-  //     buffer(1) = 1.0
-  //   }
-  //
-  //   // This is how to update your buffer schema given an input.
-  //   override def update(buffer: MutableAggregationBuffer, input: Row): Unit = {
-  //     println(s">>> update (buffer: $buffer -> input: $input)")
-  //     buffer(0) = buffer.getAs[Long](0) + 1
-  //     buffer(1) = buffer.getAs[Double](1) * input.getAs[Double](0)
-  //   }
-  //
-  //   // This is how to merge two objects with the bufferSchema type.
-  //   override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
-  //     println(s">>> merge (buffer1: $buffer1 -> buffer2: $buffer2)")
-  //     buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
-  //     buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
-  //   }
-  //
-  //   // This is where you output the final value, given the final value of your bufferSchema.
-  //   override def evaluate(buffer: Row): Any = {
-  //     println(s">>> evaluate (buffer: $buffer)")
-  //     math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
-  //   }
-  // }
+  class AutomaticClustering extends UserDefinedAggregateFunction {
+    // This is the input fields for your aggregate function.
+    override def inputSchema: org.apache.spark.sql.types.StructType = ColsArtifact.preprocessSchema
+
+    // This is the internal fields you keep for computing your aggregate.
+    override def bufferSchema: StructType = StructType(
+      StructField("matrix", ArrayType(ArrayType(DoubleType))
+    )
+
+    // This is the output type of your aggregatation function.
+    override def dataType: DataType = DoubleType
+
+    override def deterministic: Boolean = true
+
+    // This is the initial value for your buffer schema.
+    override def initialize(buffer: MutableAggregationBuffer): Unit = {
+      println(s">>> initialize (buffer: $buffer)")
+      buffer = Array[Double]()
+      // buffer(0) = 0L
+      // buffer(1) = 1.0
+    }
+
+    // This is how to update your buffer schema given an input.
+    override def update(buffer: MutableAggregationBuffer, input: Row): Unit = {
+      println(s">>> update (buffer: $buffer -> input: $input)")
+      // buffer(0) = buffer.getAs[Long](0) + 1
+      // buffer(1) = buffer.getAs[Double](1) * input.getAs[Double](0)
+      content = buffer.getAs[WrappedArray[String]](0)
+
+      var tempSeq = content.map(row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          masterWordsIndex += word(0)
+          index = masterWordsIndex.size - 1
+        }
+
+        (index, word(1).toDouble)
+      }).toSeq
+
+      val vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense
+
+      buffer(0) = vectorData
+    }
+
+    // This is how to merge two objects with the bufferSchema type.
+    override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
+      println(s">>> merge (buffer1: $buffer1 -> buffer2: $buffer2)")
+      // buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
+      // buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
+      buffer1(0) = buffer1.getAs[WrappedArray[Double]](0) :+ buffer2.getAs[WrappedArray[Double]](0)
+    }
+
+    // This is where you output the final value, given the final value of your bufferSchema.
+    override def evaluate(buffer: Row): Any = {
+      println(s">>> evaluate (buffer: $buffer)")
+      // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
+      
+    }
+  }
 
   def main(args: Array[String]): Unit = {
 
@@ -99,7 +118,7 @@ object GenerateModel extends StreamUtils {
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     val masterWord = MongoSpark.load(spark, readConfig)
-    var masterWordCount = masterWord.count.toInt
+    AggTools.masterWordCount = masterWord.count.toInt
 
     // =================== PREPROCESS SASTRAWI =============================
 
@@ -113,32 +132,32 @@ object GenerateModel extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    val df = selectedDF.withColumn("group", lit(0))
+    val df = selectedDF.withColumn("group", lit(0)).select("text_selected", "group")
 
     df.show()
     println(masterWordCount)
 
     // ====================== UDAF =========================
 
-    // spark.udf.register("ac", new AutomaticClustering)
-    //
-    // // Create a DataFrame and Spark SQL table
-    // import org.apache.spark.sql.functions._
-    //
-    // // val ids = spark.range(1, 20)
-    // // ids.registerTempTable("ids")
-    // // val df = spark.sql("select id, id % 3 as group_id from ids")
-    // // df.registerTempTable("simple")
-    //
-    // df.show()
-    //
-    // // Or use Dataframe syntax to call the aggregate function.
-    //
-    // // Create an instance of UDAF GeometricMean.
-    // val ac = new AutomaticClustering
-    //
-    // // Show the geometric mean of values of column "id".
-    // df.groupBy("_id").agg(ac(col("text_selected")).as("AutomaticClustering")).show()
+    spark.udf.register("ac", new AutomaticClustering)
+
+    // Create a DataFrame and Spark SQL table
+    import org.apache.spark.sql.functions._
+
+    // val ids = spark.range(1, 20)
+    // ids.registerTempTable("ids")
+    // val df = spark.sql("select id, id % 3 as group_id from ids")
+    // df.registerTempTable("simple")
+
+    df.show()
+
+    // Or use Dataframe syntax to call the aggregate function.
+
+    // Create an instance of UDAF GeometricMean.
+    val ac = new AutomaticClustering
+
+    // Show the geometric mean of values of column "id".
+    df.groupBy("group").agg(ac(col("text_selected")).as("AutomaticClustering")).show()
 
     // // Invoke the UDAF by its assigned name.
     // df.groupBy("group_id").agg(expr("gm(id) as GeometricMean")).show()
