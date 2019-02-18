@@ -37,9 +37,9 @@ object GenerateModel extends StreamUtils {
     override def inputSchema: StructType = ColsArtifact.preprocessSchema
 
     // This is the internal fields you keep for computing your aggregate.
-    override def bufferSchema: StructType = StructType(
+    override def bufferSchema: StructType = StructType(Seq(
       StructField("matrix", ArrayType(DoubleType))
-    )
+    ))
 
     // This is the output type of your aggregatation function.
     override def dataType: DataType = ArrayType(DoubleType)
@@ -49,7 +49,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer(0) = Array[WrappedArray[Double]]()
+      buffer(0) = Array[WrappedArray[Double]](0.0)
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
