@@ -42,7 +42,7 @@ object GenerateModel extends StreamUtils {
     ))
 
     // This is the output type of your aggregatation function.
-    override def dataType: DataType = WrappedArray[Double]
+    override def dataType: DataType = ArrayType(DoubleType)
 
     override def deterministic: Boolean = true
 
