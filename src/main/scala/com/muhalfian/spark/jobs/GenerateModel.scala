@@ -38,7 +38,7 @@ object GenerateModel extends StreamUtils {
 
     // This is the internal fields you keep for computing your aggregate.
     override def bufferSchema: StructType = StructType(Seq(
-      StructField("matrix", ArrayType(java.lang.Double))
+      StructField("matrix", ArrayType(DoubleType))
     ))
 
     // This is the output type of your aggregatation function.
@@ -49,7 +49,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer(0) = Array[java.lang.Double]()
+      buffer(0) = Array[Double]()
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
