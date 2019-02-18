@@ -88,7 +88,7 @@ object GenerateModel extends StreamUtils {
     // This is where you output the final value, given the final value of your bufferSchema.
     override def evaluate(buffer: Row): Any = {
       println(s">>> evaluate (buffer: $buffer)")
-      var example = ArrayBuffer[ArrayBuffer[1.0, 2.0]]
+      var example = Array(Array(1.0, 2.0))
       example
       // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
 
