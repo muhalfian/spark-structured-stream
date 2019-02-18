@@ -37,9 +37,9 @@ object GenerateModel extends StreamUtils {
     override def inputSchema: StructType = ColsArtifact.preprocessSchema
 
     // This is the internal fields you keep for computing your aggregate.
-    override def bufferSchema: StructType = StructType(
+    override def bufferSchema: StructType = StructType(Seq(
       StructField("matrix", ArrayType(ArrayType(DoubleType)))
-    )
+    ))
 
     // This is the output type of your aggregatation function.
     override def dataType: DataType = DoubleType
