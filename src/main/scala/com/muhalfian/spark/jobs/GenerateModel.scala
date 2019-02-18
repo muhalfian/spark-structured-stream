@@ -49,7 +49,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer = Array[Double]()
+      buffer(0) = Array[Double]()
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
@@ -64,10 +64,10 @@ object GenerateModel extends StreamUtils {
       var tempSeq = content.map(row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = masterWordsIndex.size - 1
-        }
+        // if(index == -1){
+        //   AggTools.masterWordsIndex += word(0)
+        //   index = masterWordsIndex.size - 1
+        // }
 
         (index, word(1).toDouble)
       }).toSeq
