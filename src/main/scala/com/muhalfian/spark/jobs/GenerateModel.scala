@@ -101,7 +101,7 @@ object GenerateModel extends StreamUtils {
     val masterWord = MongoSpark.load(spark, readConfig)
     var masterWordCount = masterWord.count.toInt
 
-    // =================== PREPROCESS SSparkSessionASTRAWI =============================
+    // =================== PREPROCESS SASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
 
@@ -113,7 +113,7 @@ object GenerateModel extends StreamUtils {
     val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    val df = selectedDF.withColumn("group", lit(0)).rdd
+    val df = selectedDF.withColumn("group", lit(0))
 
     df.show()
     println(masterWordCount)
