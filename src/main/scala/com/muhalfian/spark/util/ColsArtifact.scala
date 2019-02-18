@@ -14,10 +14,8 @@ object ColsArtifact {
     )
   )
 
-  val preprocessSchema : StructType = StructType(Seq(
-    StructField("text_selected", ArrayType(StringType), true),
-    StructField("group", IntegerType, true)
-    )
+  val preprocessSchema : StructType = StructType(
+    StructField("text_selected", ArrayType(StringType), true)
   )
 
   case class masterData(
