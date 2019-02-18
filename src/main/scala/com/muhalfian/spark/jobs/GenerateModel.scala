@@ -76,7 +76,7 @@ object GenerateModel extends StreamUtils {
 
       val vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1))
                       .toDense.toArray.toList
-                      .asScala.map(_.doubleValue)(breakOut)
+                      .map(_.doubleValue)(breakOut)
 
       buffer(0) = vectorData
     }
