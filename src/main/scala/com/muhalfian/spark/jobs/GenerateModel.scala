@@ -38,7 +38,7 @@ object GenerateModel extends StreamUtils {
 
     // This is the internal fields you keep for computing your aggregate.
     override def bufferSchema: StructType = StructType(Seq(
-      StructField("matrix", ArrayType(ArrayType(DoubleType)))
+      StructField("matrix", ArrayType(java.lang.Double))
     ))
 
     // This is the output type of your aggregatation function.
