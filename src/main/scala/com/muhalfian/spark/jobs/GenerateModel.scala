@@ -59,7 +59,7 @@ object GenerateModel extends StreamUtils {
       println(s">>> update (buffer: $buffer -> input: $input)")
       // buffer(0) = buffer.getAs[Long](0) + 1
       // buffer(1) = buffer.getAs[Double](1) * input.getAs[Double](0)
-      var content = buffer.getAs[WrappedArray[String]](0)
+      var content = input.getAs[WrappedArray[String]](0)
 
       var tempSeq = content.map(row => {
         var word = row.drop(1).dropRight(1).split("\\,")
