@@ -34,7 +34,7 @@ object GenerateModel extends StreamUtils {
 
   class AutomaticClustering extends UserDefinedAggregateFunction {
     // This is the input fields for your aggregate function.
-    override def inputSchema: org.apache.spark.sql.types.StructType = ColsArtifact.preprocessSchema
+    override def inputSchema: StructType = ColsArtifact.preprocessSchema
 
     // This is the internal fields you keep for computing your aggregate.
     override def bufferSchema: StructType = StructType(
