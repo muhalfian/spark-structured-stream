@@ -26,6 +26,8 @@ import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.expressions.MutableAggregationBuffer
 import org.apache.spark.sql.expressions.UserDefinedAggregateFunction
 import org.apache.spark.sql.Row
+import collection.JavaConverters._
+import scala.collection.breakOut
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
 
@@ -74,7 +76,7 @@ object GenerateModel extends StreamUtils {
 
       val vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1))
                       .toDense.toArray.toList
-                      .map(_.toDouble)
+                      .asScala.map(_.doubleValue)(breakOut)
 
       buffer(0) = vectorData
     }
