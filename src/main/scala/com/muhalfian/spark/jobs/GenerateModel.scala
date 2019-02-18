@@ -111,8 +111,8 @@ object GenerateModel extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
-      .option("startingOffsets", """{"online_media":{"0":25500}}""")
-      .option("endingOffsets", """{"online_media":{"0":26000}}""")
+      .option("startingOffsets", """{"online_media":{"0":0}}""")
+      .option("endingOffsets", """{"online_media":{"0":10}}""")
       .load()
 
     // Transform data stream to Dataframe
