@@ -34,7 +34,7 @@ object GenerateModel extends StreamUtils {
 
     // This is the internal fields you keep for computing your aggregate.
     override def bufferSchema: StructType = StructType(
-      StructField("matrix", ArrayType(ArrayType(DoubleType))
+      StructField("matrix", ArrayType(ArrayType(DoubleType)))
     )
 
     // This is the output type of your aggregatation function.
@@ -85,7 +85,7 @@ object GenerateModel extends StreamUtils {
     override def evaluate(buffer: Row): Any = {
       println(s">>> evaluate (buffer: $buffer)")
       // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
-      
+
     }
   }
 
