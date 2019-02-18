@@ -51,7 +51,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer(0) = Array[Double]()
+      buffer(0) = Array[java.lang.Double]()
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
@@ -75,8 +75,7 @@ object GenerateModel extends StreamUtils {
       }).toSeq
 
       val vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1))
-                      .toDense.toArray.toList
-                      .map(_.doubleValue)(breakOut)
+                      .toDense.toArray
 
       buffer(0) = vectorData
     }
