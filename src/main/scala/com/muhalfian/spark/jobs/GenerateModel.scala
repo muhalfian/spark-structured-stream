@@ -49,7 +49,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer(0) = Array[Double]()
+      buffer(0) = Array[WrappedArray[Double]]()
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
@@ -91,7 +91,7 @@ object GenerateModel extends StreamUtils {
       println(s">>> evaluate (buffer: $buffer)")
       // var example = Array(Array(1.0, 2.0))
       // example
-      buffer(0)
+      buffer
       // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
 
     }
