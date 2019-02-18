@@ -72,7 +72,8 @@ object GenerateModel extends StreamUtils {
         (index, word(1).toDouble)
       }).toSeq
 
-      val vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense
+      var vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1))
+                      .toDense.toArray
 
       buffer(0) = vectorData
     }
