@@ -45,13 +45,13 @@ object Konteks {
     val sqlContext = sparkSession.sqlContext
     import sparkSession.implicits._
 
-    // val gid = APP_NAME + Instant.now.getEpochSecond
+    val gid = APP_NAME + Instant.now.getEpochSecond
 
     val kafkaParams = scala.collection.immutable.Map[String, Object](
       "bootstrap.servers" -> kafkaBrokers,
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
-      // "group.id" -> gid,
+      "group.id" -> gid,
       "auto.offset.reset" -> "earliest",
       "enable.auto.commit" -> (false: java.lang.Boolean)
     ).asJava
