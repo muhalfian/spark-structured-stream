@@ -75,7 +75,7 @@ object GenerateModel extends StreamUtils {
       var vectorData = Vectors.sparse(AggTools.masterWordCount, tempSeq.sortWith(_._1 < _._1))
                       .toDense.toArray
 
-      buffer(0) = vectorData
+      buffer(0) = Array(vectorData)
     }
 
     // This is how to merge two objects with the bufferSchema type.
