@@ -88,8 +88,8 @@ object GenerateModel extends StreamUtils {
       println(s">>> buffer1 $second")
       // buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
       // buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
-      buffer1(0) = buffer1.getAs[WrappedArray[Double]](0) :+ buffer2.getAs[WrappedArray[Double]](0)
-      var third = buffer1(0)
+      buffer1 = buffer1.getAs[WrappedArray[Double]](0) :+ buffer2.getAs[WrappedArray[Double]](0)
+      var third = buffer1
       println(s">>> buffer1 $third")
     }
 
