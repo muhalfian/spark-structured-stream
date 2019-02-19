@@ -23,6 +23,8 @@ libraryDependencies += "com.andylibrian.jsastrawi" % "jsastrawi" % "0.1"
 
 libraryDependencies += "com.typesafe" % "config" % "1.3.2"
 
+libraryDependencies += "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % "2.4.0"
+
 // libraryDependencies += "org.apache.lucene" % "lucene-analyzers-common" % "7.4.0"
 
 // lazy val root = Project("root", file(".")) dependsOn(sparkProject)
