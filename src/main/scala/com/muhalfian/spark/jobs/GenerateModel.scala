@@ -85,13 +85,13 @@ object GenerateModel extends StreamUtils {
       println(s">>> buffer1 $first")
 
       var second = buffer2.getAs[WrappedArray[Double]](0)
-      println(s">>> buffer1 $second")
+      println(s">>> buffer2 $second")
       // buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
       // buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
       // buffer1 = buffer1.getAs[WrappedArray[Double]](0) :+ buffer2.getAs[WrappedArray[Double]](0)
       buffer1(0) = buffer1.getAs[WrappedArray[WrappedArray[Double]]](0) ++ buffer2.getAs[WrappedArray[WrappedArray[Double]]](0)
       var third = buffer1
-      println(s">>> buffer1 $third")
+      println(s">>> buffer3 $third")
     }
 
     // This is where you output the final value, given the final value of your bufferSchema.
