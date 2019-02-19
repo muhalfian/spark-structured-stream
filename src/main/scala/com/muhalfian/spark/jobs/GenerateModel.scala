@@ -42,7 +42,7 @@ object GenerateModel extends StreamUtils {
     ))
 
     // This is the output type of your aggregatation function.
-    override def dataType: DataType = ArrayType(DoubleType)
+    override def dataType: DataType = ArrayType(ArrayType(DoubleType))
 
     override def deterministic: Boolean = true
 
@@ -134,7 +134,8 @@ object GenerateModel extends StreamUtils {
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
     val masterWord = MongoSpark.load(spark, readConfig)
-    AggTools.masterWordCount = masterWord.count.toInt
+    // AggTools.masterWordCount = masterWord.count.toInt
+    AggTools.masterWordCount = 100
 
     // =================== PREPROCESS SASTRAWI =============================
 
