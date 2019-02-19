@@ -81,6 +81,8 @@ object GenerateModel extends StreamUtils {
     // This is how to merge two objects with the bufferSchema type.
     override def merge(buffer1: MutableAggregationBuffer, buffer2: Row): Unit = {
       println(s">>> merge (buffer1: $buffer1 -> buffer2: $buffer2)")
+      var first = buffer1.getAs[WrappedArray[Double]](0)
+      println(s">>> buffer1 $first")
       // buffer1(0) = buffer1.getAs[Long](0) + buffer2.getAs[Long](0)
       // buffer1(1) = buffer1.getAs[Double](1) * buffer2.getAs[Double](1)
       buffer1(0) = buffer1.getAs[WrappedArray[Double]](0) :+ buffer2.getAs[WrappedArray[Double]](0)
