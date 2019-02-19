@@ -99,7 +99,7 @@ object GenerateModel extends StreamUtils {
       println(s">>> evaluate (buffer: $buffer)")
       // var example = Array(Array(1.0, 2.0))
       // example
-      buffer
+      buffer.getAs[WrappedArray[WrappedArray[Double]]](0)
       // math.pow(buffer.getDouble(1), 1.toDouble / buffer.getLong(0))
 
     }
