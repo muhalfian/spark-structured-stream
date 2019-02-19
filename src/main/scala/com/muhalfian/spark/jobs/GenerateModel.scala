@@ -49,7 +49,7 @@ object GenerateModel extends StreamUtils {
     // This is the initial value for your buffer schema.
     override def initialize(buffer: MutableAggregationBuffer): Unit = {
       println(s">>> initialize (buffer: $buffer)")
-      buffer(0) = Array[WrappedArray[Double]]()
+      buffer(0) = Array[Array[Double]]()
       // buffer(0) = 0L
       // buffer(1) = 1.0
     }
