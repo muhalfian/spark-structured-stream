@@ -2,7 +2,7 @@ package com.muhalfian.spark.util
 
 import jsastrawi.morphology.DefaultLemmatizer
 
-import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover}
+import org.apache.spark.ml.feature.{RegexTokenizer, StopWordsRemover, NGram}
 
 import scala.io.Source
 import scala.collection.JavaConverters._
@@ -128,6 +128,13 @@ object TextTools {
   val remover = new StopWordsRemover()
     .setStopWords(stopwordsArr)
     .setInputCol("text_regex")
+    .setOutputCol("text_filter")
+
+  // =================== N-GRAM CONFIGURATION =========================
+
+  val ngram = new NGram()
+    .setN(2)
+    .setInputCol("text_filter")
     .setOutputCol("text_preprocess")
 
   // ======================= STEMMING UDF ===============================
