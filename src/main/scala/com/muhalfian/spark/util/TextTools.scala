@@ -135,7 +135,7 @@ object TextTools {
   val ngram = new NGram()
     .setN(2)
     .setInputCol("text_stemmed")
-    .setOutputCol("text_preprocess")
+    .setOutputCol("text_ngram_2")
 
   // ======================= STEMMING UDF ===============================
 
@@ -147,6 +147,13 @@ object TextTools {
                   .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
     stemmed
   })
+
+  // ====================== MERGE TEXT =================================
+
+  val merge = udf( (ngam_1: Seq[String], ngam_2: Seq[String]) => {
+    val text_ngram = ngram_1 + ngram_2
+    text_ngram
+  }
 
   // ====================== TEXT MINING =================================
 
