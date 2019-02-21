@@ -151,7 +151,7 @@ object TextTools {
   // ====================== MERGE TEXT =================================
 
   val merge = udf( (ngam_1: Seq[String], ngam_2: Seq[String]) => {
-    val text_ngram = ngram_1 + ngram_2
+    val text_ngram = ngram_1 ++ ngram_2
     text_ngram
   })
 
