@@ -58,8 +58,6 @@ object MediaStream extends StreamUtils {
 
     val ngramDF = TextTools.ngram.transform(filteredDF)
 
-    ngramDF.select("text_preprocess").show(false)
-
     val preprocessDF = ngramDF
                         .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
 
@@ -109,6 +107,11 @@ object MediaStream extends StreamUtils {
 
 
     //Show Data after processed
+    val printNgram = ngramDF.select("text_preprocess").writeStream
+      .format("console")
+      .option("truncate","false")
+      .start()
+  
     val printConsole = customDF.writeStream
       .format("console")
       // .option("truncate","false")
@@ -130,6 +133,7 @@ object MediaStream extends StreamUtils {
           .foreach(WriterUtil.masterData)
           .start()
 
+    printNgram.awaitTermination()
     printConsole.awaitTermination()
     saveMasterData.awaitTermination()
   }
