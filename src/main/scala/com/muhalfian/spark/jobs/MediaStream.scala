@@ -56,7 +56,7 @@ object MediaStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    val ngramDF = TextTools.ngram.transform(filterDF)
+    val ngramDF = TextTools.ngram.transform(filteredDF)
 
     val preprocessDF = ngramDF
                         .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
