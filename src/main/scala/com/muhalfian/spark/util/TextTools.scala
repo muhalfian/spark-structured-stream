@@ -134,7 +134,7 @@ object TextTools {
 
   val ngram = new NGram()
     .setN(2)
-    .setInputCol("text_filter")
+    .setInputCol("text_stemmed")
     .setOutputCol("text_preprocess")
 
   // ======================= STEMMING UDF ===============================
