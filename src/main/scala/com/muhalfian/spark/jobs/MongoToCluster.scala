@@ -47,7 +47,7 @@ object MongoToCluster extends StreamUtils {
 
     val aggregateRDD = mongoRDD.map(r => {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
-      var tempSeq = r.get("text_selected")
+      var tempSeq : Array[String] = r.get("text_selected")
       // .map( row => {
       //   var word = row.drop(1).dropRight(1).split("\\,")
       //   var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
@@ -65,57 +65,6 @@ object MongoToCluster extends StreamUtils {
     })
 
     aggregateRDD.collect().foreach(println)
-
-
-    // val rows = selectedDF.count()
-    // // val rddDF = selectedDF.flatMap(r => {
-    // //   r.getAs[WrappedArray[String]](8).map( row => {
-    // //     var word = row.drop(1).dropRight(1).split("\\,")
-    // //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-    // //     if(index == -1){
-    // //       AggTools.masterWordsIndex += word(0)
-    // //       index = AggTools.masterWordsIndex.size - 1
-    // //     }
-    // //     word(0)
-    // //   })
-    // // })
-    //
-    // val rddDF = selectedDF.map(r => {
-    //   r.getAs[WrappedArray[String]](8).map( row => {
-    //     var word = row.drop(1).dropRight(1).split("\\,")
-    //     var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-    //     if(index == -1){
-    //       AggTools.masterWordsIndex += word(0)
-    //       index = AggTools.masterWordsIndex.size - 1
-    //     }
-    //     AggTools.masterWordsIndex.size
-    //   })
-    // })
-    // rddDF.collect()
-    // rddDF.show()
-    // println("counting " + AggTools.masterWordsIndex.size)
-    //
-    // val aggregateDF = selectedDF
-    //   .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
-    //
-    // println("count row : " + selectedDF.count())
-    //
-    // val customDF = aggregateDF
-    //   // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-    //   .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-    //   // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
-    //   .withColumn("text", TextTools.stringify(col("text").cast("string")))
-    //
-    //
-    //
-    // // customDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_aggregate").show()
-    // val aggList = customDF.select("text_aggregate").rdd.map(r => {
-    //   val row = r(0).asInstanceOf[DenseVector]
-    //   // println("size : " + row.size)
-    //   row
-    // }).collect()
-    // println(aggList)
-
 
   }
 
