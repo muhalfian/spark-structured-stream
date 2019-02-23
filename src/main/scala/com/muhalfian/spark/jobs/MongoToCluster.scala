@@ -51,8 +51,8 @@ object MongoToCluster extends StreamUtils {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[(String, Double)]())
 
-      var tempSeq = tempJava.map( word => {
-        // var word = row.drop(1).dropRight(1).split("\\,")
+      var tempSeq = tempJava.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word._1)
         if(index == -1){
           AggTools.masterWordsIndex += word._1
