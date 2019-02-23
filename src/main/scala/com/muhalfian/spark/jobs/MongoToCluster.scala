@@ -22,6 +22,7 @@ import com.mongodb.spark.config._
 import com.mongodb.spark.MongoSpark
 
 import scala.collection.JavaConversions._
+import ALI.*
 
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
@@ -48,7 +49,6 @@ object MongoToCluster extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val aggregateRDD = mongoRDD.map(r => {
-      // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
       var tempSeq = tempJava.map( row => {
@@ -68,10 +68,10 @@ object MongoToCluster extends StreamUtils {
     }).collect()
 
     // aggregateRDD.collect().foreach(println)
-    val aggregateList = aggregateRDD.asJava
+    val aggregateList = new java.util.LinkedList[Int](aggregateRDD.asJava)
 
     var method = "average"
-    n = 1000
+    val n = 1000
     val cluster = clib.AutomaticClustering(method, aggregateList, n);
     println(cluster)
 
