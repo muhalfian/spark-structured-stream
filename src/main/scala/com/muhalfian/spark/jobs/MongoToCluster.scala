@@ -39,9 +39,9 @@ object MongoToCluster extends StreamUtils {
     // ======================== READ STREAM ================================
 
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"), Some(ReadConfig(sc)))
-    val mongoDF = MongoSpark.load(sc, readConfig)
+    val mongoRDD = MongoSpark.load(sc, readConfig)
 
-    mongoDF.show()
+    mongoRDD.collect().foreach(println)
 
     // ======================== AGGREGATION ================================
 
