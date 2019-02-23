@@ -49,7 +49,7 @@ object MongoToCluster extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val aggregateRDD : ArrayBuffer[ArrayBuffer[Double]] = mongoRDD.map(r => {
-      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
+      var tempJava = r.get("text_selected", new java.util.ArrayList[String]()).asScala
 
       var tempSeq = tempJava.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
