@@ -53,9 +53,21 @@ object KafkaToMongo extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
+    // =================== PREPROCESS SSparkSessionASTRAWI =============================
+
+    val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
+
+    val filteredDF = TextTools.remover.transform(regexDF)
+
+    val preprocessDF = filteredDF
+                        .withColumn("text_preprocess", TextTools.stemming(col("text_preprocess")))
+
+    val selectedDF = preprocessDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+
     // =========================== SINK ====================================
 
-    MongoSpark.write(kafkaDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
+    MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
   }
 
 }
