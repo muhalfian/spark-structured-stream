@@ -47,7 +47,7 @@ object MongoToCluster extends StreamUtils {
 
     val aggregateRDD = mongoRDD.map(r => {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
-      var tempSeq = r.get("text_selected", java.util.ArrayList[(String, Double)])
+      var tempSeq = r.get("text_selected", Array[(String, Double)])
 
       // .map( row => {
         // var word = row.drop(1).dropRight(1).split("\\,")
