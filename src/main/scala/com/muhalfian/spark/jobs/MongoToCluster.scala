@@ -64,7 +64,7 @@ object MongoToCluster extends StreamUtils {
 
       val size = 2500
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
-      tempSeq
+      vectorData
     })
 
     aggregateRDD.collect().foreach(println)
