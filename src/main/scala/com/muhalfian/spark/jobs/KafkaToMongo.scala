@@ -49,7 +49,7 @@ object KafkaToMongo extends StreamUtils {
 
     // Transform data stream to Dataframe
     val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))mongodb
+      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
