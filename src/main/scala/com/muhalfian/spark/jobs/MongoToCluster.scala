@@ -73,8 +73,8 @@ object MongoToCluster extends StreamUtils {
     val n = 1000
     val clib : ClusteringLib = new ClusteringLib();
     val clusterJava = clib.AutomaticClustering(method, aggregateRDD, n);
-    val cluster = clusterJava.asScala
-    println(cluster)
+
+    clusterJava.map(println(_))
 
   }
 
