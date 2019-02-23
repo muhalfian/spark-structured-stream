@@ -49,9 +49,9 @@ object MongoToCluster extends StreamUtils {
 
     val aggregateRDD = mongoRDD.map(r => {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
-      var tempSeq = r.get("text_selected", new java.util.ArrayList[(String, Double)]())
+      var tempJava = r.get("text_selected", new java.util.ArrayList[(String, Double)]())
 
-      tempSeq = tempSeq.map( word => {
+      var tempSeq = tempJava.map( word => {
         // var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word._1)
         if(index == -1){
@@ -60,7 +60,7 @@ object MongoToCluster extends StreamUtils {
         }
 
         (index, word._2)
-      }).asScala.toSeq
+      }).toSeq
 
       val size = 2500
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
