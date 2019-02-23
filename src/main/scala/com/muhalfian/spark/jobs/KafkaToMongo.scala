@@ -49,14 +49,14 @@ object KafkaToMongo extends StreamUtils {
 
     // Transform data stream to Dataframe
     val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
+      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))mongodb
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // =========================== SINK ====================================
 
     val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"))
-    MongoSpark.save(kafkaDF.write.option("collection", "data_init").mode("overwrite"))
+    MongoSpark.save(kafkaDF.write.option("collection", "data_init").mode("overwrite"), writeConfig)
   }
 
 }
