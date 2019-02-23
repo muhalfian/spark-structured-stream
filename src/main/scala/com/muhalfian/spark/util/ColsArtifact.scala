@@ -32,4 +32,16 @@ object ColsArtifact {
     text_selected: String,
     text_aggregate: String
   )
+
+  case class dataInit(
+    link: String,
+    source: String,
+    description: String,
+    image: String,
+    publish_date: String,
+    title: String,
+    text: String,
+    text_preprocess: Array,
+    text_selected: Array
+  )
 }
