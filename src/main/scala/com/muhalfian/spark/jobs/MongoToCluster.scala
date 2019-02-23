@@ -48,7 +48,7 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val aggregateRDD = mongoRDD.map(r => {
+    val aggregateRDD : Array[Array[Double]] = mongoRDD.map(r => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
       var tempSeq = tempJava.map( row => {
@@ -68,7 +68,7 @@ object MongoToCluster extends StreamUtils {
     }).collect()
 
     // aggregateRDD.collect().foreach(println)
-    val aggregateList = new java.util.LinkedList[Int](aggregateRDD.asJava)
+    val aggregateList = new java.util.ArrayList[Double](aggregateRDD.asJava)
 
     var method = "average"
     val n = 1000
