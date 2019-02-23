@@ -47,19 +47,21 @@ object MongoToCluster extends StreamUtils {
 
     val aggregateRDD = mongoRDD.map(r => {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
-      var tempSeq = r.get("text_selected").map( row => {
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          AggTools.masterWordsIndex += word(0)
-          index = AggTools.masterWordsIndex.size - 1
-        }
+      var tempSeq = r.get("text_selected")
+      // .map( row => {
+      //   var word = row.drop(1).dropRight(1).split("\\,")
+      //   var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+      //   if(index == -1){
+      //     AggTools.masterWordsIndex += word(0)
+      //     index = AggTools.masterWordsIndex.size - 1
+      //   }
+      //
+      //   (index, word(1).toDouble)
+      // }).toSeq
 
-        (index, word(1).toDouble)
-      }).toSeq
-
-      val size = 2500
-      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+      // val size = 2500
+      // val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+      tempSeq
     })
 
     aggregateRDD.collect().foreach(println)
