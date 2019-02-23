@@ -22,7 +22,7 @@ import org.apache.spark.sql.streaming.Trigger
 // import com.muhalfian.spark.ml.BisectingKMeans
 
 
-object MediaStream extends StreamUtils {
+object KafkaToMongo extends StreamUtils {
 
   def main(args: Array[String]): Unit = {
 
