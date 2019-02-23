@@ -44,7 +44,7 @@ object KafkaToMongo extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
       .option("startingOffsets", """{"online_media":{"0":0}}""")
-      .option("endingOffsets", """{"online_media":{"0":10}}""")
+      .option("endingOffsets", """{"online_media":{"0":1000}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -55,8 +55,6 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"))
-    // MongoSpark.save(kafkaDF.write.option("collection", "data_init").mode("append"), writeConfig)
     MongoSpark.write(kafkaDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
   }
 
