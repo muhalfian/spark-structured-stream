@@ -22,7 +22,7 @@ import com.mongodb.spark.config._
 import com.mongodb.spark.MongoSpark
 
 import scala.collection.JavaConversions._
-import ALI.*
+import ALI._
 
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
