@@ -41,7 +41,7 @@ object ColsArtifact {
     publish_date: String,
     title: String,
     text: String,
-    text_preprocess: Array,
-    text_selected: Array
+    text_preprocess: Array[String],
+    text_selected: Array[(String, Double)]
   )
 }
