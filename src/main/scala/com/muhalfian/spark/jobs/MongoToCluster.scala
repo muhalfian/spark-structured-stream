@@ -67,14 +67,13 @@ object MongoToCluster extends StreamUtils {
       vectorData
     }).collect()
 
-    // aggregateRDD.collect().foreach(println)
-    // var aggregateList = new java.util.ArrayList[Double](aggregateRDD.asJava)
-
+    // ======================== CLUSTERING ================================
 
     var method = "average"
     val n = 1000
     val clib : ClusteringLib = new ClusteringLib();
-    val cluster = clib.AutomaticClustering(method, aggregateRDD, n);
+    val clusterJava = clib.AutomaticClustering(method, aggregateRDD, n);
+    val cluster = clusterJava.asScala
     println(cluster)
 
   }
