@@ -51,7 +51,7 @@ object MongoToCluster extends StreamUtils {
       // var tempSeq = r.getAs[WrappedArray[String]](9).map( row => {
       var tempSeq = r.get("text_selected", new java.util.ArrayList[(String, Double)]())
 
-      tempSeq = tempSeq.map( word => {
+      tempSeqJava = tempSeq.map( word => {
         // var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word._1)
         if(index == -1){
@@ -60,7 +60,7 @@ object MongoToCluster extends StreamUtils {
         }
 
         (index, word._2)
-      }).toSeq
+      }).asScala.toSeq
 
       val size = 2500
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
