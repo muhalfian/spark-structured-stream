@@ -75,7 +75,7 @@ object MongoToCluster extends StreamUtils {
     val clusterArray = clib.AutomaticClustering(method, aggregateRDD, n);
 
     val cluster = clusterArray.distinct
-    clusterJava.map(print(_ + ", "))
+    clusterArray.map(print(_ + ", "))
 
   }
 
