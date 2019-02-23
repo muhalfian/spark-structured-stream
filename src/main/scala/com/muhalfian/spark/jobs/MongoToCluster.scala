@@ -65,9 +65,15 @@ object MongoToCluster extends StreamUtils {
       val size = 2500
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
       vectorData
-    })
+    }).collect()
 
-    aggregateRDD.collect().foreach(println)
+    // aggregateRDD.collect().foreach(println)
+    val aggregateList = aggregateRDD.asJava
+
+    var method = "average"
+    n = 1000
+    val cluster = clib.AutomaticClustering(method, aggregateList, n);
+    println(cluster)
 
   }
 
