@@ -55,8 +55,9 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"))
-    MongoSpark.save(kafkaDF.write.option("collection", "data_init").mode("append"), writeConfig)
+    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"))
+    // MongoSpark.save(kafkaDF.write.option("collection", "data_init").mode("append"), writeConfig)
+    MongoSpark.write(kafkaDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
   }
 
 }
