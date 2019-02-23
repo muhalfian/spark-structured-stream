@@ -48,8 +48,8 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val aggregateRDD : ArrayBuffer[ArrayBuffer[Double]] = mongoRDD.map(r => {
-      var tempJava = r.get("text_selected", new java.util.Map[String, Double]())
+    val aggregateRDD = mongoRDD.map(r => {
+      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
       var tempSeq = tempJava.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
@@ -63,7 +63,7 @@ object MongoToCluster extends StreamUtils {
       }).toSeq
 
       val size = 2500
-      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toSeq
       vectorData
     }).collect()
 
