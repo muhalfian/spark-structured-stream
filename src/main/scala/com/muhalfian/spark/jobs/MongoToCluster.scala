@@ -63,7 +63,7 @@ object MongoToCluster extends StreamUtils {
       }).toSeq
 
       val size = 2500
-      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense
+      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
       vectorData
     }).collect()
 
