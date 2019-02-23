@@ -41,9 +41,22 @@ object MongoToCluster extends StreamUtils {
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
 
-    mongoRDD.collect().foreach(println)
+    // mongoRDD.collect().foreach(println)
 
     // ======================== AGGREGATION ================================
+
+    val rddDF = mongoRDD.map(r => {
+      r.getAs[WrappedArray[String]](9).map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          AggTools.masterWordsIndex += word(0)
+          index = AggTools.masterWordsIndex.size - 1
+        }
+
+        (index, word(1).toDouble)
+      })
+    })
 
     // val rows = selectedDF.count()
     // // val rddDF = selectedDF.flatMap(r => {
