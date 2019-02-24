@@ -111,7 +111,7 @@ object MongoToCluster extends StreamUtils {
       distance = distance ++ Array(vlib.getDistance(cent, data))
     }
 
-    // merge
+    // merge to masterData
     val mongoIndexRDD = mongoRDD.zipWithIndex
     var masterData = mongoIndexRDD.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
@@ -119,10 +119,23 @@ object MongoToCluster extends StreamUtils {
       row._1
     })
 
+    // merge to masterCluster
+    val masterCluster = cluster.map( index => {
+      cent = centroid(index)
+      r = 0
+      Document.parse(s"{cluster:$index, centroid:$cent, radius:$r}")
+    })
+
+
     // ======================== WRITE MONGO ================================
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data", "replaceDocument" -> "true"), Some(WriteConfig(sc)))
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
     MongoSpark.save(masterData, writeConfig)
+
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
+    MongoSpark.save(masterCluster, writeConfig)
+
+
   }
 
 }
