@@ -34,6 +34,7 @@ object KafkaToMongo extends StreamUtils {
     val spark = getSparkSession(args)
     import spark.implicits._
     spark.sparkContext.setLogLevel("ERROR")
+    val sc = spark.sparkContext
 
     // ======================== READ STREAM ================================
 
@@ -53,7 +54,7 @@ object KafkaToMongo extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
-    // =================== PREPROCESS SSparkSessionASTRAWI =============================
+    // =================== PREPROCESS SASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
 
@@ -69,9 +70,13 @@ object KafkaToMongo extends StreamUtils {
     val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
+    val masterWord = sc.parallelize(AggTools.masterWordAgg())
+
     // =========================== SINK ====================================
 
     MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
+    WriterUtil.saveBatchMongo("master_word",masterWord)
 
+    println("jumlah master_word : " + AggTools.masterWordsIndex.size())
   }
 }
