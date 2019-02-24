@@ -125,7 +125,8 @@ object MongoToCluster extends StreamUtils {
       val cent = centroid(index)
       val r = 0
       val i = index.toInt
-      Document.parse(s"{cluster:$i, centroid:$cent, radius:$r}")
+      // Document.parse(s"{cluster: $i, centroid: $cent, radius: $r}")
+      new Document(i, cent, r)
     }))
 
 
