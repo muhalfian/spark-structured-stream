@@ -56,7 +56,7 @@ object AggTools extends StreamUtils {
     vectorData
   })
 
-  def AggregateBatch(mongoRDD:RDD[org.bson.Document], size;Int): Array[Array[Double]] = {
+  def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
     val aggregateArray = mongoRDD.map(r => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
