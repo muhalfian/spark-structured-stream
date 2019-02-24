@@ -17,7 +17,7 @@ object ClusterTools {
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
 
-  def getCentroid(aggregateArray:Array[Array[Double]] , clusterArray:Array[Double] ) = {
+  def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), data._1)
@@ -30,7 +30,7 @@ object ClusterTools {
     }
   }
 
-  def calculateDistance(aggregateArray:Array[Array[Double]] , clusterArray:Array[Double]) = {
+  def calculateDistance(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int]) = {
     for ( i <- 1 to (aggregateArray.length - 1) ) {
       val cent = centroid(clusterArray(i))
       val data = aggregateArray(i)
@@ -38,7 +38,7 @@ object ClusterTools {
     }
   }
 
-  def calculateRadius(aggregateArray:Array[Array[Double]] , clusterArray:Array[Double] ) = {
+  def calculateRadius(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), distance(data._2))
