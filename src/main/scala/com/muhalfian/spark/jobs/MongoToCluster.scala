@@ -71,7 +71,7 @@ object MongoToCluster extends StreamUtils {
 
     // var method = "average"
     // val n = 1000
-    // val clib : ClusteringLib = new ClusteringLib();
+    val clib : ClusteringLib = new ClusteringLib();
     // val clusterArray = clib.AutomaticClustering(method, aggregateArray, n);
     // clusterArray.map(row => print(row + ", "))
 
