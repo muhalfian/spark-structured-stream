@@ -13,8 +13,8 @@ object DocArtifact {
       r.get("publish_date", String),
       r.get("title", String),
       r.get("text", String),
-      r.get("text_preprocess", new java.util.ArrayList[String]()),
-      r.get("text_selected", new java.util.ArrayList[String]())
+      r.get("text_preprocess", Array[String]),
+      r.get("text_selected", Array[(String, Double)])
     )
   }
 }
