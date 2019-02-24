@@ -112,7 +112,7 @@ object MongoToCluster extends StreamUtils {
     }
 
     // merge
-    val mongoIndexRDD = mongoRDD.map(r => RowArtifact.rowMasterData(r))
+    val mongoIndexRDD = mongoRDD.map(r => DocArtifact.dataInit(r))
 
     // .zipWithIndex
     // val dataArray = mongoIndexRDD.map(row => {
