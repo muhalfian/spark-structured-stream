@@ -122,7 +122,8 @@ object MongoToCluster extends StreamUtils {
     //   // dataArray(index.toInt) = doc
     // }
 
-    var dataArray = mongoRDD.toDF()
+    var mongoDF = mongoRDD.toDF()
+    var dataArray = mongoDF.withColumn("cluster", clusterArray)
     // var dataArray = mongoIndexRDD.map( row => {
     //   row._1.put("cluster", clusterArray(row._2.toInt))
     //   row._1.put("to_centroid", distance(row._2.toInt))
