@@ -108,7 +108,9 @@ object MongoToCluster extends StreamUtils {
     // calculate distance
     var distance = Array[Double](clusterArray.size)
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      val cent = centroid(clusterArray(i))
+      val start = """"["""
+        val end = """]"""
+      val cent = centroid(clusterArray(i)).mkString(start, ",", end)
       val data = aggregateArray(i)
       distance = distance ++ Array(vlib.getDistance(cent, data))
     }
