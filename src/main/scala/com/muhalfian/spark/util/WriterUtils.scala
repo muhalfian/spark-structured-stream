@@ -8,6 +8,7 @@ import org.bson._
 import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet, WrappedArray}
 import scala.collection.JavaConverters._
 import com.muhalfian.spark.util._
+import org.apache.spark.rdd.RDD
 
 object WriterUtil {
 
