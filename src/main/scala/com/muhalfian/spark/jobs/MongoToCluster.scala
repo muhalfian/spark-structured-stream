@@ -89,7 +89,8 @@ object MongoToCluster extends StreamUtils {
 
 
     // // merge data cluster and array
-    // var dataArray = Array.ofDim[Double](clusterArray.size, size+1)
+    // // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
+    // var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
     // for ( i <- 1 to (aggregateArray.length - 1) ) {
     //   dataArray(i) = Array(clusterArray(i).toDouble) ++ aggregateArray(i)
     // }
@@ -125,7 +126,7 @@ object MongoToCluster extends StreamUtils {
       val cent = centroid(index)
       val r = 0
       val i = index.toInt
-      Document.parse(s"{cluster: $i, centroid: $cent, radius: $r}")
+      Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
     }))
 
 
