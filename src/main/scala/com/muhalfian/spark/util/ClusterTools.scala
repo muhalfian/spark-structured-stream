@@ -61,15 +61,15 @@ object ClusterTools {
     masterData
   }
 
-  def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Double]): Array[org.bson.Document] = {
+  def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Int]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
       val start = """["""
       val end = """]"""
-      val cent = centroid(index).mkString(start, ",", end)
+      val cent = centroid(index.toInt).mkString(start, ",", end)
       val r = radius(index.toInt)
       val i = index.toInt
       Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
     })
-    masterCluser
+    masterCluster
   }
 }

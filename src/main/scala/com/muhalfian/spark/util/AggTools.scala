@@ -10,6 +10,7 @@ import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.rdd.RDD
+import scala.collection.JavaConversions._
 
 object AggTools extends StreamUtils {
 
