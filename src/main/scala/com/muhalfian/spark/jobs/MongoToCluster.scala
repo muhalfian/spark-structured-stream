@@ -110,10 +110,11 @@ object MongoToCluster extends StreamUtils {
       (clusterArray(data._2), data._1, distance(data._2))
     })
     println(dataArray)
+    dataArray.map(row => print(row + ", "))
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
-    println(grouped)
+    println(grouped
 
     // find centroid and radius
     for ((key, value) <- grouped) {
