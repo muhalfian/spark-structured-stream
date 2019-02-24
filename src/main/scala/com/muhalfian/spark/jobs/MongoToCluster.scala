@@ -124,11 +124,6 @@ object MongoToCluster extends StreamUtils {
       radius(key) = dist.max
     }
 
-    // calculate centroid
-    val centroid = clib.getCentroid(aggregateArray, clusterArray);
-
-
-
     // merge to masterData
     val mongoIndexRDD = mongoRDD.zipWithIndex
     var masterData = mongoIndexRDD.map( row => {
