@@ -102,7 +102,17 @@ object MongoToCluster extends StreamUtils {
     // }
 
     val centroid = clib.getCentroid(aggregateArray, clusterArray);
-    centroid.map(row => row.map( arr => println(arr)))
+    centroid.map(row => row.map( arr => println(arr
+
+    val vlib: VectorLib = new VectorLib()
+    var distance = Array[Double](clusterArray.size)
+    for ( i <- 1 to (aggregateArray.length - 1) ) {
+      val cent = centroid(clusterArray(i))
+      val data = aggregateArray(i)
+      distance :+ vlib.getDistance(cent, data)
+    }
+
+    println(distance)
 
   }
 
