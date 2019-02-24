@@ -114,7 +114,7 @@ object MongoToCluster extends StreamUtils {
     // merge
     val mongoIndexRDD = mongoRDD.zipWithIndex
     val dataArray = mongoIndexRDD.map(row => {
-      row._1.put("cluster", clusterArray(row._2).toLong).put("to_cluster", distance(row._2).toLong)
+      row._1.put("cluster", clusterArray(row._2.toInt)).put("to_cluster", distance(row._2.toInt))
       println(row._1)
     })
     dataArray.map(row => print(row + ", "))
