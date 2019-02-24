@@ -105,6 +105,8 @@ object MongoToCluster extends StreamUtils {
       val data = aggregateArray(i)
       distance = distance ++ Array(vlib.getDistance(cent, data))
     }
+    println("print distance == ")
+    distance.map(row => print(row + ", "))
 
     // merge cluster, array, distance
     var dataArray = aggregateArray.zipWithIndex.map(data => {
