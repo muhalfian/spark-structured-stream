@@ -124,7 +124,7 @@ object MongoToCluster extends StreamUtils {
 
     var dataArray = mongoIndexRDD.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
-      row._1.put("to_cluster", distance(row._2.toInt))
+      row._1.put("to_centroid", distance(row._2.toInt))
       row._1
     })
 
@@ -134,7 +134,7 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_2", "replaceDocument" -> "False"), Some(WriteConfig(sc)))
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init", "replaceDocument" -> "false"), Some(WriteConfig(sc)))
     MongoSpark.save(dataArray, writeConfig)
 
 
