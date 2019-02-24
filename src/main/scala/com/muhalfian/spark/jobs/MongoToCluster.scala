@@ -88,14 +88,18 @@ object MongoToCluster extends StreamUtils {
     println("jumlah data : " + clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
+    // merge data cluster and array
     var dataArray = Array.ofDim[Double](clusterArray.size, size+1)
-
     for ( i <- 1 to (aggregateArray.length - 1) ) {
       dataArray(i) = Array(clusterArray(i).toDouble) ++ aggregateArray(i)
     }
 
+    // group data array
     var grouped = dataArray.groupBy(_(0))
-    println(grouped)
+    for ((key, value) <- grouped) {
+      println(key)
+      println(value)
+    }
 
   }
 
