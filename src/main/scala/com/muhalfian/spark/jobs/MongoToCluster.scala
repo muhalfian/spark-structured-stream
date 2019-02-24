@@ -88,11 +88,13 @@ object MongoToCluster extends StreamUtils {
     println("jumlah data : " + clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
-    var dataArray = new Array.ofDim[Double](clusterArray.size, size+1)
+    var dataArray = Array.ofDim[Double](clusterArray.size, size+1)
 
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      dataArray(i) = clusterArray(i).toInt ++ aggregateArray(i) 
+      dataArray(i) = clusterArray(i).toInt ++ aggregateArray(i)
     }
+
+    println(dataArray)
 
   }
 
