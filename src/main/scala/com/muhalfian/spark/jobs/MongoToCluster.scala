@@ -94,7 +94,7 @@ object MongoToCluster extends StreamUtils {
       dataArray(i) = Array(clusterArray(i).toDouble) ++ aggregateArray(i)
     }
 
-    var grouped = dataArray.groupBy(_._(0))
+    var grouped = dataArray.groupBy(_(0))
     println(grouped)
 
   }
