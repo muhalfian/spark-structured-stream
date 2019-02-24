@@ -134,9 +134,9 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init", "replaceDocument" -> "false"), Some(WriteConfig(sc)))
-    MongoSpark.save(dataArray, writeConfig)
-
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init", "replaceDocument" -> "true"), Some(WriteConfig(sc)))
+    // MongoSpark.save(dataArray, writeConfig)
+    dataArray.saveToMongoDB(writeConfig)
 
   }
 
