@@ -120,7 +120,7 @@ object MongoToCluster extends StreamUtils {
       doc.put("to_cluster", distance(index.toInt))
       // dataArray(index.toInt) = doc
     }
-    dataArray.map(row => print(row.toJson + ", "))
+    mongoIndexRDD.map(row => print(row.toJson + ", "))
     // print(dataArray)
 
 
