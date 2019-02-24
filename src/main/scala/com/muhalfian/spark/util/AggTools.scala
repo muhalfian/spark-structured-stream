@@ -82,7 +82,7 @@ object AggTools extends StreamUtils {
 
   def masterWordAgg(): ArrayBuffer[org.bson.Document] = {
     val masterWord = masterWordsIndex.map{ word =>
-      Document.parse(s"{word : $word}")
+      Document.parse(s"{word : '$word'}")
     }
     masterWord
   }
