@@ -102,7 +102,7 @@ object MongoToCluster extends StreamUtils {
     // }
 
     val centroid = clib.getCentroid(aggregateArray, clusterArray);
-    centroid.map(row => println(row))
+    centroid.map(row => row.map( arr => println(arr)))
 
   }
 
