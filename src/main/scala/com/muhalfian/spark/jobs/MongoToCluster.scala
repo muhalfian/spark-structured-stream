@@ -91,7 +91,7 @@ object MongoToCluster extends StreamUtils {
     var dataArray = new Array.ofDim[Double](clusterArray.size, size+1)
 
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      dataArray(i) = aggregateArray(i) ++ clusterArray(i) 
+      dataArray(i) = clusterArray(i).toInt ++ aggregateArray(i) 
     }
 
   }
