@@ -78,4 +78,10 @@ object AggTools extends StreamUtils {
 
     aggregateArray
   }
+
+  def masterWordAgg(): Array[org.bson.Document] = {
+    masterWordsIndex.map{ word =>
+      Document.parse(s"word : $word")
+    }
+  }
 }

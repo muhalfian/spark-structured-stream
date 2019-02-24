@@ -77,10 +77,13 @@ object MongoToCluster extends StreamUtils {
     // merge to masterCluster
     val masterCluster = sc.parallelize(ClusterTools.masterClusterAgg(mongoRDD, cluster))
 
+    val masterWord = sc.parallelize(AggTools.masterWordAgg())
+
     // ======================== WRITE MONGO ================================
 
     WriterUtil.saveBatchMongo("master_data",masterData)
     WriterUtil.saveBatchMongo("master_cluster",masterCluster)
+    WriterUtil.saveBatchMongo("master_word",masterWord)
 
   }
 
