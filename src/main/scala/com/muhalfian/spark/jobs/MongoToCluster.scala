@@ -25,6 +25,8 @@ import scala.collection.JavaConversions._
 import ALI._
 import org.bson.Document
 
+import com.muhalfian.spark.util._
+
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
 
