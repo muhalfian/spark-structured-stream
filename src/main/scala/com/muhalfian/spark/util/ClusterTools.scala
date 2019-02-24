@@ -2,6 +2,7 @@ package com.muhalfian.spark.util
 
 import ALI._
 import org.bson.Document
+import org.apache.spark.rdd.RDD
 
 object ClusterTools {
   val clusterArray = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 1, 0, 0, 0, 0, 0, 6, 0, 7, 8, 0, 0, 6, 9, 0, 0, 0, 0, 9,
@@ -13,7 +14,7 @@ object ClusterTools {
   val clib : ClusteringLib = new ClusteringLib();
   val vlib: VectorLib = new VectorLib()
 
-  var centroid = Array.ofDim[Double](1)
+  var centroid = Array[Array[Double]](1)
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
 
