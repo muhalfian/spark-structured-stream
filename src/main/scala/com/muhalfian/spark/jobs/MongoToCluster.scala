@@ -108,9 +108,7 @@ object MongoToCluster extends StreamUtils {
     // calculate distance
     var distance = Array[Double](clusterArray.size)
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      val start = """"["""
-        val end = """]"""
-      val cent = centroid(clusterArray(i)).mkString(start, ",", end)
+      val cent = centroid(clusterArray(i))
       val data = aggregateArray(i)
       distance = distance ++ Array(vlib.getDistance(cent, data))
     }
@@ -125,7 +123,9 @@ object MongoToCluster extends StreamUtils {
 
     // merge to masterCluster
     val masterCluster = sc.parallelize(cluster.map( index => {
-      val cent = centroid(index)
+      val start = """"["""
+      val end = """]"""
+      val cent = centroid(clusterArray(i)).mkString(start, ",", end)
       val r = 0
       val i = index.toInt
       Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
