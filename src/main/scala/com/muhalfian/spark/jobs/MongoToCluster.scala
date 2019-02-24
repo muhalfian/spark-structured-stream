@@ -121,8 +121,8 @@ object MongoToCluster extends StreamUtils {
 
     // merge to masterCluster
     val masterCluster = cluster.map( index => {
-      cent = centroid(index)
-      r = 0
+      val cent = centroid(index)
+      val r = 0
       Document.parse(s"{cluster:$index, centroid:$cent, radius:$r}")
     })
 
