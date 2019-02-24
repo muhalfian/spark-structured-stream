@@ -92,20 +92,31 @@ object MongoToCluster extends StreamUtils {
     // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
     // var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
 
-    var dataArray = aggregateArray.zipWithIndex.map(data => {
-      (clusterArray(data._2), data._1)
-    })
+
 
     var centroid = Array.ofDim[Double](clusterArray.size, size)
     var radius = Array[Double](clusterArray.size)
+    var distance = Array[Double](clusterArray.size)
+
+    // calculate distance
+    for ( i <- 1 to (aggregateArray.length - 1) ) {
+      val cent = centroid(clusterArray(i))
+      val data = aggregateArray(i)
+      distance = distance ++ Array(vlib.getDistance(cent, data))
+    }
+
+    var dataArray = aggregateArray.zipWithIndex.map(data => {
+      (clusterArray(data._2), data._1, distance(data._2))
+    })
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
     println(grouped)
 
     for ((key, value) <- grouped) {
-      val array = value.map(arr => arr._2)
-      centroid(key) = clib.getCentroid(array)
+      val data = value.map(arr => arr._2)
+      centroid(key) = clib.getCentroid(data)
+      val dist = value.map(arr => arr._3)
       radius(key) = array.max
       println(key)
       println(value)
@@ -114,13 +125,7 @@ object MongoToCluster extends StreamUtils {
     // // calculate centroid
     // val centroid = clib.getCentroid(aggregateArray, clusterArray);
     //
-    // // calculate distance
-    // var distance = Array[Double](clusterArray.size)
-    // for ( i <- 1 to (aggregateArray.length - 1) ) {
-    //   val cent = centroid(clusterArray(i))
-    //   val data = aggregateArray(i)
-    //   distance = distance ++ Array(vlib.getDistance(cent, data))
-    // }
+
     //
     // // merge to masterData
     // val mongoIndexRDD = mongoRDD.zipWithIndex
