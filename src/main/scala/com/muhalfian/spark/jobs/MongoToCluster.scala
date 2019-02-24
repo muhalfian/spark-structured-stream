@@ -121,11 +121,11 @@ object MongoToCluster extends StreamUtils {
     })
 
     // merge to masterCluster
-    val masterCluster = cluster.map( index => {
+    val masterCluster = sc.parallelize(cluster.map( index => {
       val cent = centroid(index)
       val r = 0
       Document.parse(s"{cluster:$index, centroid:$cent, radius:$r}")
-    })
+    }))
 
 
     // ======================== WRITE MONGO ================================
