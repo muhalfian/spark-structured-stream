@@ -86,18 +86,13 @@ object MongoToCluster extends StreamUtils {
 
     val cluster = clusterArray.distinct
 
-
-
     // merge data cluster and array
     // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
     // var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
 
-
-
     var centroid = Array.ofDim[Double](clusterArray.size, size)
     var distance = Array.ofDim[Double](clusterArray.size)
     var radius = Array.ofDim[Double](clusterArray.size)
-
 
     // calculate distance
     for ( i <- 1 to (aggregateArray.length - 1) ) {
@@ -113,14 +108,12 @@ object MongoToCluster extends StreamUtils {
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
-    println(grouped)
 
     // find centroid and radius
     for ((key, value) <- grouped) {
       val data = value.map(arr => arr._2)
       centroid(key) = clib.getCentroid(data)
       val dist = value.map(arr => arr._3)
-      println("besar array " + radius.size)
       radius(key) = dist.max
     }
 
@@ -145,12 +138,8 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
-    MongoSpark.save(masterData, writeConfig)
-
-    writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
-    MongoSpark.save(masterCluster, writeConfig)
-
+    WriteUtils.saveBatchMongo("master_data",masterData)
+    WriteUtils.saveBatchMongo("master_cluster",masterCluster)
 
   }
 
