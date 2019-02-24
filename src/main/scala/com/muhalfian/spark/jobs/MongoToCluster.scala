@@ -105,16 +105,11 @@ object MongoToCluster extends StreamUtils {
       val data = aggregateArray(i)
       distance(i) =  vlib.getDistance(cent, data)
     }
-    println("print distance == ")
-    distance.map(row => print(row + ", "))
 
     // merge cluster, array, distance
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), data._1, distance(data._2))
     })
-    println("jumlah data : "+ dataArray.size)
-    println(dataArray)
-    dataArray.map(row => print(row + ", "))
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
@@ -127,40 +122,39 @@ object MongoToCluster extends StreamUtils {
       val dist = value.map(arr => arr._3)
       println("besar array " + radius.size)
       radius(key) = dist.max
-
     }
 
-    // // calculate centroid
-    // val centroid = clib.getCentroid(aggregateArray, clusterArray);
-    //
+    // calculate centroid
+    val centroid = clib.getCentroid(aggregateArray, clusterArray);
 
-    //
-    // // merge to masterData
-    // val mongoIndexRDD = mongoRDD.zipWithIndex
-    // var masterData = mongoIndexRDD.map( row => {
-    //   row._1.put("cluster", clusterArray(row._2.toInt))
-    //   row._1.put("to_centroid", distance(row._2.toInt))
-    //   row._1
-    // })
-    //
-    // // merge to masterCluster
-    // val masterCluster = sc.parallelize(cluster.map( index => {
-    //   val start = """["""
-    //   val end = """]"""
-    //   val cent = centroid(index).mkString(start, ",", end)
-    //   val r = 0
-    //   val i = index.toInt
-    //   Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
-    // }))
-    //
-    //
-    // // ======================== WRITE MONGO ================================
-    //
-    // var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
-    // MongoSpark.save(masterData, writeConfig)
-    //
-    // writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
-    // MongoSpark.save(masterCluster, writeConfig)
+
+
+    // merge to masterData
+    val mongoIndexRDD = mongoRDD.zipWithIndex
+    var masterData = mongoIndexRDD.map( row => {
+      row._1.put("cluster", clusterArray(row._2.toInt))
+      row._1.put("to_centroid", distance(row._2.toInt))
+      row._1
+    })
+
+    // merge to masterCluster
+    val masterCluster = sc.parallelize(cluster.map( index => {
+      val start = """["""
+      val end = """]"""
+      val cent = centroid(index).mkString(start, ",", end)
+      val r = radius(index.toInt)
+      val i = index.toInt
+      Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
+    }))
+
+
+    // ======================== WRITE MONGO ================================
+
+    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
+    MongoSpark.save(masterData, writeConfig)
+
+    writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
+    MongoSpark.save(masterCluster, writeConfig)
 
 
   }
