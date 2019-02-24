@@ -104,7 +104,7 @@ object MongoToCluster extends StreamUtils {
     println(grouped)
 
     for ((key, value) <- grouped) {
-      val array = value._2
+      val array = value.map(arr => arr._2)
       centroid(key) = clib.getCentroid(array)
       radius(key) = array.max
       println(key)
