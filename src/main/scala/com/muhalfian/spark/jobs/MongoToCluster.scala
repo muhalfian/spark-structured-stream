@@ -88,57 +88,58 @@ object MongoToCluster extends StreamUtils {
 
 
 
-    // // merge data cluster and array
-    // // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
-    // var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
-    // for ( i <- 1 to (aggregateArray.length - 1) ) {
-    //   dataArray(i) = Array(clusterArray(i).toDouble) ++ aggregateArray(i)
-    // }
-    //
-    // // group data array
-    // var grouped = dataArray.groupBy(_(0))
-    // for ((key, value) <- grouped) {
-    //   println(key)
-    //   println(value)
-    // }
+    // merge data cluster and array
+    // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
+    var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
 
-    // calculate centroid
-    val centroid = clib.getCentroid(aggregateArray, clusterArray);
-
-    // calculate distance
-    var distance = Array[Double](clusterArray.size)
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      val cent = centroid(clusterArray(i))
-      val data = aggregateArray(i)
-      distance = distance ++ Array(vlib.getDistance(cent, data))
+      dataArray(i) = (clusterArray(i), aggregateArray(i))
     }
 
-    // merge to masterData
-    val mongoIndexRDD = mongoRDD.zipWithIndex
-    var masterData = mongoIndexRDD.map( row => {
-      row._1.put("cluster", clusterArray(row._2.toInt))
-      row._1.put("to_centroid", distance(row._2.toInt))
-      row._1
-    })
+    // group data array
+    var grouped = dataArray.groupBy(_._1)
+    for ((key, value) <- grouped) {
+      println(key)
+      println(value)
+    }
 
-    // merge to masterCluster
-    val masterCluster = sc.parallelize(cluster.map( index => {
-      val start = """"["""
-      val end = """]"""
-      val cent = centroid(index).mkString(start, ",", end)
-      val r = 0
-      val i = index.toInt
-      Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
-    }))
-
-
-    // ======================== WRITE MONGO ================================
-
-    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
-    MongoSpark.save(masterData, writeConfig)
-
-    writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
-    MongoSpark.save(masterCluster, writeConfig)
+    // // calculate centroid
+    // val centroid = clib.getCentroid(aggregateArray, clusterArray);
+    //
+    // // calculate distance
+    // var distance = Array[Double](clusterArray.size)
+    // for ( i <- 1 to (aggregateArray.length - 1) ) {
+    //   val cent = centroid(clusterArray(i))
+    //   val data = aggregateArray(i)
+    //   distance = distance ++ Array(vlib.getDistance(cent, data))
+    // }
+    //
+    // // merge to masterData
+    // val mongoIndexRDD = mongoRDD.zipWithIndex
+    // var masterData = mongoIndexRDD.map( row => {
+    //   row._1.put("cluster", clusterArray(row._2.toInt))
+    //   row._1.put("to_centroid", distance(row._2.toInt))
+    //   row._1
+    // })
+    //
+    // // merge to masterCluster
+    // val masterCluster = sc.parallelize(cluster.map( index => {
+    //   val start = """["""
+    //   val end = """]"""
+    //   val cent = centroid(index).mkString(start, ",", end)
+    //   val r = 0
+    //   val i = index.toInt
+    //   Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
+    // }))
+    //
+    //
+    // // ======================== WRITE MONGO ================================
+    //
+    // var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data"), Some(WriteConfig(sc)))
+    // MongoSpark.save(masterData, writeConfig)
+    //
+    // writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster"), Some(WriteConfig(sc)))
+    // MongoSpark.save(masterCluster, writeConfig)
 
 
   }
