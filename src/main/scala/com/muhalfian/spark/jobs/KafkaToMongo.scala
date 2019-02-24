@@ -73,13 +73,12 @@ object KafkaToMongo extends StreamUtils {
     val aggregateDF = selectedDF
                       .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
 
-    val masterWord = sc.parallelize(AggTools.masterWordAgg())
-
     // =========================== SINK ====================================
+
+    aggregateDF.show()
 
     MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
     WriterUtil.saveBatchMongo("master_word",masterWord)
 
-    println("jumlah master_word : " + AggTools.masterWordsIndex.size)
   }
 }
