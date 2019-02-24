@@ -112,13 +112,12 @@ object MongoToCluster extends StreamUtils {
     }
 
     // merge
-    val mongoIndexRDD = mongoRDD.map(r => DocArtifact.dataInit(r))
-
-    // .zipWithIndex
-    // val dataArray = mongoIndexRDD.map(row => {
-    //   row._1.put("cluster", clusterArray(row._2)).put("to_cluster", distance(row._2))
-    //   println(row._1)
-    // })
+    val mongoIndexRDD = mongoRDD.zipWithIndex
+    val dataArray = mongoIndexRDD.map(row => {
+      row._1.append("author", "alfian")
+      // row._1.put("cluster", clusterArray(row._2)).put("to_cluster", distance(row._2))
+      println(row._1)
+    })
 
 
 
