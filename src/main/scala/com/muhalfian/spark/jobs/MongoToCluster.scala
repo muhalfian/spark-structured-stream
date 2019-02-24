@@ -75,7 +75,7 @@ object MongoToCluster extends StreamUtils {
     val masterData = ClusterTools.masterDataAgg(mongoRDD)
 
     // merge to masterCluster
-    val masterCluster = sc.parallelize(ClusterTools.masterClusterAgg(mongoRDD), cluster)
+    val masterCluster = sc.parallelize(ClusterTools.masterClusterAgg(mongoRDD, cluster))
 
     // ======================== WRITE MONGO ================================
 

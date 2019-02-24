@@ -52,7 +52,7 @@ object ClusterTools {
     }
   }
 
-  def masterDataAgg(mongoRDD: RDD[org.bson.Documet]) : RDD[org.bson.Document] = {
+  def masterDataAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterData = mongoRDD.zipWithIndex.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
