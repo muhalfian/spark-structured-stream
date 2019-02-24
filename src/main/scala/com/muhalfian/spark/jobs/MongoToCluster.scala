@@ -115,12 +115,12 @@ object MongoToCluster extends StreamUtils {
     // var dataArray = mongoRDD.withColumn("cluster", clusterArray)
     val mongoIndexRDD = mongoRDD.zipWithIndex
 
-    // var dataArray = Array[Any](clusterArray.size)
-    for ((doc, index) <- mongoIndexRDD) {
-      doc.put("cluster", clusterArray(index.toInt))
-      doc.put("to_cluster", distance(index.toInt))
-      // dataArray(index.toInt) = doc
-    }
+    // // var dataArray = Array[Any](clusterArray.size)
+    // for ((doc, index) <- mongoIndexRDD) {
+    //   doc.put("cluster", clusterArray(index.toInt))
+    //   doc.put("to_cluster", distance(index.toInt))
+    //   // dataArray(index.toInt) = doc
+    // }
 
     var dataArray = mongoIndexRDD.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
