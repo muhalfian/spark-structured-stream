@@ -14,7 +14,7 @@ object ClusterTools {
   val clib : ClusteringLib = new ClusteringLib();
   val vlib: VectorLib = new VectorLib()
 
-  var centroid = Array[Array[Double]](1)
+  var centroid = Array[Array[Double]](Array(1.0))
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
 
@@ -61,7 +61,7 @@ object ClusterTools {
     masterData
   }
 
-  def masterClusterAgg(mongoRDD : RDD[org.bson.Document]): Array[org.bson.Document] = {
+  def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Double]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
       val start = """["""
       val end = """]"""
