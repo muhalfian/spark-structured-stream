@@ -117,6 +117,7 @@ object MongoToCluster extends StreamUtils {
       row._1.put("cluster", clusterArray(row._2).toLong).put("to_cluster", distance(row._2).toLong)
       println(row._1)
     })
+    dataArray.map(row => print(row + ", "))
 
 
 
