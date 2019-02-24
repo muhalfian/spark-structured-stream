@@ -93,7 +93,7 @@ object WriterUtil {
   }
 
   def saveBatchMongo(col:String, data:RDD[org.bson.Document]) = {
-    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> col), Some(WriteConfig(sc)))
+    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> col))
     MongoSpark.save(data, writeConfig)
   }
 }
