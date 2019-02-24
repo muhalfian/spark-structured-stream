@@ -18,9 +18,6 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.sql.streaming.Trigger
 
-import com.mongodb.spark.config._
-import com.mongodb.spark.MongoSpark
-
 import scala.collection.JavaConversions._
 import ALI._
 import org.bson.Document
@@ -140,8 +137,8 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    WriterUtils.saveBatchMongo("master_data",masterData)
-    WriterUtils.saveBatchMongo("master_cluster",masterCluster)
+    WriterUtil.saveBatchMongo("master_data",masterData)
+    WriterUtil.saveBatchMongo("master_cluster",masterCluster)
 
   }
 

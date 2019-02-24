@@ -10,6 +10,9 @@ import scala.collection.JavaConverters._
 import com.muhalfian.spark.util._
 import org.apache.spark.rdd.RDD
 
+import com.mongodb.spark.config._
+import com.mongodb.spark.MongoSpark
+
 object WriterUtil {
 
   val masterData = new ForeachWriter[ColsArtifact.masterData] {
