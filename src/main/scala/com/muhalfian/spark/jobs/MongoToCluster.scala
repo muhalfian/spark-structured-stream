@@ -113,7 +113,7 @@ object MongoToCluster extends StreamUtils {
 
     // merge
     // var dataArray = mongoRDD.withColumn("cluster", clusterArray)
-    val mongoIndexRDD = mongoRDD.zipWithIndex
+    // val mongoIndexRDD = mongoRDD.zipWithIndex
 
     // // var dataArray = Array[Any](clusterArray.size)
     // for ((doc, index) <- mongoIndexRDD) {
@@ -122,11 +122,12 @@ object MongoToCluster extends StreamUtils {
     //   // dataArray(index.toInt) = doc
     // }
 
-    var dataArray = mongoIndexRDD.map( row => {
-      row._1.put("cluster", clusterArray(row._2.toInt))
-      row._1.put("to_centroid", distance(row._2.toInt))
-      row._1
-    }).toDF()
+    var dataArray = mongoRDD.toDF()
+    // var dataArray = mongoIndexRDD.map( row => {
+    //   row._1.put("cluster", clusterArray(row._2.toInt))
+    //   row._1.put("to_centroid", distance(row._2.toInt))
+    //   row._1
+    // }).toDF()
 
     // var dataArray = mongoIndexRDD.map(_._1)
     // dataArray.map(row => print(row.toJson + ", "))
