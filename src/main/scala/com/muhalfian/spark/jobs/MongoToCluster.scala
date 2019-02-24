@@ -125,7 +125,7 @@ object MongoToCluster extends StreamUtils {
     val masterCluster = sc.parallelize(cluster.map( index => {
       val start = """"["""
       val end = """]"""
-      val cent = centroid(clusterArray(i)).mkString(start, ",", end)
+      val cent = centroid(index).mkString(start, ",", end)
       val r = 0
       val i = index.toInt
       Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
