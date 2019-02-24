@@ -77,6 +77,6 @@ object KafkaToMongo extends StreamUtils {
     MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
     WriterUtil.saveBatchMongo("master_word",masterWord)
 
-    println("jumlah master_word : " + AggTools.masterWordsIndex.size())
+    println("jumlah master_word : " + AggTools.masterWordsIndex.size)
   }
 }
