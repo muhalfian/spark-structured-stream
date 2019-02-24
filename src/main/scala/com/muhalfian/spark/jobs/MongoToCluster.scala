@@ -121,7 +121,7 @@ object MongoToCluster extends StreamUtils {
       // dataArray(index.toInt) = doc
     }
 
-    var dataArray = mongoIndexRdd.map(_._1)
+    var dataArray = mongoIndexRDD.map(_._1)
     dataArray.map(row => print(row.toJson + ", "))
     print(dataArray)
 
