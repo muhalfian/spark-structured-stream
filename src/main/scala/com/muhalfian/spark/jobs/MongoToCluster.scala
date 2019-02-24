@@ -39,7 +39,7 @@ object MongoToCluster extends StreamUtils {
     spark.sparkContext.setLogLevel("ERROR")
     val sc = spark.sparkContext
 
-    // ======================== READ STREAM ================================
+    // ======================== READ MONGO ================================
 
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
@@ -125,6 +125,10 @@ object MongoToCluster extends StreamUtils {
     dataArray.map(row => print(row.toJson + ", "))
     print(dataArray)
 
+    // ======================== WRITE MONGO ================================
+
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init"))
+    MongoSpark.save(dataArray, writeConfig)
 
 
   }
