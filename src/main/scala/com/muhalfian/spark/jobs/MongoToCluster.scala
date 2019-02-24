@@ -90,11 +90,11 @@ object MongoToCluster extends StreamUtils {
 
     // merge data cluster and array
     // var dataArray = Array.ofDim[(Int, Double)](clusterArray.size, size)
-    var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
+    // var dataArray = Array[(Int, Array[Double])](clusterArray.size, size)
 
-    for ( i <- 1 to (aggregateArray.length - 1) ) {
-      dataArray(i) = (clusterArray(i), aggregateArray(i))
-    }
+    var dataArray = aggregateArray.zipWithIndex.map(data => {
+      (clusterArray(data._2), data._1)
+    })
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
