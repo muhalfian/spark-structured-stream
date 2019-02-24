@@ -75,9 +75,7 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    // aggregateDF.show()
-
     MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
-    println("jumlah kata : " + AggTools.masterWordsIndex.size)
+
   }
 }

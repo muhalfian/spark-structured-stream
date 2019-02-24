@@ -82,6 +82,22 @@ object AggTools extends StreamUtils {
     aggregateArray
   }
 
+  def initDictionary(mongoRDD:RDD[org.bson.Document]): Int = {
+    mongoRDD.map(r => {
+      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
+                      .map( row => {
+                        var word = row.drop(1).dropRight(1).split("\\,")
+                        var index = masterWordsIndex.indexWhere(_ == word(0))
+                        if(index == -1){
+                          masterWordsIndex += word(0)
+                          index = masterWordsIndex.size - 1
+                        }
+      })
+    })
+
+    masterWordsIndex.size
+  }
+
   def masterWordAgg(): ArrayBuffer[org.bson.Document] = {
     val masterWord = masterWordsIndex.map{ word =>
       Document.parse(s"{word : '$word'}")
