@@ -112,18 +112,19 @@ object MongoToCluster extends StreamUtils {
     }
 
     // merge
-    val mongoIndexRDD = mongoRDD.zipWithIndex
+    var dataArray = mongoRDD.withColumn("cluster", clusterArray)
+    // val mongoIndexRDD = mongoRDD.zipWithIndex
+    //
+    // // var dataArray = Array[Any](clusterArray.size)
+    // for ((doc, index) <- mongoIndexRDD) {
+    //   doc.put("cluster", clusterArray(index.toInt))
+    //   doc.put("to_cluster", distance(index.toInt))
+    //   // dataArray(index.toInt) = doc
+    // }
 
-    // var dataArray = Array[Any](clusterArray.size)
-    for ((doc, index) <- mongoIndexRDD) {
-      doc.put("cluster", clusterArray(index.toInt))
-      doc.put("to_cluster", distance(index.toInt))
-      // dataArray(index.toInt) = doc
-    }
-
-    var dataArray = mongoIndexRDD.map(_._1)
-    dataArray.map(row => print(row.toJson + ", "))
-    print(dataArray)
+    // var dataArray = mongoIndexRDD.map(_._1)
+    // dataArray.map(row => print(row.toJson + ", "))
+    // print(dataArray)
 
     // ======================== WRITE MONGO ================================
 
