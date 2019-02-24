@@ -118,10 +118,10 @@ object MongoToCluster extends StreamUtils {
     for ((doc, index) <- mongoIndexRDD) {
       doc.put("cluster", clusterArray(index.toInt))
       doc.put("to_cluster", distance(index.toInt))
-      dataArray(index) = doc
+      dataArray(index.toInt) = doc
     }
-    dataArray.map(row => print(row + ", "))
-
+    // dataArray.map(row => print(row + ", "))
+    print(dataArray)
 
 
 
