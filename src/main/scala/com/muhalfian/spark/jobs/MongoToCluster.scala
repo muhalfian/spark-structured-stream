@@ -123,13 +123,15 @@ object MongoToCluster extends StreamUtils {
     // }
 
     var mongoDF = mongoRDD.toDF()
-    var dataArray = mongoDF.withColumn("cluster", clusterArray)
+    // var dataArray = mongoDF.withColumn("cluster", clusterArray)
+    // dataArray.show()
+    var dataArray = mongoDF.map( row => {
+      row._1.put("cluster", clusterArray(row._2.toInt))
+      row._1.put("to_centroid", distance(row._2.toInt))
+      row._1
+    })
+
     dataArray.show()
-    // var dataArray = mongoIndexRDD.map( row => {
-    //   row._1.put("cluster", clusterArray(row._2.toInt))
-    //   row._1.put("to_centroid", distance(row._2.toInt))
-    //   row._1
-    // }).toDF()
 
     // var dataArray = mongoIndexRDD.map(_._1)
     // dataArray.map(row => print(row.toJson + ", "))
