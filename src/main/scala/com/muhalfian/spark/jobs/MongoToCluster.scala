@@ -109,6 +109,7 @@ object MongoToCluster extends StreamUtils {
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), data._1, distance(data._2))
     })
+    println("jumlah data : "+ dataArray.size)
     println(dataArray)
     dataArray.map(row => print(row + ", "))
 
