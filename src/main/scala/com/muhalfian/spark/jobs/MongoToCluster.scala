@@ -124,7 +124,7 @@ object MongoToCluster extends StreamUtils {
 
     var dataArray = mongoIndexRDD.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
-      row._1.put("to_cluster", distance(row._2.toInt
+      row._1.put("to_cluster", distance(row._2.toInt))
       row._1
     })
 
