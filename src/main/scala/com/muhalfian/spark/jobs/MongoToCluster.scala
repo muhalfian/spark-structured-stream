@@ -112,37 +112,17 @@ object MongoToCluster extends StreamUtils {
     }
 
     // merge
-    // var dataArray = mongoRDD.withColumn("cluster", clusterArray)
-    // val mongoIndexRDD = mongoRDD.zipWithIndex
-
-    // // var dataArray = Array[Any](clusterArray.size)
-    // for ((doc, index) <- mongoIndexRDD) {
-    //   doc.put("cluster", clusterArray(index.toInt))
-    //   doc.put("to_cluster", distance(index.toInt))
-    //   // dataArray(index.toInt) = doc
-    // }
-
-    var mongoDF = mongoRDD.toDF()
-    // var dataArray = mongoDF.withColumn("cluster", clusterArray)
-    // dataArray.show()
-    var dataArray = mongoDF.map( row => {
+    val mongoIndexRDD = mongoRDD.zipWithIndex
+    var masterData = mongoIndexRDD.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
       row._1
     })
 
-    dataArray.show()
-
-    // var dataArray = mongoIndexRDD.map(_._1)
-    // dataArray.map(row => print(row.toJson + ", "))
-    // print(dataArray)
-
     // ======================== WRITE MONGO ================================
 
-    // val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init", "replaceDocument" -> "true"), Some(WriteConfig(sc)))
-    // // MongoSpark.save(dataArray, writeConfig)
-    // // dataArray.saveToMongoDB(writeConfig)
-    // MongoSpark.write(dataArray).mode("overwrite").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_data", "replaceDocument" -> "true"), Some(WriteConfig(sc)))
+    MongoSpark.save(dataArray, writeConfig)
   }
 
 }
