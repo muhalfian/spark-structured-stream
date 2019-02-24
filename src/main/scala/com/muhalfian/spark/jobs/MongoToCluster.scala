@@ -48,7 +48,8 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val aggregateRDD = mongoRDD.map(r => {
+    val size = 2500
+    val aggregateArray = mongoRDD.map(r => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
       var tempSeq = tempJava.map( row => {
@@ -62,7 +63,6 @@ object MongoToCluster extends StreamUtils {
         (index, word(1).toDouble)
       }).toSeq
 
-      val size = 2500
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
       vectorData
     }).collect()
@@ -72,7 +72,7 @@ object MongoToCluster extends StreamUtils {
     // var method = "average"
     // val n = 1000
     // val clib : ClusteringLib = new ClusteringLib();
-    // val clusterArray = clib.AutomaticClustering(method, aggregateRDD, n);
+    // val clusterArray = clib.AutomaticClustering(method, aggregateArray, n);
     // clusterArray.map(row => print(row + ", "))
 
     // ========================= CENTROID ================================
@@ -84,11 +84,15 @@ object MongoToCluster extends StreamUtils {
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 52, 0, 53, 7, 0, 0, 0, 0, 23, 0, 0, 0, 0, 0, 54, 55, 0, 56, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 0, 57, 0, 0, 0, 0, 7, 0, 0, 58, 59, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 7, 0, 0, 0, 0, 67, 0, 68, 0, 69, 0, 0, 0, 70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 72, 0, 0, 72, 0, 5, 0, 0, 0, 0, 0, 73, 0, 5, 0, 0, 74, 7, 0, 0, 0, 0, 0, 0, 0, 0, 75, 0, 0, 0, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 77, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 78, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 7, 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 0, 0)
 
     val cluster = clusterArray.distinct
-    val countCluster = cluster.size
-    println(cluster)
-    println("jumlah cluster : " +countCluster )
 
+    println("jumlah data : " + clusterArray.size )
+    println("jumlah cluster : " + cluster.size )
 
+    var dataArray = new Array.ofDim[Double](clusterArray.size, size+1)
+
+    for ( i <- 1 to (aggregateArray.length - 1) ) {
+      dataArray(i) = aggregateArray(i) ++ clusterArray(i) 
+    }
 
   }
 
