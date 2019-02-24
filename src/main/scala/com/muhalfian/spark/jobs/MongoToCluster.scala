@@ -23,6 +23,8 @@ import ALI._
 import org.bson.Document
 
 import com.muhalfian.spark.util._
+import com.mongodb.spark.config._
+import com.mongodb.spark.MongoSpark
 
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
