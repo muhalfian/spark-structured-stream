@@ -96,9 +96,17 @@ object MongoToCluster extends StreamUtils {
       (clusterArray(data._2), data._1)
     })
 
+    var centroid = Array.ofDim[Double](clusterArray.size, size)
+    var radius = Array[Double](clusterArray.size)
+
     // group data array
     var grouped = dataArray.groupBy(_._1)
+    println(grouped)
+
     for ((key, value) <- grouped) {
+      val array = value._2
+      centroid(key) = clib.getCentroid(array)
+      radius(key) = array.max
       println(key)
       println(value)
     }
