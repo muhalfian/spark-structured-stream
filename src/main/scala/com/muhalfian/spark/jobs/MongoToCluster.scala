@@ -122,8 +122,7 @@ object MongoToCluster extends StreamUtils {
       val data = value.map(arr => arr._2)
       centroid(key) = clib.getCentroid(data)
       val dist = value.map(arr => arr._3)
-      println(dist)
-      radius(key) = dist.max
+      radius(0) = dist.max
       println(key)
       println(value)
     }
