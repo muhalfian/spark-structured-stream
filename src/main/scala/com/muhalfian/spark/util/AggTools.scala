@@ -9,6 +9,8 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.feature.LabeledPoint
 import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
+import org.apache.spark.rdd.RDD
+
 object AggTools extends StreamUtils {
 
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
@@ -54,5 +56,25 @@ object AggTools extends StreamUtils {
     vectorData
   })
 
+  def AggregateBatch(mongoRDD:RDD[org.bson.Document], size;Int): Array[Array[Double]] = {
+    val aggregateArray = mongoRDD.map(r => {
+      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
 
+      var tempSeq = tempJava.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        var index = masterWordsIndex.indexWhere(_ == word(0))
+        if(index == -1){
+          masterWordsIndex += word(0)
+          index = masterWordsIndex.size - 1
+        }
+
+        (index, word(1).toDouble)
+      }).toSeq
+
+      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+      vectorData
+    }).collect()
+
+    aggregateArray
+  }
 }
