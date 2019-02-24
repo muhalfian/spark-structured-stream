@@ -13,9 +13,9 @@ object ClusterTools {
   val clib : ClusteringLib = new ClusteringLib();
   val vlib: VectorLib = new VectorLib()
 
-  var centroid = Array.ofDim[Double]()
-  var distance = Array.ofDim[Double]()
-  var radius = Array.ofDim[Double]()
+  var centroid = Array.ofDim[Double](1)
+  var distance = Array.ofDim[Double](1)
+  var radius = Array.ofDim[Double](1)
 
   def getCentroid(aggregateArray:Array[Array[Double]] , clusterArray:Array[Double] ) = {
     // merge cluster, array

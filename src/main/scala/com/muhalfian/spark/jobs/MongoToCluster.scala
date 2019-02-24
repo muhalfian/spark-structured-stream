@@ -58,7 +58,7 @@ object MongoToCluster extends StreamUtils {
     val clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = clusterArray.distinct
 
-    ClusterTools.centroid = Array.ofDim[Double](clusterArray.size, size)
+    ClusterTools.centroid = Array.ofDim[Double](clusterArray.size, dict)
     ClusterTools.distance = Array.ofDim[Double](clusterArray.size)
     ClusterTools.radius = Array.ofDim[Double](clusterArray.size)
 
