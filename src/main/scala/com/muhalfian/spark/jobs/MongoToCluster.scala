@@ -105,14 +105,17 @@ object MongoToCluster extends StreamUtils {
       distance = distance ++ Array(vlib.getDistance(cent, data))
     }
 
+    // merge cluster, array, distance
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), data._1, distance(data._2))
     })
+    println(dataArray)
 
     // group data array
     var grouped = dataArray.groupBy(_._1)
     println(grouped)
 
+    // find centroid and radius
     for ((key, value) <- grouped) {
       val data = value.map(arr => arr._2)
       centroid(key) = clib.getCentroid(data)
