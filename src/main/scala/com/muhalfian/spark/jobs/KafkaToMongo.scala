@@ -61,14 +61,17 @@ object KafkaToMongo extends StreamUtils {
     val filteredDF = TextTools.remover.transform(regexDF)
 
     val stemmedDF = filteredDF
-                        .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
+                    .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
 
     val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
 
     val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
-                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+                    .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+
+    val aggregateDF = selectedDF
+                      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
 
     val masterWord = sc.parallelize(AggTools.masterWordAgg())
 
