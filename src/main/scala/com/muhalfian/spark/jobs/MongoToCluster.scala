@@ -95,8 +95,9 @@ object MongoToCluster extends StreamUtils {
 
 
     var centroid = Array.ofDim[Double](clusterArray.size, size)
-    var radius = Array[Double](clusterArray.size)
     var distance = Array[Double](clusterArray.size)
+    var radius = Array[Double](clusterArray.size)
+
 
     // calculate distance
     for ( i <- 1 to (aggregateArray.length - 1) ) {
@@ -122,6 +123,7 @@ object MongoToCluster extends StreamUtils {
       val data = value.map(arr => arr._2)
       centroid(key) = clib.getCentroid(data)
       val dist = value.map(arr => arr._3)
+      println("besar array " + radius.size)
       radius(key) = dist.max
 
     }
