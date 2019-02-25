@@ -60,7 +60,6 @@ object MongoToCluster extends StreamUtils {
 
     ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = ClusterTools.clusterArray.distinct
-    ClusterTools.clusterArray.map(row => print(row + ", "))
     println("jumlah data tercluster : " + ClusterTools.clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
