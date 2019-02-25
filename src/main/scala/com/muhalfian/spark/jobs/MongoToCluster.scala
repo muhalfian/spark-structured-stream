@@ -51,6 +51,7 @@ object MongoToCluster extends StreamUtils {
     // val dict = AggTools.initDictionary(mongoRDD)
     // println("dict : "+ dict)
     val aggregateArray = AggTools.aggregateBatch(mongoRDD, dict)
+    aggregateArray.map(_.map(row => println(row + ", ")))
 
     // ======================== CLUSTERING ================================
 
@@ -60,6 +61,7 @@ object MongoToCluster extends StreamUtils {
     val clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = clusterArray.distinct
     clusterArray.map(row => print(row + ", "))
+    println("jumlah data : " + clusterArray.size)
 
     ClusterTools.centroid = Array.ofDim[Double](clusterArray.size, dict)
     ClusterTools.distance = Array.ofDim[Double](clusterArray.size)
