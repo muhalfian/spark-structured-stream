@@ -67,11 +67,9 @@ object KafkaToMongo extends StreamUtils {
 
     val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
 
-    val selectedDF = mergeDF.withColumn("text_selected", TextTools.select(col("text_preprocess")))
-
-    val aggregateDF = selectedDF
-                      .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
-                      .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+    val selectedDF = mergeDF
+                    .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+                    .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     // =========================== SINK ====================================
 
