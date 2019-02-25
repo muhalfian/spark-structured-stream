@@ -48,6 +48,7 @@ object InitDict extends StreamUtils {
     // ======================== AGGREGATION ================================
 
     val dict = AggTools.initDictionary(mongoRDD)
+    println(dict)
 
     val masterWord = sc.parallelize(AggTools.masterWordAgg())
 

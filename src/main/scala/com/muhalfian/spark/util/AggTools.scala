@@ -93,7 +93,7 @@ object AggTools extends StreamUtils {
                           index = masterWordsIndex.size - 1
                         }
       })
-    })
+    }).collect()
 
     masterWordsIndex.size
   }
