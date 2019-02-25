@@ -12,8 +12,8 @@ private[spark] trait StreamUtils {
 
   def getSparkSession(args: Array[String]): SparkSession = {
     val uri: String = args.headOption.getOrElse("mongodb://10.252.37.112/spark.bro15jun")
-    // val master: String = "spark://10.252.37.109:7077"
-    val master: String = "local[*]"
+    val master: String = "spark://10.252.37.109:7077"
+    // val master: String = "local[*]"
 
     val conf = new SparkConf()
       .setMaster(master)
