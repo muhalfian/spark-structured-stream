@@ -83,17 +83,19 @@ object AggTools extends StreamUtils {
   }
 
   def initDictionary(mongoRDD:RDD[org.bson.Document]): Int = {
-    mongoRDD.map(r => {
-      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
-                      .map( row => {
-                        var word = row.drop(1).dropRight(1).split("\\,")
-                        var index = masterWordsIndex.indexWhere(_ == word(0))
-                        if(index == -1){
-                          masterWordsIndex += word(0)
-                          index = masterWordsIndex.size - 1
-                        }
-      })
+    var temp = mongoRDD.map(r => {
+      r.get("text_selected", new java.util.ArrayList[String]())
+        .map( row => {
+          var word = row.drop(1).dropRight(1).split("\\,")
+          var index = masterWordsIndex.indexWhere(_ == word(0))
+          if(index == -1){
+            masterWordsIndex += word(0)
+            index = masterWordsIndex.size - 1
+          }
+        })
     }).collect()
+
+    println(temp)
 
     masterWordsIndex.size
   }
