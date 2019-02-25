@@ -55,7 +55,7 @@ object MongoToCluster extends StreamUtils {
     // ======================== CLUSTERING ================================
 
     var method = "average"
-    val n = 1000
+    val n = 1500
 
     val clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = clusterArray.distinct
