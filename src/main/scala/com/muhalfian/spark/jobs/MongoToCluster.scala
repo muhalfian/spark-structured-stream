@@ -60,22 +60,22 @@ object MongoToCluster extends StreamUtils {
 
     ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = clusterArray.distinct
-    clusterArray.map(row => print(row + ", "))
+    ClusterTools.clusterArray.map(row => print(row + ", "))
     println("jumlah data tercluster : " + clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
-    ClusterTools.centroid = Array.ofDim[Double](clusterArray.size, dict)
-    ClusterTools.distance = Array.ofDim[Double](clusterArray.size)
-    ClusterTools.radius = Array.ofDim[Double](clusterArray.size)
+    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, dict)
+    ClusterTools.distance = Array.ofDim[Double](ClusterTools.clusterArray.size)
+    ClusterTools.radius = Array.ofDim[Double](ClusterTools.clusterArray.size)
 
     // get centroid each cluster
-    ClusterTools.getCentroid(aggregateArray, clusterArray)
+    ClusterTools.getCentroid(aggregateArray, ClusterTools.clusterArray)
 
     // calculate distance
-    ClusterTools.calculateDistance(aggregateArray, clusterArray)
+    ClusterTools.calculateDistance(aggregateArray, ClusterTools.clusterArray)
 
     // calculate radius
-    ClusterTools.calculateRadius(aggregateArray, clusterArray)
+    ClusterTools.calculateRadius(aggregateArray, ClusterTools.clusterArray)
 
     // merge to masterData
     val masterData = ClusterTools.masterDataAgg(mongoRDD)
