@@ -47,9 +47,9 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    // val dict = 3430
-    val dict = AggTools.initDictionary(mongoRDD)
-    println("dict : "+ dict)
+    val dict = 2600
+    // val dict = AggTools.initDictionary(mongoRDD)
+    // println("dict : "+ dict)
     val aggregateArray = AggTools.aggregateBatch(mongoRDD, dict)
 
     // ======================== CLUSTERING ================================
