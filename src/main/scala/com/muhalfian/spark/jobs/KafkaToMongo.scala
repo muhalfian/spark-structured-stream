@@ -61,7 +61,7 @@ object KafkaToMongo extends StreamUtils {
     val filteredDF = TextTools.remover.transform(regexDF)
 
     val stemmedDF = filteredDF
-                    .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
+                    .withColumn("text_preprocess", TextTools.stemming(col("text_filter")))
 
     // val ngramDF = TextTools.ngram.transform(stemmedDF)
     //
