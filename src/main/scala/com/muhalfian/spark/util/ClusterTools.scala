@@ -17,6 +17,7 @@ object ClusterTools {
   var centroid = Array[Array[Double]](Array(1.0))
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
+  var n = Array.ofDim[Int](1)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
@@ -49,6 +50,7 @@ object ClusterTools {
     for ((key, value) <- dataArray) {
       val dist = value.map(arr => arr._2)
       radius(key) = dist.max
+      n(key) = dist.size
     }
   }
 
@@ -68,7 +70,8 @@ object ClusterTools {
       val cent = centroid(index.toInt).mkString(start, ",", end)
       val r = radius(index.toInt)
       val i = index.toInt
-      Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r}")
+      val size = n(index.toInt)
+      Document.parse(s"{cluster: $i, centroid: '$cent', radius: $r, size: $size}")
     })
     masterCluster
   }

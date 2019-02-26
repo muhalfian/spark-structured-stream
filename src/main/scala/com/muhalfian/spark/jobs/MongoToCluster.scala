@@ -66,6 +66,7 @@ object MongoToCluster extends StreamUtils {
     ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, dict)
     ClusterTools.distance = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.radius = Array.ofDim[Double](ClusterTools.clusterArray.size)
+    ClusterTools.n = Array.ofDim[Int](ClusterTools.clusterArray.size)
 
     // get centroid each cluster
     ClusterTools.getCentroid(aggregateArray, ClusterTools.clusterArray)
