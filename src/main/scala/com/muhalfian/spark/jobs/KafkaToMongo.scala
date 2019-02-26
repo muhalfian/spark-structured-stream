@@ -45,7 +45,7 @@ object KafkaToMongo extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribePattern", "online_media.*")
       .option("startingOffsets", """{"online_media":{"0":0}}""")
-      .option("endingOffsets", """{"online_media":{"0":4000}}""")
+      .option("endingOffsets", """{"online_media":{"0":3000}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -63,17 +63,21 @@ object KafkaToMongo extends StreamUtils {
     val stemmedDF = filteredDF
                     .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
 
-    val ngramDF = TextTools.ngram.transform(stemmedDF)
-
-    val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
+    // val ngramDF = TextTools.ngram.transform(stemmedDF)
+    //
+    // val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
+    //
+    // val selectedDF = mergeDF
+    //                 .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+    //                 .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     val selectedDF = mergeDF
                     .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
-                    .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+                    .withColumn("text_selected", TextTools.select(col("text_stemmed")))
 
     // =========================== SINK ====================================
 
-    MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init").save();
+    MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_2").save();
 
   }
 }
