@@ -43,9 +43,9 @@ object KafkaToMongo extends StreamUtils {
       .read
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-      .option("subscribePattern", "online_media.*")
+      .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", """{"online_media":{"0":0}}""")
-      .option("endingOffsets", """{"online_media":{"0":1500}}""")
+      .option("endingOffsets", """{"online_media":{"0":10}}""")
       .load()
 
     // Transform data stream to Dataframe
