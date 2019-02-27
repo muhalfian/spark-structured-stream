@@ -12,6 +12,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import org.apache.spark.rdd.RDD
 import org.bson.Document
 import scala.collection.JavaConversions._
+import scala.util.Try
 
 object AggTools extends StreamUtils {
 
@@ -25,8 +26,14 @@ object AggTools extends StreamUtils {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-
+  val spark = StreamUtils.getSparkSession()
+  import spark.implicits._
   var masterWordsIndex = ArrayBuffer[String]()
+  var wordSchema = List(
+    StructField("word", StringType, true),
+    StructField("index", DoubleType, true)
+  )
+  var masterWord = spark.createDataFrame(StructType(wordSchema))
   var masterWordCount = 0
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -71,12 +78,8 @@ object AggTools extends StreamUtils {
       //   masterWordsIndex += word(0)
       //   index = masterWordsIndex.size - 1
       // }
-      var index = Try(
-                masterWord.filter($"word" === word(0))
-                .rdd.map(r => r.getInt(1)).collect.toList(0)
-              ).getOrElse(
-                masterWordCount
-              )
+      var index = Try( masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
+                  .getOrElse( masterWordCount )
 
       if(index == masterWordCount){
         masterWordCount += 1
