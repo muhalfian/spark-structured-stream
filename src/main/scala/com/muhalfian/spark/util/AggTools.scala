@@ -60,6 +60,41 @@ object AggTools extends StreamUtils {
     vectorData
   })
 
+  val aggregateMongo = udf((content: Seq[String]) => {
+
+    var tempSeq = content.map(row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+
+
+      // var index = masterWordsIndex.indexWhere(_ == word(0))
+      // if(index == -1){
+      //   masterWordsIndex += word(0)
+      //   index = masterWordsIndex.size - 1
+      // }
+      var index = Try(
+                masterWord.filter($"word" === word(0))
+                .rdd.map(r => r.getInt(1)).collect.toList(0)
+              ).getOrElse(
+                masterWordCount
+              )
+
+      if(index == masterWordCount){
+        masterWordCount += 1
+      }
+
+      println("master word update : " + index + " - " + word(1).toDouble)
+      (index, word(1).toDouble)
+    }).toSeq
+
+    println(tempSeq)
+    // println(masterWordsIndex.size)
+
+    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+
+    // println("aggregate " + masterWordsIndex.size)
+    vectorData
+  })
+
   def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
     val aggregateArray = mongoRDD.map(r => {
       var tempJava = r.get("text_selected", new java.util.ArrayList[String]())

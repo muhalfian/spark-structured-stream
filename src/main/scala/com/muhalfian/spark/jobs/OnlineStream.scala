@@ -43,7 +43,7 @@ object OnlineStream extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
-      .option("startingOffsets", PropertiesLoader.kafkaStartingOffset)
+      .option("startingOffsets", "latest")
       .option("maxOffsetsPerTrigger", "100")
       .load()
 
@@ -55,9 +55,9 @@ object OnlineStream extends StreamUtils {
 
     // read master word
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-    val masterWord = MongoSpark.load(spark, readConfig)
-    var masterWordCount = masterWord.count.toInt
-    masterWord.show()
+    AggTools.masterWord = MongoSpark.load(spark, readConfig)
+    AggTools.masterWordCount = AggTools.masterWord.count.toInt
+    AggTools.masterWord.show()
 
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
@@ -77,8 +77,8 @@ object OnlineStream extends StreamUtils {
 
     // // ======================== AGGREGATION ================================
     //
-    // val aggregateDF = selectedDF
-    //   .withColumn("text_aggregate", AggTools.aggregate(col("text_selected"), col("link")))
+    val aggregateDF = selectedDF
+      .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
     //
     // val customDF = aggregateDF
     //   .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
