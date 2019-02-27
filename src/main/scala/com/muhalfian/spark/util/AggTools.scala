@@ -104,9 +104,11 @@ object AggTools extends StreamUtils {
     // val masterWord = masterWordsIndex.map{ word =>
     //   Document.parse(s"{word : '$word'}")
     // }
-    val masterWord = masterWordsIndex.zipWithIndex.foreach {
-      case(word, index) => Document.parse(s"{word : '$word'}")
-    }
+    val masterWord = masterWordsIndex.zipWithIndex.map( row => {
+      val word = row._1
+      val index = row._2
+      Document.parse(s"{word : '$word', index: $index}")
+    })
 
     masterWord
   }
