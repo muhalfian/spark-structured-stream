@@ -18,6 +18,10 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import org.apache.spark.sql.streaming.Trigger
 
+import org.bson.Document
+import com.mongodb.spark.MongoSpark
+import com.mongodb.spark.config._
+
 // import org.apache.spark.ml.clustering.BisectingKMeans
 // import com.muhalfian.spark.ml.BisectingKMeans
 
