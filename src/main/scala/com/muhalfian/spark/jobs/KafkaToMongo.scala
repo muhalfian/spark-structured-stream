@@ -54,6 +54,8 @@ object KafkaToMongo extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
+    kafkaDF.show()
+
     // =================== PREPROCESS SASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
@@ -74,6 +76,8 @@ object KafkaToMongo extends StreamUtils {
     // val selectedDF = stemmedDF
     //                 .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
     //                 .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+
+    selectedDF.show()
 
     // =========================== SINK ====================================
 
