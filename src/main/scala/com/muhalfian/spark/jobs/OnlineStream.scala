@@ -28,11 +28,13 @@ import com.mongodb.spark.config._
 
 object OnlineStream extends StreamUtils {
 
+  val spark : SparkSession = _
+
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
 
-    val spark = getSparkSession(args)
+    spark = getSparkSession(args)
     import spark.implicits._
     spark.sparkContext.setLogLevel("ERROR")
 

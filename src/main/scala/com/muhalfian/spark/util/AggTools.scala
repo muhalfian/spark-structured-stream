@@ -26,7 +26,7 @@ object AggTools extends StreamUtils {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-  val spark = StreamUtils.getSparkSession()
+  val spark = com.muhalfian.spark.jobs.OnlineStream.spark
   import spark.implicits._
   var masterWordsIndex = ArrayBuffer[String]()
   var wordSchema = List(
