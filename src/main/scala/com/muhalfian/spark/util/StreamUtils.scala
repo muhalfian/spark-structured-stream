@@ -5,7 +5,8 @@ import com.mongodb.spark.config.WriteConfig
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 
-private[spark] trait StreamUtils {
+// private[spark] trait StreamUtils {
+trait StreamUtils {
   def getSparkContext(args: Array[String]): SparkContext = {
     getSparkSession(args).sparkContext
   }
