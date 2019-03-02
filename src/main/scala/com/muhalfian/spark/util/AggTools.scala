@@ -4,6 +4,8 @@ import org.apache.spark.sql.functions.{split, col, udf}
 
 import scala.collection.mutable.ArrayBuffer
 
+import com.muhalfian.spark.jobs.OnlineStream
+
 // import org.apache.spark.ml.linalg._
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.feature.LabeledPoint
@@ -14,7 +16,7 @@ import org.bson.Document
 import scala.collection.JavaConversions._
 import scala.util.Try
 
-object AggTools extends StreamUtils {
+object AggTools {
 
   val indexWords = Map("a" -> 0, "b" -> 1, "c" -> 2,
                        "d" -> 3, "e" -> 4, "f" -> 5,
@@ -26,8 +28,9 @@ object AggTools extends StreamUtils {
                        "v" -> 21, "w" -> 22, "x" -> 23,
                        "y" -> 24, "z" -> 25)
 
-  val spark = StreamUtils.getSparkSessionPlain()
+  val spark = OnlineStream.spark
   import spark.implicits._
+
   var masterWordsIndex = ArrayBuffer[String]()
   var wordSchema = List(
     StructField("word", StringType, true),
