@@ -33,7 +33,7 @@ object AggTools {
   import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
-  var wordSchema = List(
+  var wordSchema = Seq(
     StructField("word", StringType, true),
     StructField("index", DoubleType, true)
   )
