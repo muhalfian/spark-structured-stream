@@ -33,11 +33,11 @@ object AggTools {
   import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
-  var wordSchema = Seq(
-    StructField("word", StringType, true),
-    StructField("index", DoubleType, true)
-  )
-  var masterWord = spark.createDataFrame(StructType(wordSchema))
+  // var wordSchema = Seq(
+  //   StructField("word", StringType, true),
+  //   StructField("index", DoubleType, true)
+  // )
+  // var masterWord = spark.createDataFrame(StructType(wordSchema))
   var masterWordCount = 0
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -83,7 +83,7 @@ object AggTools {
       //   index = masterWordsIndex.size - 1
       // }
       var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
-                  .getOrElse( masterWordCount )
+                  .getOrElse( OnlineStream.asterWordCount )
 
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
@@ -96,7 +96,7 @@ object AggTools {
     println(tempSeq)
     // println(masterWordsIndex.size)
 
-    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    val vectorData = Vectors.sparse(OnlineStream.masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
     // println("aggregate " + masterWordsIndex.size)
     vectorData
