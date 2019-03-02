@@ -83,7 +83,7 @@ object AggTools {
       //   index = masterWordsIndex.size - 1
       // }
       var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
-                  .getOrElse( OnlineStream.asterWordCount )
+                  .getOrElse( OnlineStream.masterWordCount )
 
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
