@@ -35,7 +35,7 @@ object OnlineStream extends StreamUtils {
   // read master word
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
   var masterWord = MongoSpark.load(spark, readConfig)
-  var masterWordCount = AggTools.masterWord.count.toInt
+  var masterWordCount = masterWord.count.toInt
   masterWord.show()
 
   def main(args: Array[String]): Unit = {
