@@ -32,6 +32,12 @@ object OnlineStream extends StreamUtils {
   import spark.implicits._
   spark.sparkContext.setLogLevel("ERROR")
 
+  // read master word
+  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+  var masterWord = MongoSpark.load(spark, readConfig)
+  var masterWordCount = AggTools.masterWord.count.toInt
+  masterWord.show()
+
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
@@ -56,12 +62,6 @@ object OnlineStream extends StreamUtils {
       .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
-
-    // read master word
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-    AggTools.masterWord = MongoSpark.load(spark, readConfig)
-    AggTools.masterWordCount = AggTools.masterWord.count.toInt
-    AggTools.masterWord.show()
 
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 

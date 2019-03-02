@@ -82,11 +82,11 @@ object AggTools {
       //   masterWordsIndex += word(0)
       //   index = masterWordsIndex.size - 1
       // }
-      var index = Try( masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
+      var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
                   .getOrElse( masterWordCount )
 
-      if(index == masterWordCount){
-        masterWordCount += 1
+      if(index == OnlineStream.masterWordCount){
+        OnlineStream.masterWordCount += 1
       }
 
       println("master word update : " + index + " - " + word(1).toDouble)
