@@ -91,6 +91,7 @@ object AggTools {
         val columns = Array("word", "index")
         val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
         OnlineStream.masterWord = OnlineStream.masterWord.union(newWord)
+        OnlineStream.masterWord.show()
       }
 
       println("master word update : " + index + " - " + word(1).toDouble)
