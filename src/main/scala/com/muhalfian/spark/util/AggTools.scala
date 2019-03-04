@@ -66,9 +66,9 @@ object AggTools {
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       println(word(0))
-      var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect()
-      println(index)
-      index = 0
+      var index2 = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect()
+      println(index2)
+      var index = 0
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
       //             .getOrElse( OnlineStream.masterWordCount )
