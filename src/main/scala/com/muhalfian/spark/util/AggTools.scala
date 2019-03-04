@@ -89,7 +89,7 @@ object AggTools {
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
         val columns = Array("word", "index")
-        val newWord = sc.parallelize((word, index)).toDF(columns: _*)
+        val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
         OnlineStream.masterWord = OnlineStream.masterWord.union(newWord)
       }
 
