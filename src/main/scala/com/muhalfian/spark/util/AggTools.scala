@@ -30,6 +30,37 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordCount = 0
 
+  val aggregate = udf((content: Seq[String], link: String) => {
+
+    var tempSeq = content.map(row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      var index = masterWordsIndex.indexWhere(_ == word(0))
+      if(index == -1){
+        masterWordsIndex += word(0)
+        index = masterWordsIndex.size - 1
+      }
+
+      (index, word(1).toDouble)
+    }).toSeq
+
+    println(masterWordsIndex.size)
+
+    // println(tempSeq)
+    // println(masterWordsIndex.size)
+    // val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense
+    val vectorData = Vectors.sparse(masterWordsIndex.size, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+
+    // val vectorData = ""
+    // seqLabel = seqLabel :+ LabeledPoint(masterLink.size-1, Vectors.sparse(countWords, tempSeq))
+    // var dataset: Dataset[LabeledPoint] = temp.toDS
+    //
+    // println(dataset.select("*").show(false))
+    // masterAgg = masterAgg.union(dataset)
+    println("aggregate " + masterWordsIndex.size)
+    // content
+    vectorData
+  })
+
   val aggregateMongo = udf((content: Seq[String]) => {
 
     var tempSeq = content.map(row => {
