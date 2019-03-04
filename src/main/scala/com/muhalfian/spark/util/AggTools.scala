@@ -30,6 +30,7 @@ object AggTools {
                        "y" -> 24, "z" -> 25)
 
   val spark = OnlineStream.spark
+  val sc = spark.sparkContext
   import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
@@ -87,6 +88,9 @@ object AggTools {
 
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
+        val columns = Array("word", "index")
+        val newWord = sc.parallelize((word, index)).toDF(columns: _*)
+        OnlineStream.masterWord = OnlineStream.masterWord.union(newWord)
       }
 
       println("master word update : " + index + " - " + word(1).toDouble)
