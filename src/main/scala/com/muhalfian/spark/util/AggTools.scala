@@ -28,7 +28,7 @@ object AggTools {
   import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
-  var masterWordCount =
+  // var masterWordCount = 
 
   // read master word
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
