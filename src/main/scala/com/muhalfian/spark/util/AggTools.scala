@@ -6,6 +6,7 @@ import scala.collection.mutable.ArrayBuffer
 
 import com.muhalfian.spark.jobs.OnlineStream
 
+import org.bson.Document
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 
@@ -92,7 +93,9 @@ object AggTools {
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
         val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-        val newWord = sc.parallelize(Seq((word, index)))
+        // val newWord = sc.parallelize(Seq((word, index)))
+        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+        val newWord = Document.parse(s"{index: $index, word: '$kata'}")
         MongoSpark.save(newWord, writeConfig)
         // val columns = Array("word", "index")
         // val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
