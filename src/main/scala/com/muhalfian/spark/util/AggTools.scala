@@ -95,7 +95,10 @@ object AggTools {
         val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
         // val newWord = sc.parallelize(Seq((word, index)))
         println(s"doc save to mongodb : {index: $index, word: '$word'}")
-        val newWord = Document.parse(s"{index: $index, word: '$word'}")
+        // val newWord = Document.parse(s"{index: $index, word: '$word'}")
+        val newWord = sc.parallelize(
+          Seq(Document.parse(s"{index: $index, word: '$word'}").asJava))
+        )
         MongoSpark.save(newWord, writeConfig)
         // val columns = Array("word", "index")
         // val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
