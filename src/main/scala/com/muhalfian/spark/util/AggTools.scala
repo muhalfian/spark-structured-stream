@@ -65,6 +65,7 @@ object AggTools {
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
+      OnlineStream.masterWord.show()
       println(word(0))
       var index2 = OnlineStream.masterWord.filter($"word" isin (word(0)))
       index2.show()
