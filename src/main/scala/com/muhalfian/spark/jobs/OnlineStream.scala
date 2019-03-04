@@ -98,7 +98,7 @@ object OnlineStream extends StreamUtils {
 
 
     //Show Data after processed
-    val printConsole = selectedDF.writeStream
+    val printConsole = aggregateDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
