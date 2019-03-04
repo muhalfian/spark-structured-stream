@@ -6,6 +6,9 @@ import scala.collection.mutable.ArrayBuffer
 
 import com.muhalfian.spark.jobs.OnlineStream
 
+import com.mongodb.spark.MongoSpark
+import com.mongodb.spark.config._
+
 // import org.apache.spark.ml.linalg._
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.feature.LabeledPoint
