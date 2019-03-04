@@ -88,10 +88,13 @@ object AggTools {
 
       if(index == OnlineStream.masterWordCount){
         OnlineStream.masterWordCount += 1
-        val columns = Array("word", "index")
-        val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
-        OnlineStream.masterWord = OnlineStream.masterWord.union(newWord)
-        OnlineStream.masterWord.show()
+        val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+        val newWord = sc.parallelize(Seq((word, index)))
+        MongoSpark.save(newWord, writeConfig)
+        // val columns = Array("word", "index")
+        // val newWord = sc.parallelize(Seq((word, index))).toDF(columns: _*)
+        // OnlineStream.masterWord = OnlineStream.masterWord.union(newWord)
+        // OnlineStream.masterWord.show()
       }
 
       println("master word update : " + index + " - " + word(1).toDouble)
