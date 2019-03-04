@@ -28,7 +28,13 @@ object AggTools {
   import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
-  var masterWordCount = 0
+  var masterWordCount =
+
+  // read master word
+  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+  var masterWord = MongoSpark.load(spark, readConfig)
+  var masterWordCount = masterWord.count.toInt
+  // masterWord.show()
 
   val aggregate = udf((content: Seq[String], link: String) => {
 
@@ -65,9 +71,9 @@ object AggTools {
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
-      OnlineStream.masterWord.show()
+      masterWord.show()
       println(word(0))
-      var index2 = OnlineStream.masterWord.filter($"word" isin (word(0)))
+      var index2 = masterWord.filter($"word" isin (word(0)))
       index2.show()
       // println(index2)
       var index = 0
@@ -75,8 +81,8 @@ object AggTools {
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
       //             .getOrElse( OnlineStream.masterWordCount )
 
-      if(index == OnlineStream.masterWordCount){
-        OnlineStream.masterWordCount += 1
+      if(index == masterWordCount){
+        masterWordCount += 1
 
         // save new word to mongodb
         val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
@@ -94,7 +100,7 @@ object AggTools {
     println(tempSeq)
     // println(masterWordsIndex.size)
 
-    val vectorData = Vectors.sparse(OnlineStream.masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    val vectorData = Vectors.sparse(masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
     // println("aggregate " + masterWordsIndex.size)
     vectorData
