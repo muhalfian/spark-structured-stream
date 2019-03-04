@@ -103,10 +103,10 @@ object OnlineStream extends StreamUtils {
       // .option("truncate","false")
       .start()
 
-      val printConsole = masterWord.writeStream
-        .format("console")
-        .option("truncate","false")
-        .start()
+    val wordConsole = masterWord.writeStream
+      .format("console")
+      .option("truncate","false")
+      .start()
 
     // val saveMasterData = customDF
     //       .map(r => RowArtifact.rowMasterData(r))
@@ -116,6 +116,7 @@ object OnlineStream extends StreamUtils {
     //       .start()
 
     printConsole.awaitTermination()
+    wordConsole.awaitTermination()
     // saveMasterData.awaitTermination()
   }
 
