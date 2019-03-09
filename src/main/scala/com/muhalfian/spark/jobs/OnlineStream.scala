@@ -33,6 +33,7 @@ object OnlineStream extends StreamUtils {
   spark.sparkContext.setLogLevel("ERROR")
 
   val masterWord = MongoSpark.load(spark)
+  masterWord.show()
 
   def main(args: Array[String]): Unit = {
 
