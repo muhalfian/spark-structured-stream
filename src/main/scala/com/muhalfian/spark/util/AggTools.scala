@@ -33,7 +33,7 @@ object AggTools {
   // read master word
   // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
   // var masterWord = MongoSpark.load(spark, readConfig)
-  // var masterWordCount = masterWord.count.toInt
+  var masterWordCount = OnlineStream.masterWord.count.toInt
   // masterWord.show()
 
   val aggregate = udf((content: Seq[String], link: String) => {
