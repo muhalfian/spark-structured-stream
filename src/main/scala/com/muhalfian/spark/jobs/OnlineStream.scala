@@ -32,11 +32,7 @@ object OnlineStream extends StreamUtils {
   import spark.implicits._
   spark.sparkContext.setLogLevel("ERROR")
 
-  // read master word
-  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-  var masterWord = MongoSpark.load(spark, readConfig)
-  var masterWordCount = masterWord.count.toInt
-  masterWord.show()
+
 
   def main(args: Array[String]): Unit = {
 

@@ -30,10 +30,6 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   // var masterWordCount =
 
-  // read master word
-  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-  var masterWord = MongoSpark.load(spark, readConfig)
-  var masterWordCount = masterWord.count.toInt
   // masterWord.show()
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -68,6 +64,11 @@ object AggTools {
   })
 
   val aggregateMongo = udf((content: Seq[String]) => {
+
+    // read master word
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    var masterWord = MongoSpark.load(spark, readConfig)
+    var masterWordCount = masterWord.count.toInt
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
