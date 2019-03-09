@@ -69,6 +69,8 @@ object AggTools {
 
   val aggregateMongo = udf((content: Seq[String]) => {
 
+    OnlineStream.masterWord.show()
+
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       println(word(0))
