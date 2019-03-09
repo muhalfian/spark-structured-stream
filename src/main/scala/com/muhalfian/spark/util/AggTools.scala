@@ -35,7 +35,7 @@ object AggTools {
   // var masterWord = MongoSpark.load(spark, readConfig)
   val masterWord = MongoSpark.load(OnlineStream.spark)
   masterWord.show()
-  var masterWordCount = OnlineStream.masterWord.count.toInt
+  var masterWordCount = masterWord.count.toInt
   // masterWord.show()
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -71,13 +71,13 @@ object AggTools {
 
   val aggregateMongo = udf((content: Seq[String]) => {
 
-    OnlineStream.masterWord.show()
+    masterWord.show()
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       println(word(0))
-      OnlineStream.masterWord.show()
-      var index2 = OnlineStream.masterWord.filter($"word" isin (word(0)))
+      masterWord.show()
+      var index2 = masterWord.filter($"word" isin (word(0)))
       index2.show()
       // println(index2)
       var index = 0
