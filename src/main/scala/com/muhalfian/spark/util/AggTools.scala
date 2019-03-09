@@ -105,7 +105,8 @@ object AggTools {
     val vectorData = Vectors.sparse(masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
     // println("aggregate " + masterWordsIndex.size)
-    vectorData
+    // vectorData
+    content
   })
 
   def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
