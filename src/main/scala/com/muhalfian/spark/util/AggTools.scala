@@ -33,6 +33,8 @@ object AggTools {
   // read master word
   // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
   // var masterWord = MongoSpark.load(spark, readConfig)
+  val masterWord = MongoSpark.load(OnlineStream.spark)
+  masterWord.show()
   var masterWordCount = OnlineStream.masterWord.count.toInt
   // masterWord.show()
 

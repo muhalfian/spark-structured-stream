@@ -32,9 +32,6 @@ object OnlineStream extends StreamUtils {
   import spark.implicits._
   spark.sparkContext.setLogLevel("ERROR")
 
-  val masterWord = MongoSpark.load(spark)
-  masterWord.show()
-
   def main(args: Array[String]): Unit = {
 
     // ===================== LOAD SPARK SESSION ============================
