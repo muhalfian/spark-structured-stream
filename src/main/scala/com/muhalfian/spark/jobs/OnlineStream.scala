@@ -82,8 +82,8 @@ object OnlineStream extends StreamUtils {
     // val aggregateDF = selectedDF
     //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
-    val aggregateDF = selectedDF.map( r =>> {
-      var data = r.getAs[WrappedArray[String]](8).map( row => {
+    val aggregateDF = selectedDF.map( data => {
+      var data = data.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
 
