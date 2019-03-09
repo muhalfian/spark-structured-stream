@@ -103,7 +103,7 @@ object OnlineStream extends StreamUtils {
         val kata = word(0)
         var query = s"{index: $index, word: '$kata'}"
         println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        Document.parse(query)
+        // Document.parse(query)
       })
       data
     })
