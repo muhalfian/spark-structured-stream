@@ -54,6 +54,12 @@ object Dictionary extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
+    // read master word
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+    val masterWord = MongoSpark.load(spark, readConfig)
+    var masterWordCount = masterWord.count.toInt
+    masterWord.show()
+
     // =================== PREPROCESS SSparkSessionASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
@@ -70,6 +76,7 @@ object Dictionary extends StreamUtils {
 
     val dictionary = spark.sparkContext.parallelize(selectedDF.rdd.flatMap(r => {
       var data = r.getAs[WrappedArray[String]](8).map( row => {
+        masterWord.show()
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = AggTools.masterWordsIndex.indexWhere(_ == word(0))
         if(index == -1){
@@ -83,7 +90,7 @@ object Dictionary extends StreamUtils {
       data
     }).collect()).distinct
 
-    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word"))
+    val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"))
     MongoSpark.save(dictionary, writeConfig)
 
   }
