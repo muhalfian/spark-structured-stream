@@ -83,7 +83,7 @@ object OnlineStream extends StreamUtils {
     //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
     val aggregateDF = selectedDF.map( d => {
-      var data = d.getAs[WrappedArray[String]](8).map( row => {
+      d.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
 
@@ -104,8 +104,8 @@ object OnlineStream extends StreamUtils {
         var query = s"{index: $index, word: '$kata'}"
         println(s"doc save to mongodb : {index: $index, word: '$kata'}")
         // Document.parse(query)
+        row
       })
-      d
     })
 
     //
