@@ -5,7 +5,7 @@ import com.muhalfian.spark.util._
 import org.apache.spark.{SparkContext, SparkConf}
 import org.apache.spark.sql._
 
-import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet}
+import scala.collection.mutable.{MutableList, ArrayBuffer, Set, HashSet, WrappedArray}
 
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.functions.{explode, split, col, lit, concat, udf, from_json}
@@ -82,8 +82,8 @@ object OnlineStream extends StreamUtils {
     // val aggregateDF = selectedDF
     //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
-    val aggregateDF = selectedDF.map( data => {
-      var data = data.getAs[WrappedArray[String]](8).map( row => {
+    val aggregateDF = selectedDF.map( d => {
+      var data = d.getAs[WrappedArray[String]](8).map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
 
