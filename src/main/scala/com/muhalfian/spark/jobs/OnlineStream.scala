@@ -84,6 +84,7 @@ object OnlineStream extends StreamUtils {
 
     val aggregateDF = selectedDF.map( d => {
       d.getAs[WrappedArray[String]](8).map( row => {
+        masterWord.show()
         var word = row.drop(1).dropRight(1).split("\\,")
         var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
 
