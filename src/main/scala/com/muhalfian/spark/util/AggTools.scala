@@ -72,8 +72,8 @@ object AggTools {
     // read master word
     val readConfigTemp = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
     var masterWordTemp = MongoSpark.load(spark, readConfigTemp)
-    masterWordTemp.show()
-    masterWordCount = masterWordTemp.count.toInt
+    // masterWordTemp.show()
+    // masterWordCount = masterWordTemp.count.toInt
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
