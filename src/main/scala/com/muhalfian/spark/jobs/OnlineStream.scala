@@ -33,6 +33,8 @@ object OnlineStream extends StreamUtils {
   spark.sparkContext.setLogLevel("ERROR")
 
   val masterWord = MongoSpark.load(OnlineStream.spark)
+  masterWord.persist()
+  broadcast(masterWord)
   masterWord.show()
   var masterWordCount = masterWord.count.toInt
 
