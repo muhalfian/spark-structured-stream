@@ -27,7 +27,7 @@ trait StreamUtils {
       .config(conf)
       .getOrCreate()
 
-    MongoConnector(session.sparkContext).withDatabaseDo(WriteConfig(session), {db => db.drop()})
+    // MongoConnector(session.sparkContext).withDatabaseDo(WriteConfig(session), {db => db.drop()})
     session
   }
 
