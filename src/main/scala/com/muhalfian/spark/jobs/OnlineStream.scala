@@ -35,7 +35,7 @@ object OnlineStream extends StreamUtils {
   val masterWord = MongoSpark.load(OnlineStream.spark)
   masterWord.persist()
   broadcast(masterWord)
-  masterWord.show()
+  // masterWord.show()
   var masterWordCount = masterWord.count.toInt
 
   def main(args: Array[String]): Unit = {
