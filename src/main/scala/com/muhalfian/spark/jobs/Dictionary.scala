@@ -57,8 +57,9 @@ object Dictionary extends StreamUtils {
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // read master word
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-    val masterWord = MongoSpark.load(spark, readConfig)
+    // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+    // val masterWord = MongoSpark.load(spark, readConfig)
+    val masterWord = MongoSpark.load(OnlineStream.spark)
     var masterWordCount = masterWord.count.toInt
     masterWord.show()
 
