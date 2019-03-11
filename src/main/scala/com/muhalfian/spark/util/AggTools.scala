@@ -37,10 +37,6 @@ object AggTools {
   }).collect
 
 
-  var masterWordCount = 0
-  // masterWord.foreach(println)
-  // masterWord.show()
-
   val aggregate = udf((content: Seq[String], link: String) => {
 
     var tempSeq = content.map(row => {
@@ -79,25 +75,16 @@ object AggTools {
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
-      println(word(0))
 
-      // masterWord.show()
-      // var index2 = masterWord.filter($"word" isin (word(0)))
-      // index2.show()
-      // println(index2)
       var index = 0
       var indexStat = masterWord.indexWhere(_._1 == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
-        masterWord :+ Array((word(0), masterWord.size-1))
+        masterWord = masterWord ++ Array((word(0), masterWord.size-1))
         index = masterWord.size - 1
       } else {
         index = masterWord(indexStat)._2
       }
-
-      // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
-      // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
-      //             .getOrElse( OnlineStream.masterWordCount )
 
       // if(index == masterWordCount){
       //   masterWordCount += 1
