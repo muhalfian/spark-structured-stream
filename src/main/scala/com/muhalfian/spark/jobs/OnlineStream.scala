@@ -32,10 +32,9 @@ object OnlineStream extends StreamUtils {
   import spark.implicits._
   spark.sparkContext.setLogLevel("ERROR")
 
-  val masterWord = MongoSpark.load(OnlineStream.spark)
-  masterWord.persist()
-  // broadcast(masterWord)
-  masterWord.show()
+  // val masterWord = MongoSpark.load(OnlineStream.spark)
+  // masterWord.show()
+
   var masterWordCount = masterWord.count.toInt
 
   def main(args: Array[String]): Unit = {
@@ -81,35 +80,35 @@ object OnlineStream extends StreamUtils {
 
     // // ======================== AGGREGATION ================================
     //
-    // val aggregateDF = selectedDF
-    //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
-
-    val aggregateDF = selectedDF.map( d => {
-      d.getAs[WrappedArray[String]](8).map( row => {
-        masterWord.show()
-        var word = row.drop(1).dropRight(1).split("\\,")
-        var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
-
-        // var index = Try(
-        //
-        //         ).getOrElse(
-        //           masterWordCount
-        //         )
-
-        if(index == masterWordCount){
-          masterWordCount += 1
-        } else {
-          index = 0
-          word = null
-        }
-
-        val kata = word(0)
-        var query = s"{index: $index, word: '$kata'}"
-        println(s"doc save to mongodb : {index: $index, word: '$kata'}")
-        // Document.parse(query)
-        row
-      })
-    })
+    val aggregateDF = selectedDF
+      .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
+    //
+    // val aggregateDF = selectedDF.map( d => {
+    //   d.getAs[WrappedArray[String]](8).map( row => {
+    //     masterWord.show()
+    //     var word = row.drop(1).dropRight(1).split("\\,")
+    //     var index = masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
+    //
+    //     // var index = Try(
+    //     //
+    //     //         ).getOrElse(
+    //     //           masterWordCount
+    //     //         )
+    //
+    //     if(index == masterWordCount){
+    //       masterWordCount += 1
+    //     } else {
+    //       index = 0
+    //       word = null
+    //     }
+    //
+    //     val kata = word(0)
+    //     var query = s"{index: $index, word: '$kata'}"
+    //     println(s"doc save to mongodb : {index: $index, word: '$kata'}")
+    //     // Document.parse(query)
+    //     row
+    //   })
+    // })
 
     //
     // val customDF = aggregateDF
