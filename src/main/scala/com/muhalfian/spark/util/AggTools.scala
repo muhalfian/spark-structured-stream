@@ -37,7 +37,7 @@ object AggTools {
     (row.getAs[String](0),row.getAs[Integer](1))
   }).collect.toArray//.map(_.toSeq)
 
-  masterWord.foreach(println)
+  // masterWord.foreach(println)
   // var masterWordCount = masterWord.size
   var masterWordCount = 0
   // masterWord.foreach(println)
@@ -113,7 +113,7 @@ object AggTools {
       //   MongoSpark.save(newWord, writeConfig)
       // }
 
-      println("master word update : " + index + " - " + word(1).toDouble)
+      println("word : " + word(0) + "(" + index + ") - " + word(1).toDouble)
       (index, word(1).toDouble)
     }).toSeq
 
