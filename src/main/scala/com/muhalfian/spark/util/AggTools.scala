@@ -38,6 +38,7 @@ object AggTools {
   }).collect.toArray//.map(_.toSeq)
   .foreach(println)
   // var masterWordCount = masterWord.size
+  var masterWordCount = 0
   // masterWord.foreach(println)
   // masterWord.show()
 
