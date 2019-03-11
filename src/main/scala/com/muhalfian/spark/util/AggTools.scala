@@ -80,8 +80,8 @@ object AggTools {
       var indexStat = masterWord.indexWhere(_._1 == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
-        masterWord = masterWord ++ Array((word(0), (masterWord.size.toInt-1)))
         index = masterWord.size - 1
+        masterWord = masterWord ++ Array((word(0), index))
       } else {
         index = masterWord(indexStat)._2
       }
