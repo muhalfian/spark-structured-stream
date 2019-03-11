@@ -82,7 +82,7 @@ object AggTools {
       // index2.show()
       // println(index2)
       var index = 0
-      index = masterWords.indexWhere(_(0) == word(0))
+      index = masterWord.indexWhere(_(0) == word(0))
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
       //             .getOrElse( OnlineStream.masterWordCount )
