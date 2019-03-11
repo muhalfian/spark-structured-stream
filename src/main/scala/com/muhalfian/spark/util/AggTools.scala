@@ -81,7 +81,7 @@ object AggTools {
       if(indexStat == -1){
         println("add to database : " + word(0))
         index = masterWord.size - 1
-        masterWord = masterWord ++ Array((word(0), index))
+        masterWord = masterWord ++ Array((word(0), index.toDouble))
       } else {
         index = masterWord(indexStat)._2
       }
