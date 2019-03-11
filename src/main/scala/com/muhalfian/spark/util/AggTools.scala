@@ -36,7 +36,8 @@ object AggTools {
     // var data = row.getAs[String](0)
     (row.getAs[String](0),row.getAs[Integer](1))
   }).collect.toArray//.map(_.toSeq)
-  .foreach(println)
+
+  masterWord.foreach(println)
   // var masterWordCount = masterWord.size
   var masterWordCount = 0
   // masterWord.foreach(println)
