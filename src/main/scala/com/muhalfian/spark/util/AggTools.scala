@@ -87,14 +87,14 @@ object AggTools {
       // index2.show()
       // println(index2)
       var index = 0
-      // var indexStat = masterWord.indexWhere(_(0) == word(0))
-      // if(indexStat == -1){
-      //   println("add to database : " + word(0))
-      //   masterWord :+ Array(WrappedArray(word(0), masterWord.size-1))
-      //   index = masterWord.size - 1
-      // } else {
-      //   index = masterWord(indexStat)(1).toInt
-      // }
+      var indexStat = masterWord.indexWhere(_._1 == word(0))
+      if(indexStat == -1){
+        println("add to database : " + word(0))
+        masterWord :+ Array(WrappedArray(word(0), masterWord.size-1))
+        index = masterWord.size - 1
+      } else {
+        index = masterWord(indexStat)._2
+      }
 
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
