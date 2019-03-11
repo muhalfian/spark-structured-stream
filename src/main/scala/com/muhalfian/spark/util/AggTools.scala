@@ -82,7 +82,7 @@ object AggTools {
       // index2.show()
       // println(index2)
       var index = 0
-      indexStat = masterWord.indexWhere(_(0) == word(0))
+      var indexStat = masterWord.indexWhere(_(0) == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
         masterWord += WrappedArray(word(0), masterWord.size-1)
