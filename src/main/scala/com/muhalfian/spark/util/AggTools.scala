@@ -37,7 +37,7 @@ object AggTools {
     (data(0),data(1))
   }).collect.toArray//.map(_.toSeq)
   .foreach(println)
-  var masterWordCount = masterWord.size
+  // var masterWordCount = masterWord.size
   // masterWord.foreach(println)
   // masterWord.show()
 
@@ -118,7 +118,7 @@ object AggTools {
     println(tempSeq)
     // println(masterWordsIndex.size)
 
-    val vectorData = Vectors.sparse(masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
+    // val vectorData = Vectors.sparse(masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
 
     // println("aggregate " + masterWordsIndex.size)
     // vectorData
