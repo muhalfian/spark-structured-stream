@@ -35,7 +35,8 @@ object AggTools {
   var masterWord = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
     var data = row.getAs[WrappedArray[(String, Double)]](0)
     (data(0),data(1))
-  }).collect.map(_.toSeq).foreach(println)
+  }).collect//.map(_.toSeq)
+  .foreach(println)
   var masterWordCount = masterWord.size
   // masterWord.foreach(println)
   // masterWord.show()
