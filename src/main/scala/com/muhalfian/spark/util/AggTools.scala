@@ -70,30 +70,33 @@ object AggTools {
 
   val aggregateMongo = udf((content: Seq[String]) => {
 
+    println("=========================== UDF ===============================")
+    masterWord.foreach(println)
+    
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       println(word(0))
 
       // masterWord.show()
-      var index2 = masterWord.filter($"word" isin (word(0)))
-      index2.show()
+      // var index2 = masterWord.filter($"word" isin (word(0)))
+      // index2.show()
       // println(index2)
       var index = 0
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
       //             .getOrElse( OnlineStream.masterWordCount )
 
-      if(index == masterWordCount){
-        masterWordCount += 1
-
-        // save new word to mongodb
-        val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-        println(s"doc save to mongodb : {index: $index, word: '$word'}")
-        val newWord = sc.parallelize(
-          Seq(Document.parse(s"{index: $index, word: '$word'}"))
-        )
-        MongoSpark.save(newWord, writeConfig)
-      }
+      // if(index == masterWordCount){
+      //   masterWordCount += 1
+      //
+      //   // save new word to mongodb
+      //   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
+      //   println(s"doc save to mongodb : {index: $index, word: '$word'}")
+      //   val newWord = sc.parallelize(
+      //     Seq(Document.parse(s"{index: $index, word: '$word'}"))
+      //   )
+      //   MongoSpark.save(newWord, writeConfig)
+      // }
 
       println("master word update : " + index + " - " + word(1).toDouble)
       (index, word(1).toDouble)
