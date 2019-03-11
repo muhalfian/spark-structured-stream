@@ -33,8 +33,8 @@ object AggTools {
   // read master word
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
   var masterWord = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
-    var data = row.getAs[WrappedArray[(String, Double)]](0)
-    (data(0),data(1))
+    // var data = row.getAs[String](0)
+    (row.getAs[String](0),row.getAs[Double](1))
   }).collect.toArray//.map(_.toSeq)
   .foreach(println)
   // var masterWordCount = masterWord.size
