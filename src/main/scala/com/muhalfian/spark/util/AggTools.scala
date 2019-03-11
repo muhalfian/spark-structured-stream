@@ -71,7 +71,7 @@ object AggTools {
   val aggregateMongo = udf((content: Seq[String]) => {
 
     println("=========================== UDF ===============================")
-    masterWord.foreach(println)
+    // masterWord.foreach(println)
 
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
@@ -82,7 +82,15 @@ object AggTools {
       // index2.show()
       // println(index2)
       var index = 0
-      index = masterWord.indexWhere(_(0) == word(0))
+      indexStat = masterWord.indexWhere(_(0) == word(0))
+      if(indexStat == -1){
+        println("add to database : " + word(0))
+        masterWord += WrappedArray(word(0), masterWord.size-1)
+        index = masterWord.size - 1
+      } else {
+        index = masterWord(indexStat)(1)
+      }
+
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
       // var index = Try( OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0))
       //             .getOrElse( OnlineStream.masterWordCount )
