@@ -85,10 +85,10 @@ object AggTools {
       var indexStat = masterWord.indexWhere(_(0) == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
-        masterWord += WrappedArray(word(0), masterWord.size-1)
+        masterWord :+ Array(WrappedArray(word(0), masterWord.size-1))
         index = masterWord.size - 1
       } else {
-        index = masterWord(indexStat)(1)
+        index = masterWord(indexStat)(1).toInt
       }
 
       // var index = OnlineStream.masterWord.filter($"word" === word(0)).rdd.map(r => r.getInt(1)).collect.toList(0)
