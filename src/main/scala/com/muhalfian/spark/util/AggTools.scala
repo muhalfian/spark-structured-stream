@@ -32,7 +32,7 @@ object AggTools {
 
   // read master word
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-  var masterWord = MongoSpark.load(spark, readConfig).select("word", "index").collect.map(_.toSeq).map((_(0), _(1).toInt))
+  var masterWord = MongoSpark.load(spark, readConfig).select("word", "index").collect.map(_.toSeq).map(_.getAs(WrappedArray[(String, Double)]))
   var masterWordCount = masterWord.size
   // masterWord.foreach(println)
   // masterWord.show()
@@ -82,7 +82,7 @@ object AggTools {
       // index2.show()
       // println(index2)
       var index = 0
-      var indexStat = masterWord.indexWhere(_._1 == word(0))
+      var indexStat = masterWord.indexWhere(_(0) == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
         masterWord :+ Array(WrappedArray(word(0), masterWord.size-1))
