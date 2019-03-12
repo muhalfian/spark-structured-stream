@@ -73,15 +73,14 @@ object KafkaToMongo extends StreamUtils {
                     .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-    // val selectedDF = stemmedDF
-    //                 .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
-    //                 .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+    val aggregateDF = selectedDF
+                    .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
-    selectedDF.show()
+    aggregateDF.show()
 
     // =========================== SINK ====================================
 
-    MongoSpark.write(selectedDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_2").save();
+    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_3").save();
 
   }
 }

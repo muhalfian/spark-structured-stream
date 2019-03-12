@@ -30,12 +30,15 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordCount = 0
 
+  // MongoConfig
+  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"))
+  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"))
+
   // read master word
-  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-  var masterWord : Array[(String, Integer)] = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
+  var words : Array[(String, Integer)] = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
     (row.getAs[String](0),row.getAs[Integer](1))
   }).collect
-  var masterWordIndex = ArrayBuffer(masterWord: _*)
+  var masterWord = ArrayBuffer(words: _*)
 
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -78,44 +81,28 @@ object AggTools {
       var word = row.drop(1).dropRight(1).split("\\,")
 
       var index = 0
-      var indexStat = masterWordIndex.indexWhere(_._1 == word(0))
+      var indexStat = masterWord.indexWhere(_._1 == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
-        index = masterWordIndex.size - 1
-        // masterWord = masterWord ++ new Array[(String, Integer)]((word(0), index))
-        // masterWord = masterWord ++ Array((((word(0), index))))
-        // println(masterWord ++ Array((word(0), index)))
-        // masterWord ++ Array((word(0), index))
-        masterWordIndex += ((word(0), index))
+        index = masterWord.size
+        masterWord += ((word(0), index))
+
+        // Mongo save
+        val newWord = sc.parallelize(Seq(Document.parse(s"{index: $index, word: '$word'}")))
+        MongoSpark.save(newWord, writeConfig)
 
       } else {
-        index = masterWordIndex(indexStat)._2
+        index = masterWord(indexStat)._2
       }
-
-      // if(index == masterWordCount){
-      //   masterWordCount += 1
-      //
-      //   // save new word to mongodb
-      //   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-      //   println(s"doc save to mongodb : {index: $index, word: '$word'}")
-      //   val newWord = sc.parallelize(
-      //     Seq(Document.parse(s"{index: $index, word: '$word'}"))
-      //   )
-      //   MongoSpark.save(newWord, writeConfig)
-      // }
 
       println("word : " + word(0) + "(" + index + ") - " + word(1).toDouble)
       (index, word(1).toDouble)
     }).toSeq
 
     println(tempSeq)
-    // println(masterWordsIndex.size)
 
-    // val vectorData = Vectors.sparse(masterWordCount, tempSeq.sortWith(_._1 < _._1)).toDense.toString
-
-    // println("aggregate " + masterWordsIndex.size)
-    // vectorData
-    content
+    val vectorData = tempSeq.sortWith(_._1 < _._1)
+    vectorData
   })
 
   def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
