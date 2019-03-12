@@ -117,7 +117,7 @@ object AggTools {
         //   index = masterWordsIndex.size - 1
         // }
 
-        (word(0).toDouble, word(1).toDouble)
+        (word(0).toInt, word(1).toDouble)
       }).toSeq
 
       // var tempSeq = tempJava.map( row => {
