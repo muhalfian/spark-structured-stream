@@ -35,7 +35,7 @@ object AggTools {
   var masterWord : Array[(String, Integer)] = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
     (row.getAs[String](0),row.getAs[Integer](1))
   }).collect
-  var masterWordIndex = ArrayBuffer(masterWord: _*)
+  var masterWordsIndex = ArrayBuffer(masterWord: _*)
 
 
   val aggregate = udf((content: Seq[String], link: String) => {
