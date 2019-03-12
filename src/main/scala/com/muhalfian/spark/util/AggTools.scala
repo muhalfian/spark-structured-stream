@@ -86,7 +86,7 @@ object AggTools {
         // masterWord = masterWord ++ Array((((word(0), index))))
         // println(masterWord ++ Array((word(0), index)))
         // masterWord ++ Array((word(0), index))
-        masterWordIndex += (word(0), index)
+        masterWordIndex += ((word(0), index))
 
       } else {
         index = masterWordIndex(indexStat)._2
