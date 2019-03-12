@@ -43,7 +43,7 @@ object MongoToCluster extends StreamUtils {
     // ======================== READ MONGO ================================
 
     val readWord = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"), Some(ReadConfig(sc)))
-    AggTools.masterWordCount = MongoSpark.load(sc, readWord).size
+    AggTools.masterWordCount = MongoSpark.load(sc, readWord).count
 
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_3"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
@@ -72,7 +72,7 @@ object MongoToCluster extends StreamUtils {
     println("jumlah data tercluster : " + ClusterTools.clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
-    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, dict)
+    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, AggTools.masterWordCount)
     ClusterTools.distance = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.radius = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.n = Array.ofDim[Int](ClusterTools.clusterArray.size)
