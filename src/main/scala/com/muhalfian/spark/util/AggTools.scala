@@ -44,8 +44,9 @@ object AggTools {
       var word = row.drop(1).dropRight(1).split("\\,")
       var index = masterWordsIndex.indexWhere(_ == word(0))
       if(index == -1){
-        masterWordsIndex += word(0)
-        index = masterWordsIndex.size - 1
+
+        index = masterWordsIndex.size
+        masterWordsIndex += (word(0), index)
       }
 
       (index, word(1).toDouble)
