@@ -27,7 +27,7 @@ object AggTools {
   val sc = spark.sparkContext
   import spark.implicits._
 
-  var masterWordsIndex = ArrayBuffer[String]()
+  // var masterWordsIndex = ArrayBuffer[String]()
   var masterWordCount = 0
 
   // read master word
@@ -35,6 +35,7 @@ object AggTools {
   var masterWord : Array[(String, Integer)] = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
     (row.getAs[String](0),row.getAs[Integer](1))
   }).collect
+  var masterWordIndex = ArrayBuffer(masterWord: _*)
 
 
   val aggregate = udf((content: Seq[String], link: String) => {
@@ -77,17 +78,18 @@ object AggTools {
       var word = row.drop(1).dropRight(1).split("\\,")
 
       var index = 0
-      var indexStat = masterWord.indexWhere(_._1 == word(0))
+      var indexStat = masterWordIndex.indexWhere(_._1 == word(0))
       if(indexStat == -1){
         println("add to database : " + word(0))
-        index = masterWord.size - 1
+        index = masterWordIndex.size - 1
         // masterWord = masterWord ++ new Array[(String, Integer)]((word(0), index))
         // masterWord = masterWord ++ Array((((word(0), index))))
         // println(masterWord ++ Array((word(0), index)))
-        masterWord ++ Array((word(0), index))
+        // masterWord ++ Array((word(0), index))
+        masterWordIndex += (word(0), index)
 
       } else {
-        index = masterWord(indexStat)._2
+        index = masterWordIndex(indexStat)._2
       }
 
       // if(index == masterWordCount){
