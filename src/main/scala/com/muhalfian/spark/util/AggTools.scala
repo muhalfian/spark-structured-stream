@@ -32,9 +32,9 @@ object AggTools {
 
   // read master word
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_2"))
-  var masterWord = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
+  var masterWord : Array[(String, Integer)] = MongoSpark.load(spark, readConfig).select("word", "index").map(row => {
     (row.getAs[String](0),row.getAs[Integer](1))
-  }).map(_.toSeq).collect
+  }).collect
 
 
   val aggregate = udf((content: Seq[String], link: String) => {
