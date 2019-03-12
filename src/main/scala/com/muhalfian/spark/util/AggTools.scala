@@ -107,24 +107,36 @@ object AggTools {
 
   def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
     val aggregateArray = mongoRDD.map(r => {
-      var tempJava = r.get("text_selected", new java.util.ArrayList[String]())
+      var tempJava = r.get("text_aggregate", new java.util.ArrayList[String]())
 
       var tempSeq = tempJava.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
-        var index = masterWordsIndex.indexWhere(_ == word(0))
-        if(index == -1){
-          masterWordsIndex += word(0)
-          index = masterWordsIndex.size - 1
-        }
+        // var index = masterWordsIndex.indexWhere(_ == word(0))
+        // if(index == -1){
+        //   masterWordsIndex += word(0)
+        //   index = masterWordsIndex.size - 1
+        // }
 
-        (index, word(1).toDouble)
+        (word(0), word(1).toDouble)
       }).toSeq
 
+      // var tempSeq = tempJava.map( row => {
+      //   var word = row.drop(1).dropRight(1).split("\\,")
+      //   var index = masterWordsIndex.indexWhere(_ == word(0))
+      //   if(index == -1){
+      //     masterWordsIndex += word(0)
+      //     index = masterWordsIndex.size - 1
+      //   }
+      //
+      //   (index, word(1).toDouble)
+      // }).toSeq
+
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-      println(vectorData)
+
       vectorData
     }).collect()
 
+    println(aggregateArray)
     aggregateArray
   }
 
