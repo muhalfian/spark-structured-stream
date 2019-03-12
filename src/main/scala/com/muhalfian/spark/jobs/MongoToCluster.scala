@@ -43,7 +43,7 @@ object MongoToCluster extends StreamUtils {
     // ======================== READ MONGO ================================
 
     val readWord = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"), Some(ReadConfig(sc)))
-    AggTools.masterWordCount = MongoSpark.load(sc, readWord).count
+    AggTools.masterWordCount = MongoSpark.load(sc, readWord).count.toInt
 
     val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_3"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
