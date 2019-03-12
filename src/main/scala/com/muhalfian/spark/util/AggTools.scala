@@ -110,7 +110,7 @@ object AggTools {
       var tempJava = r.get("text_aggregate", new java.util.ArrayList[org.bson.Document]())
 
       var tempSeq = tempJava.map(row => {
-        (row.get(0, java.lang.Integer), row.get(1, java.lang.Double))
+        (row.get(0, new java.lang.Integer), row.get(1, new java.lang.Double))
       }).toSeq
       println(tempSeq)
       //   var word = row.drop(1).dropRight(1).split("\\,")
