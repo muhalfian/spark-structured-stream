@@ -82,7 +82,7 @@ object AggTools {
         println("add to database : " + word(0))
         index = masterWord.size - 1
         // masterWord = masterWord ++ new Array[(String, Integer)]((word(0), index))
-        masterWord = masterWord :+ Array(word(0), index)
+        masterWord = masterWord :+ ((word(0), index))
 
       } else {
         index = masterWord(indexStat)._2
