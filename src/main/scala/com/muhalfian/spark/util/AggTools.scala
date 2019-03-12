@@ -86,7 +86,7 @@ object AggTools {
         println("add to database : " + word(0))
         index = masterWord.size
         masterWord += ((word(0), index))
-        selectedWord = word(0)
+        var selectedWord = word(0)
         // Mongo save
         val newWord = sc.parallelize(Seq(Document.parse(s"{index: $index, word: '$selectedWord'}")))
         MongoSpark.save(newWord, writeConfig)
