@@ -42,21 +42,30 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== READ MONGO ================================
 
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_2"), Some(ReadConfig(sc)))
+    val readWord = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_3"), Some(ReadConfig(sc)))
+    AggTools.masterWordCount = MongoSpark.load(sc, readWord).size
+
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_3"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
 
     // ======================== AGGREGATION ================================
 
     // val dict = 3430
-    val dict = AggTools.initDictionary(mongoRDD)
-    println("dict : "+ dict)
-    val aggregateArray = AggTools.aggregateBatch(mongoRDD, dict)
+    println("dict : "+ AggTools.masterWordCount)
+
+    val aggregateArray = AggTools.aggregateBatch(mongoRDD, AggTools.masterWordCount)
     println("jumlah data aggregasi : " + aggregateArray.size )
+
+
+    // val dict = AggTools.initDictionary(mongoRDD)
+    // println("dict : "+ dict)
+    // val aggregateArray = AggTools.aggregateBatch(mongoRDD, dict)
+    // println("jumlah data aggregasi : " + aggregateArray.size )
 
     // ======================== CLUSTERING ================================
 
     var method = "average"
-    val n = 1900
+    val n = AggTools.masterWordCount
 
     ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
     val cluster = ClusterTools.clusterArray.distinct
@@ -87,9 +96,9 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    WriterUtil.saveBatchMongo("master_data_2",masterData)
-    WriterUtil.saveBatchMongo("master_cluster_2",masterCluster)
-    WriterUtil.saveBatchMongo("master_word_2",masterWord)
+    WriterUtil.saveBatchMongo("master_data_3",masterData)
+    WriterUtil.saveBatchMongo("master_cluster_3",masterCluster)
+    WriterUtil.saveBatchMongo("master_word_3",masterWord)
   }
 
 }
