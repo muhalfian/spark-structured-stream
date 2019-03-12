@@ -121,6 +121,7 @@ object AggTools {
       }).toSeq
 
       val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+      println(vectorData)
       vectorData
     }).collect()
 
