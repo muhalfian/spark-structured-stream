@@ -136,11 +136,16 @@ object ClusterTools {
       // var cent = centTupple.drop(1).dropRight(1).split("\\,")
       var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
       var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+      if(dist > data._4){
+        dist = 1
+      }
+
+      println((data._2, dist))
       (data._2, dist)
     })
 
-    println(distData)
-    distData
+    var selected = distData.sortWith(_._2 < _._2)(0)._1
+    selected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
     // vectorData.map(_.toString)
