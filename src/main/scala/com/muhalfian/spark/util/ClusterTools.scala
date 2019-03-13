@@ -61,8 +61,10 @@ object ClusterTools {
     var zeroVec = Vectors.sparse(size, Seq((0,0.0))).toDense.toArray
     var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
-  }).maxBy(_._2)._2
-  println("cluster outlier : " + outlier)
+  })
+  outlier.foreach(println)
+  // .maxBy(_._2)._2
+  // println("cluster outlier : " + outlier)
 
   // calculate rmax
   var rmax = centroidArr.filter(x => x._2 != 0).maxBy(_._4)._4
