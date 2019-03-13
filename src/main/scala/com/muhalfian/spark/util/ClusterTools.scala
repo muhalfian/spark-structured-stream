@@ -44,7 +44,7 @@ object ClusterTools {
   // var centroidArr = MongoSpark.load(spark, readConfig).collect
   // centroidArr.foreach(println)
   var centroidArr = MongoSpark.load(spark, readConfig).map(row => {
-    (row.getAs[Integer]("centroid"),row.getAs[Double]("cluster"),row.getAs[Integer]("n"),row.getAs[Array[String]]("radius"))
+    (row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
   }).collect
   centroidArr.foreach(println)
   // masterWord = ArrayBuffer(words: _*)
