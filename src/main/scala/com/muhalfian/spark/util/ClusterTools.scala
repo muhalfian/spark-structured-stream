@@ -49,7 +49,7 @@ object ClusterTools {
   }).collect
   centroidArr.foreach(println)
   var rmax = centroidArr.filter(x => x != 0).maxBy(_._4)(0)
-  println(rmax)
+  rmax.foreach(println)
 
   // masterWord = ArrayBuffer(words: _*)
 
