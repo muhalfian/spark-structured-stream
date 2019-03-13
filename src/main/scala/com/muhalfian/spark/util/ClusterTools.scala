@@ -1,8 +1,10 @@
 package com.muhalfian.spark.util
 
 import ALI._
-import org.bson.Document
+// import org.bson.Document
 import org.apache.spark.rdd.RDD
+import org.mongodb.scala.bson._
+import org.mongodb.scala.bson.collection.mutable.Document
 
 object ClusterTools {
   var clusterArray = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 1, 0, 0, 0, 0, 0, 6, 0, 7, 8, 0, 0, 6, 9, 0, 0, 0, 0, 9,
@@ -75,7 +77,7 @@ object ClusterTools {
       val size = n(index.toInt)
       // var clusterData = Document.parse(s"{cluster: $i, radius: $r, size: $size}")
       // clusterData.put("centroid", cent)
-      Document("cluster" -> i, "radius" -> r, "size" -> size, "centroid" -> cent)
+      Document("cluster" -> BsonInt32(i), "radius" -> BsonDouble(r), "size" -> BsonInt32(size), "centroid" -> BsonArray(cent))
     })
     masterCluster
   }
