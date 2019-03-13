@@ -48,6 +48,22 @@ object ClusterTools {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
   centroidArr.foreach(println)
+
+  // calculate outlier
+  var outlier = centroidArr.map(data => {
+    var cent = data._1.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+    // var cent = centTupple.drop(1).dropRight(1).split("\\,")
+    var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+    var zeroVec = Vectors.sparse(size, Seq(0,0.0)).toDense.toArray
+    var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, zeroVec)
+    (data._2, dist)
+  }).maxBy(_._2)._2
+  println("cluster outlier : " + outlier)
+
+  // calculate rmax
   var rmax = centroidArr.filter(x => x._2 != 0).maxBy(_._4)._4
   println(rmax)
 
