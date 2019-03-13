@@ -81,6 +81,11 @@ object OnlineStream extends StreamUtils {
     //
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
+
+    // val clusterDF = aggregateDF
+    //   .withColumn("new_cluster", AggTools.aggregateMongo(col("text_selected")))
+
+    
     //
     // val aggregateDF = selectedDF.map( d => {
     //   d.getAs[WrappedArray[String]](8).map( row => {

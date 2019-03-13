@@ -36,7 +36,8 @@ object ClusterTools {
     for ( i <- 1 to (aggregateArray.length - 1) ) {
       val cent = centroid(clusterArray(i))
       val data = aggregateArray(i)
-      distance(i) =  vlib.getDistance(cent, data)
+      // distance(i) =  vlib.getDistance(cent, data)
+      distance(i) = CosineSimilarity.cosineSimilarity(cent, data)
     }
   }
 
