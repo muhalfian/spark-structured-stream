@@ -62,7 +62,7 @@ object ClusterTools {
     var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
   }).maxBy(_._2)._2
-  println("cluster outlier : " + outlier)
+  println("unknown cluster : " + unknown)
 
   // calculate rmax
   var rmax = centroidArr.filter(x => x._2 != 0).maxBy(_._4)._4
