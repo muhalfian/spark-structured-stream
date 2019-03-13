@@ -42,10 +42,11 @@ object ClusterTools {
 
   // read master cluster
   var centroidArr = MongoSpark.load(spark, readConfig).collect
+  centroidArr.foreach(println)
   // .map(row => {
   //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
   // }).collect
-  println(centroid)
+  // println(centroid)
   // masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
