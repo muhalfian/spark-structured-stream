@@ -73,7 +73,7 @@ object ClusterTools {
       val r = radius(index.toInt)
       val i = index.toInt
       val size = n(index.toInt)
-      Document.parse(s"{cluster: $i, centroid: $cent, radius: $r, size: $size}")
+      Document.parse(s"{cluster: $i, centroid: "+cent+s", radius: $r, size: $size}")
     })
     masterCluster
   }
