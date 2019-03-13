@@ -49,9 +49,9 @@ object ClusterTools {
   }).collect
   centroidArr.foreach(println)
 
-  // calculate outlier
+  // calculate unknown cluster
   var size = AggTools.masterWord.size
-  var outlier = centroidArr.map(data => {
+  var unknown = centroidArr.map(data => {
     var cent = data._1.map( row => {
       var word = row.drop(1).dropRight(1).split("\\,")
       (word(0).toInt, word(1).toDouble)
@@ -61,10 +61,8 @@ object ClusterTools {
     var zeroVec = Array.fill(size)(0.01)
     var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
-  })
-  outlier.foreach(println)
-  // .maxBy(_._2)._2
-  // println("cluster outlier : " + outlier)
+  }).maxBy(_._2)._2
+  println("cluster outlier : " + outlier)
 
   // calculate rmax
   var rmax = centroidArr.filter(x => x._2 != 0).maxBy(_._4)._4
