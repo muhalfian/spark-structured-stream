@@ -41,12 +41,13 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
+  // var centroidArr = MongoSpark.load(spark, readConfig).collect
+  // centroidArr.foreach(println)
   var centroidArr = MongoSpark.load(spark, readConfig).collect
+  .map(row => {
+    (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
+  }).collect
   centroidArr.foreach(println)
-  // .map(row => {
-  //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
-  // }).collect
-  // println(centroid)
   // masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
@@ -127,12 +128,12 @@ object ClusterTools {
 
     val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
 
-    val distData = centroidArr.map(data => {
-      var cent = data(1).toSeq
-      var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
-      var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
-      (data(0)(0), data(2), dist)
-    })
+    // val distData = centroidArr.map(data => {
+    //   var cent = data(1).toSeq
+    //   var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+    //   var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+    //   (data(0)(0), data(2), dist)
+    // })
 
     // println(tempSeq)
     //
