@@ -149,7 +149,7 @@ object ClusterTools {
     if(selected._2 == 1) {
       clusterSelected = 0
     }
-    selected
+    clusterSelected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
     // vectorData.map(_.toString)
