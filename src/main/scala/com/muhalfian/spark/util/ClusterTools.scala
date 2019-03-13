@@ -61,7 +61,7 @@ object ClusterTools {
     var zeroVec = Array.fill(size)(0.01)
     var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
-  }).maxBy(_._2)._2
+  }).maxBy(_._2)._1
   println("unknown cluster : " + unknown)
 
   // calculate rmax
