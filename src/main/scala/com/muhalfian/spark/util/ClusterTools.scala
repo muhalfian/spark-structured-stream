@@ -48,6 +48,9 @@ object ClusterTools {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
   centroidArr.foreach(println)
+  var rmax = centroidArr.filter(x => x != 0).maxBy(_._4)(0)
+  println(rmax)
+
   // masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
@@ -136,11 +139,12 @@ object ClusterTools {
       // var cent = centTupple.drop(1).dropRight(1).split("\\,")
       var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
       var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+      println((data._2, dist, data._4 ))
+
       if(dist > data._4){
         dist = 1
       }
 
-      println((data._2, dist))
       (data._2, dist)
     })
 
