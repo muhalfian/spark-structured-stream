@@ -23,7 +23,7 @@ object CosineSimilarity {
    * Return the dot product of the 2 arrays
    * e.g. (a[0]*b[0])+(a[1]*a[2])
    */
-  def dotProduct(x: Array[Double], y: Array[Double]): Int = {
+  def dotProduct(x: Array[Double], y: Array[Double]): Double = {
     (for((a, b) <- x zip y) yield a * b) sum
   }
 
