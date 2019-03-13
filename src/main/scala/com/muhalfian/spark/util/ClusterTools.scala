@@ -50,6 +50,7 @@ object ClusterTools {
   centroidArr.foreach(println)
 
   // calculate outlier
+  var size = AggTools.masterWord.size
   var outlier = centroidArr.map(data => {
     var cent = data._1.map( row => {
       var word = row.drop(1).dropRight(1).split("\\,")
@@ -137,7 +138,7 @@ object ClusterTools {
     println("=========================== Online Clustering ===============================")
     // masterWord.foreach(println)
 
-    var size = AggTools.masterWord.size
+    size = AggTools.masterWord.size
 
     // convert New Data to Array
     var tempSeq = content.map( row => {
