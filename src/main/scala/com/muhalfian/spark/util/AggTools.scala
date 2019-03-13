@@ -105,7 +105,7 @@ object AggTools {
     vectorData.map(_.toString)
   })
 
-  def aggregateBatch(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
+  def mongoToArray(mongoRDD:RDD[org.bson.Document], size:Int): Array[Array[Double]] = {
     val aggregateArray = mongoRDD.map(r => {
       var tempJava = r.get("text_aggregate", new java.util.ArrayList[String]())
 
