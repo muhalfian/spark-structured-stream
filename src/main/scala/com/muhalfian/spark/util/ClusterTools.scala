@@ -34,7 +34,7 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  centroid = MongoSpark.load(spark, readConfig).map(row => {
+  var centroidArr = MongoSpark.load(spark, readConfig).map(row => {
     (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Array[String]](3))
   }).collect
   println(centroid)
