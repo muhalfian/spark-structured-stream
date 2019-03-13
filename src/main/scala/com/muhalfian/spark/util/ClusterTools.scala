@@ -1,10 +1,8 @@
 package com.muhalfian.spark.util
 
 import ALI._
-// import org.bson.Document
+import org.bson.Document
 import org.apache.spark.rdd.RDD
-import org.mongodb.scala.bson._
-import org.mongodb.scala.bson.collection.mutable.Document
 
 object ClusterTools {
   var clusterArray = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 1, 0, 0, 0, 0, 0, 6, 0, 7, 8, 0, 0, 6, 9, 0, 0, 0, 0, 9,
@@ -67,17 +65,16 @@ object ClusterTools {
 
   def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Int]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
-      val start = """["""
-      val end = """]"""
+      val start = """[\""""
+      val end = """\"]"""
       // val cent = centroid(index.toInt).mkString(start, ",", end)
-      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString)
+      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
       println(cent)
       val r = radius(index.toInt)
       val i = index.toInt
       val size = n(index.toInt)
-      // var clusterData = Document.parse(s"{cluster: $i, radius: $r, size: $size}")
-      // clusterData.put("centroid", cent)
-      Document("cluster" -> BsonInt32(i), "radius" -> BsonDouble(r), "size" -> BsonInt32(size), "centroid" -> BsonArray(cent))
+      var clusterData = Document.parse(s"{cluster: $i, radius: $r, size: $size}")
+      clusterData.put("centroid", cent)
     })
     masterCluster
   }
