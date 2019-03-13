@@ -138,6 +138,6 @@ object ClusterTools {
     //
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
     // vectorData.map(_.toString)
-    vectorData
+    // vectorData
   })
 }
