@@ -39,7 +39,7 @@ object ClusterTools {
   //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
   // }).collect
   println(centroid)
-  masterWord = ArrayBuffer(words: _*)
+  // masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
@@ -104,25 +104,25 @@ object ClusterTools {
     masterCluster
   }
 
-  // val onlineClustering = udf((content: Seq[String]) => {
-  //
-  //   println("=========================== Online Clustering ===============================")
-  //   // masterWord.foreach(println)
-  //
-  //   var size = AggTools.masterWord.size
-  //
-  //   // convert New Data to Array
-  //   var tempSeq = content.map( row => {
-  //     var word = row.drop(1).dropRight(1).split("\\,")
-  //     (word(0).toInt, word(1).toDouble)
-  //   }).toSeq
-  //
-  //   val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-  //
-  //   // println(tempSeq)
-  //   //
-  //   // val vectorData = tempSeq.sortWith(_._1 < _._1)
-  //   // vectorData.map(_.toString)
-  //   tempSeq
-  // })
+  val onlineClustering = udf((content: Seq[String]) => {
+
+    println("=========================== Online Clustering ===============================")
+    // masterWord.foreach(println)
+
+    var size = AggTools.masterWord.size
+
+    // convert New Data to Array
+    var tempSeq = content.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+
+    val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+
+    // println(tempSeq)
+    //
+    // val vectorData = tempSeq.sortWith(_._1 < _._1)
+    // vectorData.map(_.toString)
+    vectorData
+  })
 }

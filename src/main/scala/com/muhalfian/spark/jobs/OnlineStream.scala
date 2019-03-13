@@ -82,8 +82,8 @@ object OnlineStream extends StreamUtils {
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
-    // val clusterDF = aggregateDF
-    //   .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+    val clusterDF = aggregateDF
+      .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
 
     //
     // val aggregateDF = selectedDF.map( d => {
@@ -128,7 +128,7 @@ object OnlineStream extends StreamUtils {
 
 
     //Show Data after processed
-    val printConsole = aggregateDF.writeStream
+    val printConsole = clusterDF.writeStream
       .format("console")
       // .option("truncate","false")
       .start()
