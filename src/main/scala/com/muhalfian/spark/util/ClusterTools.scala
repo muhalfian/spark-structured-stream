@@ -58,7 +58,8 @@ object ClusterTools {
     }).toSeq
     // var cent = centTupple.drop(1).dropRight(1).split("\\,")
     var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
-    var zeroVec = Vectors.sparse(size, Seq((0,0.0))).toDense.toArray
+    var zeroVec = Vectors.sparse(size, Seq((1,0.0))).toDense.toArray
+    println(zeroVec)
     var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
   })
