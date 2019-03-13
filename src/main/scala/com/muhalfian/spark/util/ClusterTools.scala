@@ -128,7 +128,7 @@ object ClusterTools {
     }).toSeq
 
     val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-
+    newData
     // val distData = centroidArr.map(data => {
     //   var cent = data(1).toSeq
     //   var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
