@@ -37,7 +37,7 @@ object ClusterTools {
       val cent = centroid(clusterArray(i))
       val data = aggregateArray(i)
       // distance(i) =  vlib.getDistance(cent, data)
-      dist = 1 - CosineSimilarity.cosineSimilarity(cent, data)
+      var dist = 1 - CosineSimilarity.cosineSimilarity(cent, data)
       if(dist < 0) {
         distance(i) = 0
       } else {
