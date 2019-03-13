@@ -27,6 +27,10 @@ object ClusterTools {
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_3"))
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_3"))
 
+  val spark = OnlineStream.spark
+  val sc = spark.sparkContext
+  import spark.implicits._
+
   // read master cluster
   centroid = MongoSpark.load(spark, readConfig).map(row => {
     (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Array[String]](3))
