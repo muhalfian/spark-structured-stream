@@ -35,7 +35,7 @@ object CosineSimilarity {
     math.sqrt(x map(i => i*i) sum)
   }
 
-}
+
 
  def similarity(t1: Map[String, Int], t2: Map[String, Int]): Double = {
      //word, t1 freq, t2 freq
@@ -63,4 +63,5 @@ object CosineSimilarity {
 
      val cos = p1 / (Math.sqrt(p2) * Math.sqrt(p3))
      cos
+  }
 }
