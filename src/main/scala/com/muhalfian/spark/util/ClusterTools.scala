@@ -1,5 +1,7 @@
 package com.muhalfian.spark.util
 
+import com.muhalfian.spark.jobs.OnlineStream
+
 import ALI._
 import org.bson.Document
 import org.apache.spark.rdd.RDD
@@ -8,7 +10,12 @@ import org.bson.Document
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 
-import com.muhalfian.spark.jobs.OnlineStream
+import org.apache.spark.sql.functions.{split, col, udf}
+
+import scala.collection.mutable.{ArrayBuffer, WrappedArray}
+
+import org.apache.spark.ml.linalg.{Vector, Vectors}
+
 
 object ClusterTools {
   var clusterArray = Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 3, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 1, 0, 0, 0, 0, 0, 6, 0, 7, 8, 0, 0, 6, 9, 0, 0, 0, 0, 9,
