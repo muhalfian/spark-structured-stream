@@ -48,8 +48,8 @@ object ClusterTools {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
   centroidArr.foreach(println)
-  var rmax = centroidArr.filter(x => x != 0).maxBy(_._4)
-  rmax.foreach(println)
+  var rmax = centroidArr.filter(x => x != 0).maxBy(_._4)._4
+  println(rmax)
 
   // masterWord = ArrayBuffer(words: _*)
 
