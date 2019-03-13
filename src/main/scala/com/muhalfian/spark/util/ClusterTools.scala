@@ -144,7 +144,11 @@ object ClusterTools {
       (data._2, dist)
     })
 
-    var selected = distData.sortWith(_._2 < _._2)(0)._1
+    var selected = distData.sortWith(_._2 < _._2)(0)
+    var clusterSelected = selected._1
+    if(selected._2 == 1) {
+      clusterSelected = 0
+    }
     selected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
