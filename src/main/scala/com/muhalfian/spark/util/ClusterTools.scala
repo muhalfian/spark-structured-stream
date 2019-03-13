@@ -129,8 +129,11 @@ object ClusterTools {
     val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
 
     val distData = centroidArr.map(data => {
-      var centTupple = data._1
-      var cent = centTupple.drop(1).dropRight(1).split("\\,")
+      var cent = data._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+      // var cent = centTupple.drop(1).dropRight(1).split("\\,")
       var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
       var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
       (data._2, dist)
