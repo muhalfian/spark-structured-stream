@@ -33,11 +33,11 @@ object ClusterTools {
   val sc = spark.sparkContext
   import spark.implicits._
 
-  // read master cluster
-  var centroidArr = MongoSpark.load(spark, readConfig).map(row => {
-    (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Array[String]](3))
-  }).collect
-  println(centroid)
+  // // read master cluster
+  // var centroidArr = MongoSpark.load(spark, readConfig).map(row => {
+  //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Array[String]](3))
+  // }).collect
+  // println(centroid)
   // masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
