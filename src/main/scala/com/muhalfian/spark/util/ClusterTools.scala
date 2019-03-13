@@ -21,7 +21,7 @@ object ClusterTools {
   var centroid = Array[Array[Double]](Array(1.0))
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
-  var n = Array.ofDim[Int](1
+  var n = Array.ofDim[Int](1)
 
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_3"))
