@@ -45,7 +45,7 @@ object ClusterTools {
   // centroidArr.foreach(println)
   var centroidArr = MongoSpark.load(spark, readConfig)
   .map(row => {
-    (row.getAs[new org.bson.types.ObjectId]("_id"),row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+    (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
   centroidArr.foreach(println)
   // masterWord = ArrayBuffer(words: _*)
@@ -127,16 +127,17 @@ object ClusterTools {
     }).toSeq
 
     val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-    newData
-    // val distData = centroidArr.map(data => {
-    //   var cent = data(1).toSeq
-    //   var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
-    //   var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
-    //   (data(0)(0), data(2), dist)
-    // })
 
-    // println(tempSeq)
-    //
+    val distData = centroidArr.map(data => {
+      var cent = data(1).toSeq
+      var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+      var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+      (data(2), dist)
+    })
+
+    println(distData)
+    distData
+
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
     // vectorData.map(_.toString)
     // vectorData
