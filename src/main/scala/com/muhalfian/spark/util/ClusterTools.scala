@@ -26,19 +26,20 @@ object ClusterTools {
   var n = Array.ofDim[Int](1)
 
   // MongoConfig
-  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_3"))
-  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_3"))
+  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_4"))
+  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_4"))
 
   val spark = OnlineStream.spark
   val sc = spark.sparkContext
   import spark.implicits._
 
-  // // read master cluster
-  // var centroidArr = MongoSpark.load(spark, readConfig).map(row => {
-  //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Array[String]](3))
+  // read master cluster
+  var centroidArr = MongoSpark.load(spark, readConfig).collect
+  // .map(row => {
+  //   (row.getAs[org.bson.types.ObjectId](0),row.getAs[Integer](1),row.getAs[Double](2),row.getAs[Integer](3),row.getAs[Array[String]](4))
   // }).collect
-  // println(centroid)
-  // masterWord = ArrayBuffer(words: _*)
+  println(centroid)
+  masterWord = ArrayBuffer(words: _*)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
