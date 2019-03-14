@@ -217,7 +217,7 @@ object ClusterTools {
       val start = """[""""
       val end = """"]"""
       var newCentroidStr = newCentroid.mkString(start, "\",\"", end)
-      var newDoc = Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")))
       MongoSpark.save(newDoc, writeConfig)
 
     } else {

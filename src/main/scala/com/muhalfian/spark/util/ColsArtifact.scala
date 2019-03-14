@@ -33,6 +33,21 @@ object ColsArtifact {
     text_aggregate: String
   )
 
+  case class masterDataUpdate(
+    link: String,
+    source: String,
+    description: String,
+    image: String,
+    publish_date: String,
+    title: String,
+    text: String,
+    text_preprocess: String,
+    text_selected: String,
+    text_aggregate: String,
+    new_cluster: Integer,
+    to_centroid: Double
+  )
+
   case class dataInit(
     link: String,
     source: String,

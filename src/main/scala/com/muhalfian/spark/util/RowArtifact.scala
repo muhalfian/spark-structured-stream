@@ -20,7 +20,7 @@ object RowArtifact {
   }
 
   def rowMasterDataUpdate(r:Row) = {
-    ColsArtifact.masterData(
+    ColsArtifact.masterDataUpdate(
       r.getAs[String](0),
       r.getAs[String](1),
       r.getAs[String](2),
