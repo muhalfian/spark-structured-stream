@@ -193,17 +193,17 @@ object ClusterTools {
         (word(0).toInt, word(1).toDouble)
       }).toSeq
       var centroidSelectedArr = Vectors.sparse(size, centroidSelected.sortWith(_._1 < _._1)).toDense.toArray
-      var newCentroid = Array.ofDim[Double](centroidSelectedArr.size)
+      var newCentroidArr = Array.ofDim[Double](centroidSelectedArr.size)
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroid(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
-      var centroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
+      var newCentroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
-      var size = selected._3 + 1
-      var radius = selected._4
+      var newSize = selected._3 + 1
+      var newRadius = selected._4
 
       var index = centroidArr.indexWhere(_._2 == clusterSelected)
-      centroidArr(index) = (centroid, clusterSelected, size, radius)
+      centroidArr(index) = (newCentroid, clusterSelected, newSize, newRadius)
     }
     centroidArr.foreach(println)
     clusterSelected
