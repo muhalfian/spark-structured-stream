@@ -197,7 +197,7 @@ object ClusterTools {
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroid(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
-      var newCentroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
+      var newCentroid : Array[String] = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
       var newSize = selected._3 + 1
       var newRadius = selected._4
