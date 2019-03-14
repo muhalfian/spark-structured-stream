@@ -115,28 +115,28 @@ object ClusterTools {
     }
   }
 
-  // def updateRadius(content: Seq[String], index: Integer ) = {
-  //   size = AggTools.masterWord.size
-  //
-  //   // convert New Data to Array
-  //   var tempSeq = content.map( row => {
-  //     var word = row.drop(1).dropRight(1).split("\\,")
-  //     (word(0).toInt, word(1).toDouble)
-  //   }).toSeq
-  //   val dataVec = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-  //
-  //   // loop centroid data then calculate distance
-  //   val centroid = centroidArr.filter(_._2 == index)(0)._1.map( row => {
-  //       var word = row.drop(1).dropRight(1).split("\\,")
-  //       (word(0).toInt, word(1).toDouble)
-  //     }).toSeq
-  //   var centVec = Vectors.sparse(size, centroid.sortWith(_._1 < _._1)).toDense.toArray
-  //
-  //   // calculate distance
-  //   var radius = 1 - CosineSimilarity.cosineSimilarity(centVec, dataVec)
-  //
-  //   radius
-  // }
+  def updateRadius(content: Seq[String], index: Integer ) = {
+    size = AggTools.masterWord.size
+
+    // convert New Data to Array
+    var tempSeq = content.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+    val dataVec = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+
+    // loop centroid data then calculate distance
+    val centroid = centroidArr.filter(_._2 == index)(0)._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+    var centVec = Vectors.sparse(size, centroid.sortWith(_._1 < _._1)).toDense.toArray
+
+    // calculate distance
+    var radius = 1 - CosineSimilarity.cosineSimilarity(centVec, dataVec)
+
+    radius
+  }
 
   def masterDataAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterData = mongoRDD.zipWithIndex.map( row => {
@@ -217,8 +217,8 @@ object ClusterTools {
       val start = """[""""
       val end = """"]"""
       var newCentroidStr = newCentroid.mkString(start, "\",\"", end)
-      var newData = Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")
-      MongoSpark.save(newData, writeConfig)
+      var newDoc = Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")
+      MongoSpark.save(newDoc, writeConfig)
 
     } else {
       println("============= UPDATE CLUSTER =====================")
