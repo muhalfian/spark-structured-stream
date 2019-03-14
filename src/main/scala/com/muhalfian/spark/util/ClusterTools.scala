@@ -128,7 +128,7 @@ object ClusterTools {
     val masterCluster = cluster.map( index => {
       val start = """[""""
       val end = """"]"""
-      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end
+      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
       val r = radius(index.toInt)
       val i = index.toInt
       val size = n(index.toInt)
