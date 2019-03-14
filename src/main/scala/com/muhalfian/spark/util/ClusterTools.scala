@@ -195,7 +195,7 @@ object ClusterTools {
       var centroidSelectedArr = Vectors.sparse(size, centroidSelected.sortWith(_._1 < _._1)).toDense.toArray
       var newCentroidArr = Array.ofDim[Double](centroidSelectedArr.size)
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
-        newCentroid(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
+        newCentroidArr(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
       var newCentroid : Array[String] = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
