@@ -115,6 +115,29 @@ object ClusterTools {
     }
   }
 
+  def updateRadius(content: Seq[String], index: Integer ) = {
+    size = AggTools.masterWord.size
+
+    // convert New Data to Array
+    var tempSeq = content.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+    val dataVec = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+
+    // loop centroid data then calculate distance
+    val centroid = centroidArr.filter(_._2 == index)(0)._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+    var centVec = Vectors.sparse(size, centroid.sortWith(_._1 < _._1)).toDense.toArray
+
+    // calculate distance
+    var radius = 1 - CosineSimilarity.cosineSimilarity(centVec, dataVec)
+
+    radius
+  }
+
   def masterDataAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterData = mongoRDD.zipWithIndex.map( row => {
       row._1.put("cluster", clusterArray(row._2.toInt))
@@ -185,17 +208,24 @@ object ClusterTools {
       clusterSelected = distData.size + 1
       println("cluster selected = " + clusterSelected)
       println("cluster distance = " + selected._2)
-      val start = """[""""
-      val end = """"]"""
       var newSize = 1
       var newCentroid = newData.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
       var newRadius = 0
       centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
+
+      // add mongo
+      val start = """[""""
+      val end = """"]"""
+      var newCentroidStr = newCentroid.mkString(start, "\",\"", end)
+      var newData = Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")
+      MongoSpark.save(newData, writeConfig)
+
     } else {
       println("============= UPDATE CLUSTER =====================")
       clusterSelected = selected._1
       println("cluster selected = " + clusterSelected)
       println("cluster distance = " + selected._2)
+
       // update centroid
       var centroidSelected = centroidArr.filter(_._2 == clusterSelected)(0)._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
@@ -211,8 +241,11 @@ object ClusterTools {
       var updateSize = selected._3 + 1
       var updateRadius = selected._4
 
+      // update centroid
       var index = centroidArr.indexWhere(_._2 == clusterSelected)
       centroidArr(index) = (updateCentroid, clusterSelected, updateSize, updateRadius)
+
+      // update mongo
     }
     centroidArr.foreach(println)
     clusterSelected

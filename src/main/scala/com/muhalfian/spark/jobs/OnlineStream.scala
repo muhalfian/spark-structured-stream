@@ -84,6 +84,7 @@ object OnlineStream extends StreamUtils {
 
     val clusterDF = aggregateDF
       .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+      .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
     //
     // val aggregateDF = selectedDF.map( d => {
@@ -134,12 +135,12 @@ object OnlineStream extends StreamUtils {
       .start()
 
 
-    // val saveMasterData = customDF
-    //       .map(r => RowArtifact.rowMasterData(r))
-    //       .writeStream
-    //       .outputMode("append")
-    //       .foreach(WriterUtil.masterData)
-    //       .start()
+    val saveMasterData = clusterDF
+          .map(r => RowArtifact.rowMasterData(r))
+          .writeStream
+          .outputMode("append")
+          .foreach(WriterUtil.masterData)
+          .start()
 
     printConsole.awaitTermination()
     // saveMasterData.awaitTermination()
