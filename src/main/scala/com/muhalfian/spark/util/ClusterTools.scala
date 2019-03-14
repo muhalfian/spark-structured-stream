@@ -66,7 +66,7 @@ object ClusterTools {
 
   // calculate rmax
   var dmax = centroidArr.filter(x => x._2 != unknown).maxBy(_._4)._4
-  println(rmax)
+  println("dmax = " + dmax)
 
   // cluster definition
   var alpha = 0.1
@@ -165,7 +165,7 @@ object ClusterTools {
 
       // compare to radius
       var beta = 1
-      dt = beta * dmax
+      var dt = beta * dmax
       if(dd > dt){
         dd = 1
       }
@@ -182,12 +182,12 @@ object ClusterTools {
       var size = 1
       var centroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
       var radius = 0
-      clusterArray += (centroid, clusterSelected, size, radius)
+      centroidArr += (centroid, clusterSelected, size, radius)
     } else {
       var clusterSelected = selected._1
       // update centroid
       var dataMap = newData.toMap
-      var centroidSelected = centroidArr.filter(_._2 === clusterSelected)._1.map( row => {
+      var centroidSelected = centroidArr.filter(_._2 == clusterSelected)._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         (word(0).toInt, word(1).toDouble)
       }).toSeq
@@ -201,10 +201,10 @@ object ClusterTools {
       var size = selected._3 + 1
       var radius = selected._4
 
-      var index = clusterArray.indexWhere(_._2 == clusterSelected)
-      clusterArray(index) = (centroid, cluster, size, radius)
+      var index = centroidArr.indexWhere(_._2 == clusterSelected)
+      centroidArr(index) = (centroid, cluster, size, radius)
     }
-    clusterArray.foreach(println)
+    centroidArr.foreach(println)
     clusterSelected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
