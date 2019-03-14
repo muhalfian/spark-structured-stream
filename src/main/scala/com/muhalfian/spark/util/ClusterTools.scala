@@ -188,7 +188,6 @@ object ClusterTools {
     } else {
       clusterSelected = selected._1
       // update centroid
-      var dataMap = newData.toMap
       var centroidSelected = centroidArr.filter(_._2 == clusterSelected)(0)._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         (word(0).toInt, word(1).toDouble)
@@ -196,7 +195,7 @@ object ClusterTools {
       var centroidSelectedArr = Vectors.sparse(size, centroidSelected.sortWith(_._1 < _._1)).toDense.toArray
       var newCentroid = Array.ofDim[Double](centroidSelectedArr.size)
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
-        newCentroid(i) = centroidSelectedArr(i) + (alpha * (dataMap(i) - centroidSelectedArr(i)))
+        newCentroid(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
       var centroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
