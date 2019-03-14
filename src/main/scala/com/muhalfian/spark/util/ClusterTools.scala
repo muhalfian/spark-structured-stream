@@ -174,11 +174,17 @@ object ClusterTools {
       (data._2, dd, data._3, data._4)
     })
 
+    println("=============== CLUSTER DISTANCE LIST ====================")
+    distData.foreach(println)
+
     var clusterSelected = 0
     var selected = distData.minBy(_._2)
     if(selected._2 == 1) {
       // make new cluster
+      println("============= NEW CLUSTER =====================")
       clusterSelected = distData.size + 1
+      println("cluster selected = " + clusterSelected)
+      println("cluster distance = " + selected._2)
       val start = """[""""
       val end = """"]"""
       var newSize = 1
@@ -186,7 +192,10 @@ object ClusterTools {
       var newRadius = 0
       centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
     } else {
+      println("============= UPDATE CLUSTER =====================")
       clusterSelected = selected._1
+      println("cluster selected = " + clusterSelected)
+      println("cluster distance = " + selected._2)
       // update centroid
       var centroidSelected = centroidArr.filter(_._2 == clusterSelected)(0)._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
