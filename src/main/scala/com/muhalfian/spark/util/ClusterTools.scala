@@ -181,10 +181,10 @@ object ClusterTools {
       clusterSelected = distData.size + 1
       val start = """[""""
       val end = """"]"""
-      var size = 1
-      var centroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
-      var radius = 0
-      centroidArr += ((centroid, clusterSelected, size, radius))
+      var newSize = 1
+      var newCentroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
+      var newRadius = 0
+      centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
     } else {
       clusterSelected = selected._1
       // update centroid
