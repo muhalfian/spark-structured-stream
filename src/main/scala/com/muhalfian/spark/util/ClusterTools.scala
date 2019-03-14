@@ -128,7 +128,7 @@ object ClusterTools {
     val masterCluster = cluster.map( index => {
       val start = """[""""
       val end = """"]"""
-      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end
       val r = radius(index.toInt)
       val i = index.toInt
       val size = n(index.toInt)
@@ -182,9 +182,9 @@ object ClusterTools {
       val start = """[""""
       val end = """"]"""
       var size = 1
-      var centroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+      var centroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
       var radius = 0
-      centroidArr += (centroid, clusterSelected, size, radius)
+      centroidArr += ((centroid, clusterSelected, size, radius))
     } else {
       clusterSelected = selected._1
       // update centroid
@@ -198,7 +198,7 @@ object ClusterTools {
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroid(i) = centroidSelectedArr(i) + (alpha * (dataMap(i) - centroidSelectedArr(i)))
       }
-      var centroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+      var centroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
       var size = selected._3 + 1
       var radius = selected._4
