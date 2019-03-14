@@ -170,13 +170,14 @@ object ClusterTools {
         dd = 1
       }
 
-      (data._2, dd)
+      (data._2, dd, data._3, data._4)
     })
 
+    var clusterSelected = 0
     var selected = distData.minBy(_._2)
     if(selected._2 == 1) {
       // make new cluster
-      var clusterSelected = distData.size + 1
+      clusterSelected = distData.size + 1
       val start = """[""""
       val end = """"]"""
       var size = 1
@@ -184,14 +185,14 @@ object ClusterTools {
       var radius = 0
       centroidArr += (centroid, clusterSelected, size, radius)
     } else {
-      var clusterSelected = selected._1
+      clusterSelected = selected._1
       // update centroid
       var dataMap = newData.toMap
-      var centroidSelected = centroidArr.filter(_._2 == clusterSelected)._1.map( row => {
+      var centroidSelected = centroidArr.filter(_._2 == clusterSelected)(0)._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         (word(0).toInt, word(1).toDouble)
       }).toSeq
-      var centroidSelectedArr = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+      var centroidSelectedArr = Vectors.sparse(size, centroidSelected.sortWith(_._1 < _._1)).toDense.toArray
       var newCentroid = Array.ofDim[Double](centroidSelectedArr.size)
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroid(i) = centroidSelectedArr(i) + (alpha * (dataMap(i) - centroidSelectedArr(i)))
@@ -202,7 +203,7 @@ object ClusterTools {
       var radius = selected._4
 
       var index = centroidArr.indexWhere(_._2 == clusterSelected)
-      centroidArr(index) = (centroid, cluster, size, radius)
+      centroidArr(index) = (centroid, clusterSelected, size, radius)
     }
     centroidArr.foreach(println)
     clusterSelected
