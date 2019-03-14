@@ -188,7 +188,7 @@ object ClusterTools {
       val start = """[""""
       val end = """"]"""
       var newSize = 1
-      var newCentroid = newData.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString)
+      var newCentroid = newData.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
       var newRadius = 0
       centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
     } else {
@@ -206,7 +206,7 @@ object ClusterTools {
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroidArr(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
-      var updateCentroid : Array[String] = newCentroidArr.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString)
+      var updateCentroid : Array[String] = newCentroidArr.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
 
       var updateSize = selected._3 + 1
       var updateRadius = selected._4
