@@ -136,10 +136,10 @@ object OnlineStream extends StreamUtils {
 
 
     val saveMasterData = clusterDF
-          .map(r => RowArtifact.rowMasterData(r))
+          .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
           .outputMode("append")
-          .foreach(WriterUtil.masterData)
+          .foreach(WriterUtil.masterDataUpdate)
           .start()
 
     printConsole.awaitTermination()
