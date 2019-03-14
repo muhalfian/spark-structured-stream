@@ -59,16 +59,19 @@ object ClusterTools {
     // var cent = centTupple.drop(1).dropRight(1).split("\\,")
     var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
     var zeroVec = Array.fill(size)(0.01)
-    var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
+    var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     (data._2, dist)
-  }).maxBy(_._2)._1
+  }).minBy(_._2)._1
   println("unknown cluster : " + unknown)
 
   // calculate rmax
-  var rmax = centroidArr.filter(x => x._2 != 0).maxBy(_._4)._4
+  var dmax = centroidArr.filter(x => x._2 != unknown).maxBy(_._4)._4
   println(rmax)
 
-  // masterWord = ArrayBuffer(words: _*)
+  // cluster definition
+  var alpha = 0.1
+
+
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
@@ -138,6 +141,7 @@ object ClusterTools {
     println("=========================== Online Clustering ===============================")
     // masterWord.foreach(println)
 
+    // update size array [word]
     size = AggTools.masterWord.size
 
     // convert New Data to Array
@@ -145,31 +149,62 @@ object ClusterTools {
       var word = row.drop(1).dropRight(1).split("\\,")
       (word(0).toInt, word(1).toDouble)
     }).toSeq
-
     val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
 
+    // loop centroid data then calculate distance
     val distData = centroidArr.map(data => {
       var cent = data._1.map( row => {
         var word = row.drop(1).dropRight(1).split("\\,")
         (word(0).toInt, word(1).toDouble)
       }).toSeq
-      // var cent = centTupple.drop(1).dropRight(1).split("\\,")
       var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
-      var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
-      println((data._2, dist, data._4 ))
 
-      if(dist > data._4){
-        dist = 1
+      // calculate distance
+      var dd = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+      println((data._2, dd, data._3 ))
+
+      // compare to radius
+      var beta = 1
+      dt = beta * dmax
+      if(dd > dt){
+        dd = 1
       }
 
-      (data._2, dist)
+      (data._2, dd)
     })
 
-    var selected = distData.sortWith(_._2 < _._2)(0)
-    var clusterSelected = selected._1
+    var selected = distData.minBy(_._2)
     if(selected._2 == 1) {
-      clusterSelected = 0
+      // make new cluster
+      var clusterSelected = distData.size + 1
+      val start = """[""""
+      val end = """"]"""
+      var size = 1
+      var centroid = newData.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+      var radius = 0
+      clusterArray += (centroid, clusterSelected, size, radius)
+    } else {
+      var clusterSelected = selected._1
+      // update centroid
+      var dataMap = newData.toMap
+      var centroidSelected = centroidArr.filter(_._2 === clusterSelected)._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+      var centroidSelectedArr = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+      var newCentroid = Array.ofDim[Double](centroidSelectedArr.size)
+      for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
+        newCentroid(i) = centroidSelectedArr(i) + (alpha * (dataMap(i) - centroidSelectedArr(i)))
+      }
+      var centroid = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+
+      var size = selected._3 + 1
+      var radius = selected._4
+
+      var index = clusterArray.indexWhere(_._2 == clusterSelected)
+      clusterArray(index) = (centroid, cluster, size, radius)
     }
+    clusterArray.foreach(println)
     clusterSelected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
