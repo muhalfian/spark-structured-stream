@@ -197,13 +197,13 @@ object ClusterTools {
       for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
         newCentroidArr(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
       }
-      var newCentroid : Array[String] = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
+      var updateCentroid : Array[String] = newCentroid.zipWithIndex.map( row => (row._1, row._2)).filter(_._2 > 0.0).map(_.toString)
 
-      var newSize = selected._3 + 1
-      var newRadius = selected._4
+      var updateSize = selected._3 + 1
+      var updateRadius = selected._4
 
       var index = centroidArr.indexWhere(_._2 == clusterSelected)
-      centroidArr(index) = (newCentroid, clusterSelected, newSize, newRadius)
+      centroidArr(index) = (updateCentroid, clusterSelected, updateSize, updateRadius)
     }
     centroidArr.foreach(println)
     clusterSelected
