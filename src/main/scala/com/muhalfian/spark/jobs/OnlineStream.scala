@@ -51,7 +51,7 @@ object OnlineStream extends StreamUtils {
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
-      .option("startingOffsets", "earliest")
+      .option("startingOffsets", "latest")
       .option("maxOffsetsPerTrigger", "100")
       .load()
 
