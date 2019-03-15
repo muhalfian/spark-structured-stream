@@ -41,9 +41,9 @@ object ColsArtifact {
     publish_date: String,
     title: String,
     text: String,
-    text_preprocess: Seq[String],
-    text_selected: Seq[String],
-    text_aggregate: Seq[String],
+    text_preprocess: Array[String],
+    text_selected: Array[String],
+    text_aggregate: Array[String],
     new_cluster: Integer,
     to_centroid: Double
   )
