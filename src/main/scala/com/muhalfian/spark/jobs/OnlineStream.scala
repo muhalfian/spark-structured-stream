@@ -47,15 +47,16 @@ object OnlineStream extends StreamUtils {
     // ======================== READ STREAM ================================
 
     // read data stream from Kafka
-    val kafka = spark.read
-    // .readStream
+    val kafka = spark
+      // .read
+      .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
-      // .option("startingOffsets", "latest")
-      // .option("maxOffsetsPerTrigger", "100")
-      .option("startingOffsets", """{"online_media":{"0":4000}}""")
-      .option("endingOffsets", """{"online_media":{"0":6000}}""")
+      .option("startingOffsets", "latest")
+      .option("maxOffsetsPerTrigger", "100")
+      // .option("startingOffsets", """{"online_media":{"0":4000}}""")
+      // .option("endingOffsets", """{"online_media":{"0":6000}}""")
       .load()
 
     // Transform data stream to Dataframe
