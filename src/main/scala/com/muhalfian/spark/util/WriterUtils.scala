@@ -88,7 +88,7 @@ object WriterUtil {
 
     override def open(partitionId: Long, version: Long): Boolean = {
       mongoConnector = MongoConnector(writeConfig.asOptions)
-      masterDataCounts = new ArrayBuffer[ColsArtifact.masterData]()
+      masterDataCounts = new ArrayBuffer[ColsArtifact.masterDataUpdate]()
       true
     }
   }
