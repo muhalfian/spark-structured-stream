@@ -15,6 +15,7 @@ import org.apache.spark.sql.functions.{split, col, udf}
 import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 
 import org.apache.spark.ml.linalg.{Vector, Vectors}
+import java.util.Calendar
 
 
 object ClusterTools {
@@ -33,7 +34,7 @@ object ClusterTools {
   var n = Array.ofDim[Int](1)
 
   // MongoConfig
-  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_4"))
+  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_10"))
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_cluster_4"))
 
   val spark = OnlineStream.spark
@@ -219,7 +220,8 @@ object ClusterTools {
       val start = """[""""
       val end = """"]"""
       var newCentroidStr = newCentroid.mkString(start, "\",\"", end)
-      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")))
+      val datetime = Calendar.getInstance().getTime()
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr, $datetime: datetime}")))
       MongoSpark.save(newDoc, writeConfig)
 
     } else {
@@ -247,7 +249,10 @@ object ClusterTools {
       var index = centroidArr.indexWhere(_._2 == clusterSelected)
       centroidArr(index) = (updateCentroid, clusterSelected, updateSize, updateRadius)
 
-      // update mongo
+      // update - add to mongo
+      val datetime = Calendar.getInstance().getTime()
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, $centroid: updateCentroid, $datetime: datetime}")))
+      MongoSpark.save(newDoc, writeConfig)
     }
     centroidArr.foreach(println)
     clusterSelected
