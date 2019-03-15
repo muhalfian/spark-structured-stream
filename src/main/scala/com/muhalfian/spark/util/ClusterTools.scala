@@ -250,8 +250,11 @@ object ClusterTools {
       centroidArr(index) = (updateCentroid, clusterSelected, updateSize, updateRadius)
 
       // update - add to mongo
+      val start = """[""""
+      val end = """"]"""
+      var updateCentroidStr = updateCentroid.mkString(start, "\",\"", end)
       val datetime = Calendar.getInstance().getTime()
-      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, $centroid: updateCentroid, $datetime: datetime}")))
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, $centroid: updateCentroidStr, $datetime: datetime}")))
       MongoSpark.save(newDoc, writeConfig)
     }
     centroidArr.foreach(println)
