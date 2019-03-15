@@ -43,7 +43,7 @@ object ColsArtifact {
     text: String,
     text_preprocess: Seq[String],
     text_selected: Seq[String],
-    text_aggregate: Seq[String]],
+    text_aggregate: Seq[String],
     new_cluster: Integer,
     to_centroid: Double
   )
