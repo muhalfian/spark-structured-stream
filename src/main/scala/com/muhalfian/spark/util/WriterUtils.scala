@@ -53,13 +53,13 @@ object WriterUtil {
     }
   }
 
-  val masterDataUpdate = new ForeachWriter[ColsArtifact.masterData] {
+  val masterDataUpdate = new ForeachWriter[ColsArtifact.masterDataUpdate] {
     var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_data_10"
     val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
     var mongoConnector: MongoConnector = _
-    var masterDataCounts: ArrayBuffer[ColsArtifact.masterData] = _
+    var masterDataCounts: ArrayBuffer[ColsArtifact.masterDataUpdate] = _
 
-    override def process(value: ColsArtifact.masterData): Unit = {
+    override def process(value: ColsArtifact.masterDataUpdate): Unit = {
       masterDataCounts.append(value)
     }
 
