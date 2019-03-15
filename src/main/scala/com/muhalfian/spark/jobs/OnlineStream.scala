@@ -128,11 +128,7 @@ object OnlineStream extends StreamUtils {
     // =========================== SINK ====================================
 
 
-    //Show Data after processed
-    val printConsole = clusterDF.writeStream
-      .format("console")
-      // .option("truncate","false")
-      .start()
+
 
 
     val saveMasterData = clusterDF
@@ -142,8 +138,15 @@ object OnlineStream extends StreamUtils {
           .foreach(WriterUtil.masterDataUpdate)
           .start()
 
-    printConsole.awaitTermination()
+    //Show Data after processed
+    val printConsole = clusterDF.writeStream
+          .format("console")
+          // .option("truncate","false")
+          .start()
+
     saveMasterData.awaitTermination()
+    printConsole.awaitTermination()
+    
   }
 
 }
