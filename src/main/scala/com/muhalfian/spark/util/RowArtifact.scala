@@ -28,9 +28,9 @@ object RowArtifact {
       r.getAs[String](4),
       r.getAs[String](5),
       r.getAs[String](6),
-      r.getAs[Array[String]](7),
-      r.getAs[Array[String]](8),
-      r.getAs[Array[String]](9),
+      r.getAs[Seq[String]](7),
+      r.getAs[Seq[String]](8),
+      r.getAs[Seq[String]](9),
       r.getAs[Integer](10),
       r.getAs[Double](11)
     )
