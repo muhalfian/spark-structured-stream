@@ -86,6 +86,12 @@ object OnlineStream extends StreamUtils {
       .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
       .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
+    val customDF = clusterDF
+      .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+      .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+      .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+      .withColumn("text", TextTools.stringify(col("text").cast("string")))
+
     //
     // val aggregateDF = selectedDF.map( d => {
     //   d.getAs[WrappedArray[String]](8).map( row => {
@@ -131,7 +137,7 @@ object OnlineStream extends StreamUtils {
 
 
 
-    val saveMasterData = clusterDF
+    val saveMasterData = customDF
           .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
           .outputMode("append")
@@ -139,14 +145,14 @@ object OnlineStream extends StreamUtils {
           .start()
 
     //Show Data after processed
-    val printConsole = clusterDF.writeStream
+    val printConsole = customDF.writeStream
           .format("console")
           // .option("truncate","false")
           .start()
 
     saveMasterData.awaitTermination()
     printConsole.awaitTermination()
-    
+
   }
 
 }
