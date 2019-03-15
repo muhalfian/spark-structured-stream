@@ -221,7 +221,7 @@ object ClusterTools {
       val end = """"]"""
       var newCentroidStr = newCentroid.mkString(start, "\",\"", end)
       // val datetime = Calendar.getInstance().getTime()
-      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, $centroid: newCentroidStr}")))
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize}")))
       MongoSpark.save(newDoc, writeConfig)
 
     } else {
@@ -254,7 +254,7 @@ object ClusterTools {
       val end = """"]"""
       var updateCentroidStr = updateCentroid.mkString(start, "\",\"", end)
       // val datetime = Calendar.getInstance().getTime()
-      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, $centroid: updateCentroidStr}")))
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize}")))
       MongoSpark.save(newDoc, writeConfig)
     }
     centroidArr.foreach(println)
