@@ -143,7 +143,7 @@ object OnlineStream extends StreamUtils {
           .start()
 
     printConsole.awaitTermination()
-    // saveMasterData.awaitTermination()
+    saveMasterData.awaitTermination()
   }
 
 }

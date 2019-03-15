@@ -188,7 +188,7 @@ object ClusterTools {
 
       // calculate distance
       var dd = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
-      println((data._2, dd, data._3 ))
+      // println((data._2, dd, data._3 ))
 
       // compare to radius
       var beta = 1
@@ -200,8 +200,8 @@ object ClusterTools {
       (data._2, dd, data._3, data._4)
     })
 
-    println("=============== CLUSTER DISTANCE LIST ====================")
-    distData.foreach(println)
+    // println("=============== CLUSTER DISTANCE LIST ====================")
+    // distData.foreach(println)
 
     var clusterSelected = 0
     var selected = distData.minBy(_._2)
@@ -257,7 +257,7 @@ object ClusterTools {
       var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, centroid: $updateCentroidStr, datetime: $datetime}")))
       MongoSpark.save(newDoc, writeConfig)
     }
-    centroidArr.foreach(println)
+    // centroidArr.foreach(println)
     clusterSelected
 
     // val vectorData = tempSeq.sortWith(_._1 < _._1)
