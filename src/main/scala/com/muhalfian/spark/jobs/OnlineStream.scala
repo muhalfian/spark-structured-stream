@@ -47,7 +47,8 @@ object OnlineStream extends StreamUtils {
     // ======================== READ STREAM ================================
 
     // read data stream from Kafka
-    val kafka = spark.readStream
+    val kafka = spark.read
+    // .readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
