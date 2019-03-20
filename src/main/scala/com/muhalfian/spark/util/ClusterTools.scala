@@ -44,7 +44,11 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroidArr = MasterClusterModel.getMasterClusterArr()
+  var centroids = MasterClusterModel.masterCluster.map(row => {
+    (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+  }).collect
+  var centroidArr = ArrayBuffer(centroids: _*)
+  // MasterClusterModel.getMasterClusterArr()
   var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
