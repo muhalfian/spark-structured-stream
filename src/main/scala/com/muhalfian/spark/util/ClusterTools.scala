@@ -33,6 +33,7 @@ object ClusterTools {
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
   var n = Array.ofDim[Int](1)
+  var size = AggTools.masterWord.size
 
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_10"))

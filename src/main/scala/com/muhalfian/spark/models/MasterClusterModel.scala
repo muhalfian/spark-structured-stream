@@ -1,4 +1,4 @@
-package com.muhalfian.spark.util
+package com.muhalfian.spark.models
 
 import com.muhalfian.spark.jobs.OnlineStream
 import com.muhalfian.spark.util._
