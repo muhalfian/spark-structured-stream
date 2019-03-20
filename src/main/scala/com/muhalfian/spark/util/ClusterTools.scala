@@ -44,7 +44,11 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroids = MasterClusterModel.masterCluster.map(row => {
+  val uri = PropertiesLoader.mongoUrl
+  val db = PropertiesLoader.mongoDb
+  val collection = "master_cluster_3"
+  val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection)))
+  var centroids = masterCluster.map(row => {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
   var centroidArr = ArrayBuffer(centroids: _*)
