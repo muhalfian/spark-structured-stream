@@ -35,16 +35,16 @@ object ClusterTools {
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_10"))
   val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_3"))
 
-  val spark = OnlineStream.spark
-  val sc = spark.sparkContext
-  import spark.implicits._
+  // val spark = OnlineStream.spark
+  // val sc = spark.sparkContext
+  // import spark.implicits._
 
   // read master cluster
   // var centroidArr = MongoSpark.load(spark, readConfig).collect
   // centroidArr.foreach(println)
   // ReadUtils.readMongo("master_cluster_3").foreach(println)
-  var centroids = ReadUtils.readMongo("master_cluster_3")
-  // var centroids = MongoSpark.load(spark, readConfig)
+  // var centroids = ReadUtils.readMongo("master_cluster_3")
+  var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
