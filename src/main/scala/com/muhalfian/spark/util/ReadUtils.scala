@@ -7,11 +7,13 @@ import org.apache.spark.rdd.RDD
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 
+import org.apache.spark.sql._
+
 object ReadUtils {
   val uri = PropertiesLoader.mongoUri
   val db = PropertiesLoader.mongoDb
 
-  def readMongo(collection: String) : RDD[Document] = {
+  def readMongo(collection: String) : RDD[Row] = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
     MongoSpark.load(OnlineStream.spark, readConfig)
   }
