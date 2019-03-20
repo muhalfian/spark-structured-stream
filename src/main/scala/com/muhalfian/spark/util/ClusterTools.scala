@@ -25,7 +25,7 @@ object ClusterTools {
   val vlib: VectorLib = new VectorLib()
 
   // Initialization Cluster Tools
-  var clusterArray = Array.ofDim[Integer](1)
+  var clusterArray = Array.ofDim[Int](1)
   var centroid = Array[Array[Double]](Array(1.0))
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
