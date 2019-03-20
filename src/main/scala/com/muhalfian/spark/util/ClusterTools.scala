@@ -46,6 +46,7 @@ object ClusterTools {
   // var centroids = ReadUtils.readMongo("master_cluster_3")
   var centroidstry = MongoSpark.load(OnlineStream.spark, readConfig)
   println(centroidstry.getClass)
+  println("=================================== TIPE DATA =================================")
 
   var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
@@ -55,7 +56,7 @@ object ClusterTools {
   //   (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   // }).collect
   var centroidArr = ArrayBuffer(centroids: _*)
-  centroidArr.foreach(println)
+  // centroidArr.foreach(println)
 
   // calculate unknown cluster
   var size = AggTools.masterWord.size
