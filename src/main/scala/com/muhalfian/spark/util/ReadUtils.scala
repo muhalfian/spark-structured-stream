@@ -13,8 +13,12 @@ object ReadUtils {
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
 
+  val spark = OnlineStream.spark
+  val sc = spark.sparkContext
+  import spark.implicits._
+
   def readMongo(collection: String) : RDD[Row] = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
-    MongoSpark.load(OnlineStream.spark.sparkContext, readConfig)
+    MongoSpark.load(OnlineStream.spark, readConfig)
   }
 }
