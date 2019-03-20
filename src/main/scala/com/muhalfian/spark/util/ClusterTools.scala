@@ -51,7 +51,7 @@ object ClusterTools {
   var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
-    val cent = row.get("centroid", new java.util.Arrays[String])
+    val cent = row.get("centroid", new java.util.Arrays).map(_.toString)
     (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
   }).collect
   // .map(row => {
