@@ -21,8 +21,10 @@ object MasterClusterModel {
   // master cluster
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
-  val collection = "master_cluster_3"
-  val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection)))
+  val collectionRead = "master_cluster_3"
+  val collectionWrite = "master_cluster_10"
+
+  val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterClusterArr = getMasterClusterArr()
   var size = AggTools.masterWord.size
   var unknownCluster = getUnknownCluster()
@@ -53,6 +55,6 @@ object MasterClusterModel {
   }
 
   def save(newDoc: RDD[org.bson.Document]) = {
-    WriterUtil.saveBatchMongo(collection, newDoc)
+    WriterUtil.saveBatchMongo(collectionWrite, newDoc)
   }
 }
