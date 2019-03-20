@@ -64,7 +64,6 @@ object AggTools {
       vectorData
     }).collect()
 
-    println(aggregateArray)
     aggregateArray
   }
 
