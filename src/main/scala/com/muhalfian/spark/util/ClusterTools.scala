@@ -229,16 +229,16 @@ object ClusterTools {
   }
 
   def actionUpdateCluster(newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
-    var newCluster = selectedCluster._2
+    var newCluster = selectedCluster._1
     // ============= UPDATE CLUSTER =====================
     println("cluster selected = " + newCluster)
-    println("cluster distance = " + selected._2)
+    println("cluster distance = " + selectedCluster._2)
 
     // update centroid
     var centroid = convertSeqToFeatures(centroidArr.filter(_._2 == newCluster)(0)._1)
     var updateCentroid  = getUpdateCentroid(centroid, newData)
 
-    var updateSize = selectedCluster._3 + 1
+    var updateSize = selectedCluster._2 + 1
     var updateRadius = getUpdateRadius(selectedCluster)
 
     // sink
