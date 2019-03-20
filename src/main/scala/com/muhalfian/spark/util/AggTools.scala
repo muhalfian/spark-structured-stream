@@ -5,6 +5,7 @@ import org.apache.spark.sql.functions.{split, col, udf}
 import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 
 import com.muhalfian.spark.jobs.OnlineStream
+import com.muhalfian.spark.models._
 
 import org.bson.Document
 import com.mongodb.spark.MongoSpark
@@ -41,13 +42,10 @@ object AggTools {
       } else {
         index = masterWord(indexStat)._2
       }
-
-      println("word : " + word(0) + "(" + index + ") - " + word(1).toDouble)
       (index, word(1).toDouble)
     }).toSeq
 
     println(tempSeq)
-
     val vectorData = tempSeq.sortWith(_._1 < _._1)
     vectorData.map(_.toString)
   })
