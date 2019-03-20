@@ -161,7 +161,7 @@ object ClusterTools {
       // compare to radius
       val beta = 1
       val dt = beta * dmax
-      val action = if(dd > dt) 1 else 0
+      val action : Integer = if(dd > dt) 1 else 0
 
       // cluster, n, radius, distance, action
       (data._2, data._3, data._4, dd, action)
