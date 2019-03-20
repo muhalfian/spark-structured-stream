@@ -153,7 +153,7 @@ object ClusterTools {
     stringData
   }
 
-  def getDistanceToCentroids(newData : Array[Double]) : Array[(Integer, Integer, Double, Double, Integer)] = {
+  def getDistanceToCentroids(newData : Array[Double]) : ArrayBuffer[(Integer, Integer, Double, Double, Integer)] = {
     val distance = centroidArr.map(data => {
       val centVec = convertSeqToFeatures(data._1)
       val dd = vlib.getDistance(centVec, newData)
@@ -170,7 +170,7 @@ object ClusterTools {
     distance
   }
 
-  def getTimeStamp() : String = {
+  def getTimeStamp() : Long = {
     val timestamp = java.lang.System.currentTimeMillis / 1000
     timestamp
   }
@@ -191,16 +191,16 @@ object ClusterTools {
     centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius)
   }
 
-  def vectorQuantization(centroid: Array[Double], newData: Array[Double]) : Double = {
+  def vectorQuantization(centroid: Double, newData: Double) : Double = {
     val alpha = 0.1
-    val vq = centroid(i) + (alpha * (newData(i) - centroid(i)))
+    val vq = centroid + (alpha * (newData - centroid)
     vq
   }
 
   def getUpdateCentroid(centroid: Array[Double], newData: Array[Double]): Seq[String] = {
     var newCentroid = Array.ofDim[Double](centroid.size)
     for ( i <- 0 to (centroid.length - 1) ) {
-      newCentroid(i) = vectorQuantization(centroid, newData)
+      newCentroid(i) = vectorQuantization(centroid(i), newData(i))
     }
     var newCentroidSeq = convertFeaturesToSeq(newCentroid)
     newCentroidSeq
@@ -211,9 +211,9 @@ object ClusterTools {
     updateRadius
   }
 
-  def actionNewCluster(newCluster: Integer, newData: Array[Double]) : Integer = {
+  def actionNewCluster(newData: Array[Double]) : Integer = {
     // ============= NEW CLUSTER =====================
-    newCluster = centroidArr.size + 1
+    var newCluster = centroidArr.size + 1
     println("cluster selected = " + newCluster)
     println("cluster distance = 0 [NEW]")
 
@@ -228,8 +228,8 @@ object ClusterTools {
     newCluster
   }
 
-  def actionUpdateCluster(newCluster: Integer, newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
-    newCluster = selectedCluster._2
+  def actionUpdateCluster(newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
+    var newCluster = selectedCluster._2
     // ============= UPDATE CLUSTER =====================
     println("cluster selected = " + newCluster)
     println("cluster distance = " + selected._2)
@@ -272,9 +272,9 @@ object ClusterTools {
     var newCluster = 0
 
     if(selectedCluster._5 == 1){
-      newCluster = actionNewCluster(newCluster, newData)
+      newCluster = actionNewCluster(newData)
     } else {
-      newCluster = actionUpdateCluster(newCluster, newData, selectedCluster)
+      newCluster = actionUpdateCluster(newData, selectedCluster)
     }
     newCluster
   })
