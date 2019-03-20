@@ -42,19 +42,7 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  // var centroidArr = MongoSpark.load(spark, readConfig).collect
-  // centroidArr.foreach(println)
-  // ReadUtils.readMongo("master_cluster_3").foreach(println)
-  // var centroids = ReadUtils.readMongo("master_cluster_3")
-  // var centroidstry = MongoSpark.load(OnlineStream.spark, readConfig)
-
-  // var centroids = ReadUtils.readMongo("master_cluster_3")
-  // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
-  var centroids = ReadUtils.readCluster
-  // .map(row => {
-  //   val cent = row.get("centroid", scala.collection.Seq).map(_.toString)
-  //   (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
-  // }).collect
+  var centroids = ReadUtils.masterCluster
   .map(row => {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect

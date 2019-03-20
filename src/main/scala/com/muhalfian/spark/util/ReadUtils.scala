@@ -20,14 +20,8 @@ object ReadUtils {
   val sc = spark.sparkContext
   import spark.implicits._
 
+  // master cluster
   val collection = "master_cluster_3"
-  val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
-  val readCluster = MongoSpark.load(spark, readConfig)
+  val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection)))
 
-  def readMongo(collection: String) = {
-    val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
-    val load = MongoSpark.load(sc, readConfig)
-    // load.show()
-    load
-  }
 }
