@@ -49,7 +49,7 @@ object ClusterTools {
   var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
-    val cent: Seq[String] = row.get("centroid", scala.collection.Seq[java.lang.String])
+    val cent: Seq[String] = row.get("centroid", scala.collection.Seq)
     (cent,row.getInt(2),row.getInt(3),row.getDouble(4))
   }).collect
   // .map(row => {
