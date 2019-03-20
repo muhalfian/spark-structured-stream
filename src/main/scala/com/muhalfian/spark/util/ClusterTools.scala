@@ -50,7 +50,7 @@ object ClusterTools {
 
   // var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
-  var centroids = readCluster
+  var centroids = ReadUtils.readCluster
   // .map(row => {
   //   val cent = row.get("centroid", scala.collection.Seq).map(_.toString)
   //   (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
