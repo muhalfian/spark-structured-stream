@@ -42,12 +42,13 @@ object ClusterTools {
   // read master cluster
   // var centroidArr = MongoSpark.load(spark, readConfig).collect
   // centroidArr.foreach(println)
-  var centroids = ReadUtils.readMongo("master_cluster_3")
-  .map(row => {
-    (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
-  }).collect
-  var centroidArr = ArrayBuffer(centroids: _*)
-  centroidArr.foreach(println)
+  ReadUtils.readMongo("master_cluster_3").foreach(println)
+  // var centroids = ReadUtils.readMongo("master_cluster_3")
+  // .map(row => {
+  //   (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+  // }).collect
+  // var centroidArr = ArrayBuffer(centroids: _*)
+  // centroidArr.foreach(println)
 
   // calculate unknown cluster
   var size = AggTools.masterWord.size
