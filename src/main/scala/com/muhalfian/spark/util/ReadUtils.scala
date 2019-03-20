@@ -19,6 +19,6 @@ object ReadUtils {
 
   def readMongo(collection: String) : RDD[Row] = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
-    MongoSpark.load(spark, readConfig)
+    MongoSpark.load(sc, readConfig)
   }
 }
