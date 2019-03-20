@@ -71,7 +71,7 @@ object ClusterTools {
   println("dmax = " + dmax)
 
   // cluster definition
-
+  var alpha = 0.1
 
 
 
@@ -92,7 +92,13 @@ object ClusterTools {
     for ( i <- 1 to (aggregateArray.length - 1) ) {
       val cent = centroid(clusterArray(i))
       val data = aggregateArray(i)
-      distance(i) =  vlib.getDistance(cent, data)
+      // distance(i) =  vlib.getDistance(cent, data)
+      var dist = 1 - CosineSimilarity.cosineSimilarity(cent, data)
+      if(dist < 0) {
+        distance(i) = 0
+      } else {
+        distance(i) = dist
+      }
     }
   }
 
@@ -109,6 +115,8 @@ object ClusterTools {
       n(key) = dist.size
     }
   }
+
+
 
   def masterDataAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterData = mongoRDD.zipWithIndex.map( row => {
@@ -132,130 +140,26 @@ object ClusterTools {
     masterCluster
   }
 
-  def convertSeqToFeatures(data : Seq[String]) : Array[Double] = {
-    val tempSeq = data.map( row => {
-      var word = row.drop(1).dropRight(1).split("\\,")
-      (word(0).toInt, word(1).toDouble)
-    }).toSeq
-    val features = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
-    features
-  }
-
-  def convertSeqToString(data: Seq[String]): String = {
-    val start = """[""""
-    val end = """"]"""
-    var dataStr = data.map(_.toString).mkString(start, "\",\"", end)
-    dataStr
-  }
-
-  def convertFeaturesToSeq(data : Array[Double]) : Seq[String] = {
-    val stringData = data.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
-    stringData
-  }
-
-  def getDistanceToCentroids(newData : Array[Double]) : Array[(Integer, Integer, Double, Double, Integer)] = {
-    val distance = centroidArr.map(data => {
-      val centVec = convertSeqToFeatures(data._1)
-      val dd = vlib.getDistance(centVec, newData)
-
-      // compare to radius
-      val beta = 1
-      val dt = beta * dmax
-      val action = if(dd > dt) 1 else 0
-
-      // cluster, n, radius, distance, action
-      (data._2, data._3, data._4, dd, action)
-    })
-
-    distance
-  }
-
-  def getTimeStamp() : String = {
-    val timestamp = java.lang.System.currentTimeMillis / 1000
-    timestamp
-  }
-
-  def addCentroidArr(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
-    centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
-  }
-
-  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
-    val newCentroidStr = convertSeqToString(newCentroid)
-    val datetime = getTimeStamp()
-    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
-    MongoSpark.save(newDoc, writeConfig)
-  }
-
-  def updateCentroidArr(updateCentroid: Seq[String], newCluster: Integer, updateSize: Integer, updateRadius: Double) = {
-    var index = centroidArr.indexWhere(_._2 == newCluster)
-    centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius)
-  }
-
-  def vectorQuantization(centroid: Array[Double], newData: Array[Double]) : = {
-    val alpha = 0.1
-    val vq = centroid(i) + (alpha * (newData(i) - centroid(i)))
-    vq
-  }
-
-  def getUpdateCentroid(centroid: Array[Double], newData: Array[Double]): Seq[String] = {
-    var newCentroid = Array.ofDim[Double](centroid.size)
-    for ( i <- 0 to (centroid.length - 1) ) {
-      newCentroid(i) = vectorQuantization(centroid, newData)
-    }
-    var newCentroidSeq = convertFeaturesToSeq(newCentroid)
-    newCentroidSeq
-  }
-
-  def getUpdateRadius(selectedCluster : (Integer, Integer, Double, Double, Integer)) : Double = {
-    val updateRadius = if(selectedCluster._4 > selectedCluster._3) selectedCluster._4 else selectedCluster._3
-    updateRadius
-  }
-
-  def actionNewCluster(newCluster: Integer, newData: Array[Double]) : Integer = {
-    // ============= NEW CLUSTER =====================
-    newCluster = centroidArr.size + 1
-    println("cluster selected = " + newCluster)
-    println("cluster distance = 0 [NEW]")
-
-    var newSize = 1
-    var newCentroid = convertFeaturesToSeq(newData)
-    var newRadius = 0
-
-    // sink
-    addCentroidArr(newCentroid, newCluster, newSize, newRadius)
-    addCentroidMongo(newCentroid, newCluster, newSize, newRadius)
-
-    newCluster
-  }
-
-  def actionUpdateCluster(newCluster: Integer, newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
-    newCluster = selectedCluster._2
-    // ============= UPDATE CLUSTER =====================
-    println("cluster selected = " + newCluster)
-    println("cluster distance = " + selected._2)
-
-    // update centroid
-    var centroid = convertSeqToFeatures(centroidArr.filter(_._2 == newCluster)(0)._1)
-    var updateCentroid  = getUpdateCentroid(centroid, newData)
-
-    var updateSize = selectedCluster._3 + 1
-    var updateRadius = getUpdateRadius(selectedCluster)
-
-    // sink
-    updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius)
-    addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius)
-
-    newCluster
-  }
-
   val updateRadius = udf((content: Seq[String], index: Integer ) => {
     size = AggTools.masterWord.size
 
-    val dataVec = convertSeqToFeatures(content)
-    val centVec = convertSeqToFeatures(centroidArr.filter(_._2 == index)(0)._1)
+    // convert New Data to Array
+    var tempSeq = content.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+    val dataVec = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+
+    // loop centroid data then calculate distance
+    val centroid = centroidArr.filter(_._2 == index)(0)._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+    var centVec = Vectors.sparse(size, centroid.sortWith(_._1 < _._1)).toDense.toArray
 
     // calculate distance
-    var radius = vlib.getDistance(centVec, dataVec)
+    var radius = 1 - CosineSimilarity.cosineSimilarity(centVec, dataVec)
+
     radius
   })
 
@@ -267,15 +171,97 @@ object ClusterTools {
     // update size array [word]
     size = AggTools.masterWord.size
 
-    val newData = convertSeqToFeatures(content)
-    val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)
-    var newCluster = 0
+    // convert New Data to Array
+    var tempSeq = content.map( row => {
+      var word = row.drop(1).dropRight(1).split("\\,")
+      (word(0).toInt, word(1).toDouble)
+    }).toSeq
+    val newData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
 
-    if(selectedCluster._5 == 1){
-      newCluster = actionNewCluster(newCluster, newData)
+    // loop centroid data then calculate distance
+    val distData = centroidArr.map(data => {
+      var cent = data._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+      var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
+
+      // calculate distance
+      var dd = 1 - CosineSimilarity.cosineSimilarity(centVec, newData)
+      // println((data._2, dd, data._3 ))
+
+      // compare to radius
+      var beta = 1
+      var dt = beta * dmax
+      if(dd > dt){
+        dd = 1
+      }
+
+      (data._2, dd, data._3, data._4)
+    })
+
+    // println("=============== CLUSTER DISTANCE LIST ====================")
+    // distData.foreach(println)
+
+    var clusterSelected = 0
+    var selected = distData.minBy(_._2)
+    if(selected._2 == 1) {
+      // make new cluster
+      println("============= NEW CLUSTER =====================")
+      clusterSelected = distData.size + 1
+      println("cluster selected = " + clusterSelected)
+      println("cluster distance = " + selected._2)
+      var newSize = 1
+      var newCentroid = newData.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
+      var newRadius = 0
+      centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
+
+      // add mongo
+      val start = """[""""
+      val end = """"]"""
+      var newCentroidStr = newCentroid.map(_.toString).mkString(start, "\",\"", end)
+      val datetime = java.lang.System.currentTimeMillis / 1000
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
+      MongoSpark.save(newDoc, writeConfig)
+
     } else {
-      newCluster = actionUpdateCluster(newCluster, newData, selectedCluster)
+      println("============= UPDATE CLUSTER =====================")
+      clusterSelected = selected._1
+      println("cluster selected = " + clusterSelected)
+      println("cluster distance = " + selected._2)
+
+      // update centroid
+      var centroidSelected = centroidArr.filter(_._2 == clusterSelected)(0)._1.map( row => {
+        var word = row.drop(1).dropRight(1).split("\\,")
+        (word(0).toInt, word(1).toDouble)
+      }).toSeq
+      var centroidSelectedArr = Vectors.sparse(size, centroidSelected.sortWith(_._1 < _._1)).toDense.toArray
+      var newCentroidArr = Array.ofDim[Double](centroidSelectedArr.size)
+      for ( i <- 0 to (centroidSelectedArr.length - 1) ) {
+        newCentroidArr(i) = centroidSelectedArr(i) + (alpha * (newData(i) - centroidSelectedArr(i)))
+      }
+      var updateCentroid = newCentroidArr.zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).toList
+
+      var updateSize = selected._3 + 1
+      var updateRadius = selected._4
+
+      // update centroid
+      var index = centroidArr.indexWhere(_._2 == clusterSelected)
+      centroidArr(index) = (updateCentroid, clusterSelected, updateSize, updateRadius)
+
+      // update - add to mongo
+      val start = """[""""
+      val end = """"]"""
+      var updateCentroidStr = updateCentroid.map(_.toString).mkString(start, "\",\"", end)
+      val datetime = java.lang.System.currentTimeMillis / 1000
+      var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $updateRadius, n: $updateSize, centroid: $updateCentroidStr, datetime: $datetime}")))
+      MongoSpark.save(newDoc, writeConfig)
     }
-    newCluster
+    // centroidArr.foreach(println)
+    clusterSelected
+
+    // val vectorData = tempSeq.sortWith(_._1 < _._1)
+    // vectorData.map(_.toString)
+    // vectorData
   })
 }
