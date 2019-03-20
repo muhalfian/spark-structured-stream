@@ -7,6 +7,7 @@ import org.apache.spark.rdd.RDD
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 import com.mongodb.spark.rdd.MongoRDD
+import org.bson.Document
 
 import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 import org.apache.spark.sql._
@@ -26,7 +27,6 @@ object MasterWordModel {
 
   val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterWordArr = getMasterWordArr()
-  var unknownCluster = getUnknownCluster()
 
   def getMasterWordArr() = {
     val words = masterWord.select("word", "index").map(row => {
@@ -46,7 +46,7 @@ object MasterWordModel {
   def addMasterWord(word: String) = {
     println("add to database : " + word(0))
 
-    index = masterWord.size
+    var index = masterWordArr.size
     masterWordArr += ((word, index))
 
     // Mongo save
