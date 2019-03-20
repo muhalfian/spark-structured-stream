@@ -44,7 +44,7 @@ object ClusterTools {
   // centroidArr.foreach(println)
   // ReadUtils.readMongo("master_cluster_3").foreach(println)
   // var centroids = ReadUtils.readMongo("master_cluster_3")
-  var centroids = MongoSpark.load(OnlineStream.spark.sparkContext, readConfig)
+  var centroids = MongoSpark.load(spark, readConfig)
   .map(row => {
     (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
   }).collect
