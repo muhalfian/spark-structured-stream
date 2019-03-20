@@ -37,16 +37,14 @@ object ClusterTools {
 
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_10"))
-  val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_3"))
+  // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_3"))
 
   val spark = OnlineStream.spark
   val sc = spark.sparkContext
   import spark.implicits._
 
   // read master cluster
-  var centroidArr = MasterClusterModel.masterClusterArr
-
-  // calculate dmax
+  var centroidArr = MasterClusterModel.getMasterClusterArr()
   var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
