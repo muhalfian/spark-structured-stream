@@ -45,7 +45,6 @@ object ClusterTools {
 
   // read master cluster
   var centroidArr = MasterClusterModel.masterClusterArr
-  centroidArr.foreach(println)
   var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
