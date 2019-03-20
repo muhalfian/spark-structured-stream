@@ -155,7 +155,7 @@ object ClusterTools {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
-    MongoSpark.save(newDoc, writeConfig)
+    MasterClusterModel.save(newDoc)
   }
 
   def updateCentroidArr(updateCentroid: Seq[String], newCluster: Integer, updateSize: Integer, updateRadius: Double) = {

@@ -52,4 +52,7 @@ object MasterClusterModel {
     masterClusterArr.filter(x => x._2 != unknownCluster).maxBy(_._4)._4
   }
 
+  def save(newDoc: RDD[org.bson.Document]) = {
+    WriterUtil.saveBatchMongo(collection, newDoc)
+  }
 }

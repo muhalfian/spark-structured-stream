@@ -15,6 +15,9 @@ import com.mongodb.spark.MongoSpark
 
 object WriterUtil {
 
+  val uri = PropertiesLoader.mongoUrl
+  val db = PropertiesLoader.mongoDb
+
   val masterData = new ForeachWriter[ColsArtifact.masterData] {
     var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_data"
     val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
@@ -133,7 +136,7 @@ object WriterUtil {
   }
 
   def saveBatchMongo(col:String, data:RDD[org.bson.Document]) = {
-    var writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> col))
+    var writeConfig = WriteConfig(Map("uri" -> uri, "database" -> db, "collection" -> col))
     MongoSpark.save(data, writeConfig)
   }
 }
