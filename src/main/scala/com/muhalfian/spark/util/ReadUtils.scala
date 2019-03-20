@@ -17,7 +17,7 @@ object ReadUtils {
   val sc = spark.sparkContext
   import spark.implicits._
 
-  def readMongo(collection: String) : RDD[Row] = {
+  def readMongo(collection: String) = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
     MongoSpark.load(sc, readConfig)
   }
