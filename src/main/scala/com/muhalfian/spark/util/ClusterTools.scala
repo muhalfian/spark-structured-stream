@@ -17,6 +17,8 @@ import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import java.util.Calendar
 
+import collection.JavaConverters._
+
 
 object ClusterTools {
 
@@ -49,7 +51,7 @@ object ClusterTools {
   var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
-    val cent = row.get("centroid", scala.collection.Seq)
+    val cent = row.get("centroid", scala.collection.Seq).asScala
     (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
   }).collect
   // .map(row => {
