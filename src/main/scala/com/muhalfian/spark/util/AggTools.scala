@@ -40,7 +40,7 @@ object AggTools {
       if(indexStat == -1){
         index = MasterWordModel.addMasterWord(word(0))
       } else {
-        index = masterWord(indexStat)._2
+        index = MasterWordModel.masterWordArr(indexStat)._2
       }
       (index, word(1).toDouble)
     }).toSeq
