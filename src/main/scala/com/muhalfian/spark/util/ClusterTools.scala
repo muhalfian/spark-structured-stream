@@ -191,7 +191,7 @@ object ClusterTools {
     centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius)
   }
 
-  def vectorQuantization(centroid: Array[Double], newData: Array[Double]) : = {
+  def vectorQuantization(centroid: Array[Double], newData: Array[Double]) : Double = {
     val alpha = 0.1
     val vq = centroid(i) + (alpha * (newData(i) - centroid(i)))
     vq
