@@ -24,4 +24,18 @@ object ReadUtils {
   val collection = "master_cluster_3"
   val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection)))
 
+  def getMasterCluster() = {
+    masterCluster.map(row => {
+      (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+    }).collect
+  }
+
+  def getMasterCluster() = {
+    val centroids = masterCluster.map(row => {
+      (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+    }).collect
+
+    ArrayBuffer(centroids: _*)
+  }
+
 }

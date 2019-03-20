@@ -42,11 +42,8 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroids = ReadUtils.masterCluster
-  .map(row => {
-    (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
-  }).collect
-  var centroidArr = ArrayBuffer(centroids: _*)
+  var centroidArr = ReadUtils.getMasterClusterArr()
+  // var centroidArr = ArrayBuffer(centroids: _*)
   // centroidArr.foreach(println)
 
   // calculate unknown cluster
