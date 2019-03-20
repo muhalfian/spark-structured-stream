@@ -1,6 +1,7 @@
 package com.muhalfian.spark.util
 
 import com.muhalfian.spark.jobs.OnlineStream
+import com.muhalfian.spark.models._
 
 import ALI._
 import org.bson.Document
@@ -42,29 +43,10 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroidArr = ReadUtils.getMasterClusterArr()
-  // var centroidArr = ArrayBuffer(centroids: _*)
-  // centroidArr.foreach(println)
+  var centroidArr = MasterClusterModel.masterClusterArr
 
-  // calculate unknown cluster
-  var size = AggTools.masterWord.size
-  var unknown = centroidArr.map(data => {
-    var cent = data._1.map( row => {
-      var word = row.drop(1).dropRight(1).split("\\,")
-      (word(0).toInt, word(1).toDouble)
-    }).toSeq
-    // var cent = centTupple.drop(1).dropRight(1).split("\\,")
-    var centVec = Vectors.sparse(size, cent.sortWith(_._1 < _._1)).toDense.toArray
-    var zeroVec = Array.fill(size)(0.01)
-    var dist = 1 - CosineSimilarity.cosineSimilarity(centVec, zeroVec)
-    (data._2, dist)
-  }).minBy(_._2)._1
-  println("unknown cluster : " + unknown)
-
-  // calculate rmax
-  var dmax = centroidArr.filter(x => x._2 != unknown).maxBy(_._4)._4
-  println("dmax = " + dmax)
-
+  // calculate dmax
+  var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
