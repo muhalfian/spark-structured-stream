@@ -40,11 +40,11 @@ object MasterWordModel {
   }
 
   def getIndex(word: String) = {
-    masterWordArr.indexWhere(_._1 == word(0))
+    masterWordArr.indexWhere(_._1 == word)
   }
 
   def addMasterWord(word: String) = {
-    println("add to database : " + word(0))
+    println("add to database : " + word)
 
     var index = masterWordArr.size
     masterWordArr += ((word, index))
