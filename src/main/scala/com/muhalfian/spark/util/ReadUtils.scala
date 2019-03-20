@@ -8,7 +8,7 @@ import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 import com.mongodb.spark.rdd.MongoRDD
 
-import org.mongodb.scala.Document
+// import org.mongodb.scala.Document
 
 import org.apache.spark.sql._
 
@@ -20,7 +20,11 @@ object ReadUtils {
   val sc = spark.sparkContext
   import spark.implicits._
 
-  def readMongo(collection: String) : MongoRDD[Document] = {
+  val collection = "master_cluster_3"
+  val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
+  val readCluster = MongoSpark.load(spark, readConfig)
+
+  def readMongo(collection: String) = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
     val load = MongoSpark.load(sc, readConfig)
     // load.show()

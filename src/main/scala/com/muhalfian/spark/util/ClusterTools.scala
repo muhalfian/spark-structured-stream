@@ -48,15 +48,16 @@ object ClusterTools {
   // var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroidstry = MongoSpark.load(OnlineStream.spark, readConfig)
 
-  var centroids = ReadUtils.readMongo("master_cluster_3")
+  // var centroids = ReadUtils.readMongo("master_cluster_3")
   // var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
-  .map(row => {
-    val cent = row.get("centroid", scala.collection.Seq).map(_.toString)
-    (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
-  }).collect
+  var centroids = readCluster
   // .map(row => {
-  //   (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+  //   val cent = row.get("centroid", scala.collection.Seq).map(_.toString)
+  //   (cent,row.getInteger(2),row.getInteger(3),row.getDouble(4))
   // }).collect
+  .map(row => {
+    (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+  }).collect
   var centroidArr = ArrayBuffer(centroids: _*)
   // centroidArr.foreach(println)
 
