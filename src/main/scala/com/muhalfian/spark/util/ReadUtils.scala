@@ -15,6 +15,6 @@ object ReadUtils {
 
   def readMongo(collection: String) : RDD[Row] = {
     val readConfig = ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collection))
-    MongoSpark.load(OnlineStream.spark, readConfig)
+    MongoSpark.load(OnlineStream.spark.sparkContext, readConfig)
   }
 }
