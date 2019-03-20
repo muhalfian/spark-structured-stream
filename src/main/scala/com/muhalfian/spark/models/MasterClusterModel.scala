@@ -26,7 +26,7 @@ object MasterClusterModel {
 
   val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterClusterArr = getMasterClusterArr()
-  var size = AggTools.masterWord.size
+  var size = MasterWordModel.masterWordArr.size
   var unknownCluster = getUnknownCluster()
 
   def getMasterClusterArr() = {
