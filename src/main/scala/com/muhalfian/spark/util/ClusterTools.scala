@@ -33,7 +33,7 @@ object ClusterTools {
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
   var n = Array.ofDim[Int](1)
-  var size = AggTools.masterWord.size
+  var size = MasterWordModel.masterWordArr.size
 
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_10"))
@@ -221,7 +221,7 @@ object ClusterTools {
   }
 
   val updateRadius = udf((content: Seq[String], index: Integer ) => {
-    size = AggTools.masterWord.size
+    size = MasterWordModel.masterWordArr.size
 
     val dataVec = convertSeqToFeatures(content)
     val centVec = convertSeqToFeatures(centroidArr.filter(_._2 == index)(0)._1)
@@ -233,11 +233,8 @@ object ClusterTools {
 
   val onlineClustering = udf((content: Seq[String]) => {
 
-    println("=========================== Online Clustering ===============================")
-    // masterWord.foreach(println)
-
     // update size array [word]
-    size = AggTools.masterWord.size
+    size = MasterWordModel.masterWordArr.size
 
     val newData = convertSeqToFeatures(content)
     val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)

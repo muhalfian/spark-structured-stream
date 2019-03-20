@@ -56,12 +56,6 @@ object MongoToCluster extends StreamUtils {
     val aggregateArray = AggTools.mongoToArray(mongoRDD, AggTools.masterWordCount)
     println("jumlah data aggregasi : " + aggregateArray.size )
 
-
-    // val dict = AggTools.initDictionary(mongoRDD)
-    // println("dict : "+ dict)
-    // val aggregateArray = AggTools.aggregateBatch(mongoRDD, dict)
-    // println("jumlah data aggregasi : " + aggregateArray.size )
-
     // ======================== CLUSTERING ================================
 
     var method = "average"
