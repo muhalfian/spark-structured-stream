@@ -2,14 +2,12 @@ package com.muhalfian.spark.util
 
 import com.muhalfian.spark.jobs.OnlineStream
 
-// import org.bson.Document
 import org.apache.spark.rdd.RDD
 import com.mongodb.spark.MongoSpark
 import com.mongodb.spark.config._
 import com.mongodb.spark.rdd.MongoRDD
 
-// import org.mongodb.scala.Document
-
+import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 import org.apache.spark.sql._
 
 object ReadUtils {
