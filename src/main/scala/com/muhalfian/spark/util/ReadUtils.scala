@@ -28,7 +28,7 @@ object ReadUtils {
     }).collect
   }
 
-  def getMasterCluster() = {
+  def getMasterClusterArr() = {
     val centroids = masterCluster.map(row => {
       (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
     }).collect
