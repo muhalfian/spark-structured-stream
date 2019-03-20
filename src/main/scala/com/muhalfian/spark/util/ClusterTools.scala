@@ -48,7 +48,8 @@ object ClusterTools {
 
   var centroids = MongoSpark.load(OnlineStream.spark, readConfig)
   .map(row => {
-    ((Seq[String]) row.get(1),row.getInt(2),row.getInt(3),row.getDouble(4))
+    val cent = (Seq[String]) row.get(1)
+    (cent,row.getInt(2),row.getInt(3),row.getDouble(4))
   }).collect
   // .map(row => {
   //   (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
