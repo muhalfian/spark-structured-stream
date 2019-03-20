@@ -10,7 +10,7 @@ import com.mongodb.spark.config._
 import org.apache.spark.sql._
 
 object ReadUtils {
-  val uri = PropertiesLoader.mongoUri
+  val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
 
   def readMongo(collection: String) : RDD[Row] = {

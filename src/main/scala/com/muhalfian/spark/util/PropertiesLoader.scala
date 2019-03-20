@@ -10,4 +10,5 @@ object PropertiesLoader {
   val kafkaTopic : String = conf.getString("KAFKA_TOPIC")
 
   val mongoUrl : String = conf.getString("MONGO_URL")
+  val mongoDb : String = conf.getString("MONGO_DB")
 }
