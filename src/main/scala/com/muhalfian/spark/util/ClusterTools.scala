@@ -187,7 +187,7 @@ object ClusterTools {
 
   def actionNewCluster(newData: Array[Double]) : Integer = {
     // ============= NEW CLUSTER =====================
-    var newCluster = centroidArr.size + 1
+    var newCluster = centroidArr.length
     println("cluster selected = " + newCluster)
     println("cluster distance = 0 [NEW]")
 
