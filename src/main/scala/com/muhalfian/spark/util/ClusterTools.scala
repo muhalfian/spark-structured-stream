@@ -44,7 +44,7 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)](("test",0,0,0.0))
+  var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
   var dmax = 0.0
   // var centroidArr = MasterClusterModel.masterClusterArr
   // var dmax = MasterClusterModel.getDmax()
