@@ -22,15 +22,11 @@ object MasterWordModel {
   // master cluster
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
-  val collectionRead = "master_word_5"
-  val collectionWrite = "master_word_5"
+  val collectionRead = "master_word_3"
+  val collectionWrite = "master_word_3"
 
   val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
-  val words = masterWord.select("word", "index").map(row => {
-    (row.getAs[String](0),row.getAs[Integer](1))
-  }).collect
-  val masterWordArr = ArrayBuffer(words: _*)
-  masterWordArr.foreach(println)
+  val masterWordArr = getMasterWordArr()
 
   def getMasterWordArr() = {
     val words = masterWord.select("word", "index").map(row => {
@@ -44,11 +40,11 @@ object MasterWordModel {
   }
 
   def getIndex(word: String) = {
-    masterWordArr.indexWhere(_._1 == word)
+    masterWordArr.indexWhere(_._1 == word(0))
   }
 
   def addMasterWord(word: String) = {
-    println("add to database : " + word)
+    println("add to database : " + word(0))
 
     var index = masterWordArr.size
     masterWordArr += ((word, index))
