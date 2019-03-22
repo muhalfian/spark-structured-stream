@@ -40,7 +40,7 @@ object MasterWordModel {
   }
 
   def getIndex(word: String) = {
-    masterWordArr.indexWhere(_._1 == word(0))
+    masterWordArr.indexWhere(_._1 == word)
   }
 
   def addMasterWord(word: String) = {
