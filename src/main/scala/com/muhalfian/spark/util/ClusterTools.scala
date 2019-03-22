@@ -44,10 +44,10 @@ object ClusterTools {
   import spark.implicits._
 
   // read master cluster
-  var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
-  var dmax = 0.0
-  // var centroidArr = MasterClusterModel.masterClusterArr
-  // var dmax = MasterClusterModel.getDmax()
+  // var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
+  // var dmax = 0.0
+  var centroidArr = MasterClusterModel.masterClusterArr
+  var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
     // merge cluster, array
@@ -234,8 +234,6 @@ object ClusterTools {
   })
 
   val onlineClustering = udf((content: Seq[String]) => {
-    centroidArr = MasterClusterModel.masterClusterArr
-    dmax = MasterClusterModel.getDmax()
 
     // update size array [word]
     size = MasterWordModel.masterWordArr.size
