@@ -31,12 +31,28 @@ object AggTools {
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordCount = 0
 
+
+  // master cluster
+  val uri = PropertiesLoader.mongoUrl
+  val db = PropertiesLoader.mongoDb
+  val collectionRead = "master_word_3"
+  val collectionWrite = "master_word_3"
+
+  val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
+  val words = masterWord.select("word", "index").map(row => {
+    (row.getAs[String](0),row.getAs[Integer](1))
+  }).collect
+  val masterWordArr = ArrayBuffer(words: _*)
+
+
+
   val aggregateMongo = udf((content: Seq[String]) => {
     var tempSeq = content.map(row => {
       var word = row.drop(1).dropRight(1).split("\\,")
 
       var index = 0
-      var indexStat = MasterWordModel.getIndex(word(0))
+      // var indexStat = MasterWordModel.getIndex(word(0))
+      var indexStat = masterWordArr.indexWhere(_._1 == word(0))
       if(indexStat == -1){
         index = MasterWordModel.addMasterWord(word(0))
       } else {
