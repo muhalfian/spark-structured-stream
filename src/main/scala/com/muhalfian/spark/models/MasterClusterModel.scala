@@ -21,8 +21,8 @@ object MasterClusterModel {
   // master cluster
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
-  val collectionRead = "master_cluster_3"
-  val collectionWrite = "master_cluster_10"
+  val collectionRead = "master_cluster_5"
+  val collectionWrite = "master_cluster_11"
 
   val masterCluster = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterClusterArr = getMasterClusterArr()

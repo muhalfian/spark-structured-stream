@@ -45,7 +45,7 @@ object KafkaToMongo extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":3000}}""")
+      .option("endingOffsets", """{"online_media":{"0":1500}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -80,7 +80,7 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_3").save();
+    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_5").save();
 
   }
 }
