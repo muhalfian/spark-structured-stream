@@ -36,7 +36,7 @@ object ClusterTools {
   var size = MasterWordModel.masterWordArr.size
 
   // MongoConfig
-  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_11"))
+  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_5_update"))
   // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_3"))
 
   val spark = OnlineStream.spark

@@ -57,7 +57,7 @@ object WriterUtil {
   }
 
   val masterDataUpdate = new ForeachWriter[ColsArtifact.masterDataUpdate] {
-    var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_data_10"
+    var masterCollection : String = PropertiesLoader.mongoUrl + "prayuga.master_data_5_update"
     val writeConfig: WriteConfig = WriteConfig(Map("uri" -> masterCollection))
     var mongoConnector: MongoConnector = _
     var masterDataCounts: ArrayBuffer[ColsArtifact.masterDataUpdate] = _
