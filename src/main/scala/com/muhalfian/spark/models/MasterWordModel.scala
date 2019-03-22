@@ -27,6 +27,7 @@ object MasterWordModel {
 
   val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterWordArr = getMasterWordArr()
+  masterWordArr.foreach(println)
 
   def getMasterWordArr() = {
     val words = masterWord.select("word", "index").map(row => {
