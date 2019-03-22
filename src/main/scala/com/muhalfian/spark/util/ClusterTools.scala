@@ -234,8 +234,8 @@ object ClusterTools {
   })
 
   val onlineClustering = udf((content: Seq[String]) => {
-    var centroidArr = MasterClusterModel.masterClusterArr
-    var dmax = MasterClusterModel.getDmax()
+    centroidArr = MasterClusterModel.masterClusterArr
+    dmax = MasterClusterModel.getDmax()
 
     // update size array [word]
     size = MasterWordModel.masterWordArr.size
