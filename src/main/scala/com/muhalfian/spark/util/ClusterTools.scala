@@ -186,7 +186,7 @@ object ClusterTools {
   }
 
   def actionNewCluster(newData: Array[Double]) : Integer = {
-    // ============= NEW CLUSTER =====================
+    println("============= NEW CLUSTER =====================")
     var newCluster = centroidArr.size
     println("cluster selected = " + newCluster + " [NEW]")
     println("cluster distance = 0")
@@ -204,7 +204,7 @@ object ClusterTools {
 
   def actionUpdateCluster(newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
     var newCluster = selectedCluster._1
-    // ============= UPDATE CLUSTER =====================
+    println("============= UPDATE CLUSTER =====================")
     println("cluster selected = " + newCluster)
     println("cluster distance = " + selectedCluster._2)
 
@@ -234,6 +234,8 @@ object ClusterTools {
   })
 
   val onlineClustering = udf((content: Seq[String]) => {
+
+    println("Start Online Clustering")
 
     // update size array [word]
     size = MasterWordModel.masterWordArr.size
