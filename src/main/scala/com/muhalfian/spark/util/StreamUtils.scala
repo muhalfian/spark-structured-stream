@@ -33,8 +33,8 @@ trait StreamUtils {
 
   def getSparkSessionPlain(): SparkSession = {
     val uri: String = "mongodb://10.252.37.112/prayuga.master_word_2"
-    val master: String = "spark://10.252.37.109:7077"
-    // val master: String = "local[*]"
+    //val master: String = "spark://10.252.37.109:7077"
+    val master: String = "local[*]"
 
     val conf = new SparkConf()
       .setMaster(master)
