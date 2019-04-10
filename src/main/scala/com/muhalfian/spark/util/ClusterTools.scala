@@ -235,7 +235,7 @@ object ClusterTools {
 
   val onlineClustering = udf((content: Seq[String]) => {
 
-    println("Start Online Clustering")
+    println("########### Start Online Clustering ##################")
 
     // update size array [word]
     size = MasterWordModel.masterWordArr.size
@@ -244,6 +244,7 @@ object ClusterTools {
     val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)
     var newCluster = 0
 
+    print(newData)
     if(selectedCluster._5 == 1){
       newCluster = actionNewCluster(newData)
     } else {
