@@ -42,16 +42,32 @@ object MasterClusterModel {
   }
 
   def getUnknownCluster() = {
-    masterClusterArr.map(data => {
-      var centVec = ClusterTools.convertSeqToFeatures(data._1)
-      var zeroVec = Array.fill(size)(0.0)
-      var dist = ClusterTools.vlib.getDistance(centVec, zeroVec)
-      (data._2, dist)
-    }).minBy(_._2)._1
+    var unknownClusterId = 0
+    try {
+      unknownClusterId = masterClusterArr.map(data => {
+        var centVec = ClusterTools.convertSeqToFeatures(data._1)
+        var zeroVec = Array.fill(size)(0.0)
+        var dist = ClusterTools.vlib.getDistance(centVec, zeroVec)
+        (data._2, dist)
+      }).minBy(_._2)._1
+    } catch {
+      case _: Throwable =>  {
+        unknownClusterId = 0
+      }
+    }
+    unknownCluster
   }
 
   def getDmax() = {
-    masterClusterArr.filter(x => x._2 != unknownCluster).maxBy(_._4)._4
+    var dmax = 0.0
+    try{
+      dmax = masterClusterArr.filter(x => x._2 != unknownCluster).maxBy(_._4)._4
+    } catch {
+      case _: Throwable =>  {
+        dmax = 0
+      }
+    }
+    dmax
   }
 
   def save(newDoc: RDD[org.bson.Document]) = {
