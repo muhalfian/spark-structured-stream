@@ -33,8 +33,8 @@ object MasterWordModel {
       getMasterWordArr()
     } catch {
       save(sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}"))))
-      getMasterWordArr()
     }
+    getMasterWordArr()
   }
 
   def getMasterWordArr() = {
