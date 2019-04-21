@@ -32,7 +32,10 @@ object MasterWordModel {
     try {
       getMasterWordArr()
     } catch {
-      save(sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}"))))
+      case _: Throwable =>  {
+        val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
+        save(newWord)
+      }
     }
     getMasterWordArr()
   }
