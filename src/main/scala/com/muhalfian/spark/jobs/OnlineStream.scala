@@ -67,16 +67,19 @@ object OnlineStream extends StreamUtils {
                         .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
-
-    val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
-
-    val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
-                        .withColumn("text_selected", TextTools.select(col("text_preprocess")))
+    //
+    // val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
+    //
+    // val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
+    //                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
 
     // ======================== AGGREGATION ================================
 
-    val customDF = selectedDF
+    val customDF = ngramDF
+      .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
+      .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
+      .withColumn("text_selected", TextTools.select(col("text_preprocess")))
       .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
       .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
       .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
@@ -85,6 +88,18 @@ object OnlineStream extends StreamUtils {
       .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
       .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
+      // val aggregateDF = selectedDF
+      //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
+      //
+      // val clusterDF = aggregateDF
+      //   .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+      //   .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
+      //
+      // val customDF = clusterDF
+      //   .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+      //   .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+      //   .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+      //   .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // =========================== SINK ====================================
 
