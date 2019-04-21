@@ -174,7 +174,7 @@ object ClusterTools {
   def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
-    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : "$clusterSelected", radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
+    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
     MasterClusterModel.save(newDoc)
   }
 
