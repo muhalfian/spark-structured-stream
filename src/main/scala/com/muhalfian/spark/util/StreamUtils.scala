@@ -13,7 +13,8 @@ trait StreamUtils {
   }
 
   def getSparkSession(args: Array[String]): SparkSession = {
-    // val uri: String = args.headOption.getOrElse("mongodb://10.252.37.112/prayuga.master_word_2")
+    val mongoUrl = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb
+    val uri: String = args.headOption.getOrElse(mongoUrl)
     //val master: String = "spark://10.252.37.109:7077"
     val master: String = "local[*]"
 
@@ -21,8 +22,8 @@ trait StreamUtils {
       .setMaster(master)
       .setAppName("PrayugaStream")
       .set("spark.app.id", "StreamProtocolCountToMongo")
-      // .set("spark.mongodb.input.uri", uri)
-      // .set("spark.mongodb.output.uri", uri)
+      .set("spark.mongodb.input.uri", uri)
+      .set("spark.mongodb.output.uri", uri)
 
     val session = SparkSession.builder()
       .config(conf)
@@ -33,7 +34,8 @@ trait StreamUtils {
   }
 
   def getSparkSessionPlain(): SparkSession = {
-    // val uri: String = "mongodb://10.252.37.112/prayuga.master_word_2"
+    val mongoUrl = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb
+    val uri: String = args.headOption.getOrElse(mongoUrl)
     //val master: String = "spark://10.252.37.109:7077"
     val master: String = "local[*]"
 
@@ -41,8 +43,8 @@ trait StreamUtils {
       .setMaster(master)
       .setAppName("PrayugaStream")
       .set("spark.app.id", "StreamProtocolCountToMongo")
-      // .set("spark.mongodb.input.uri", uri)
-      // .set("spark.mongodb.output.uri", uri)
+      .set("spark.mongodb.input.uri", uri)
+      .set("spark.mongodb.output.uri", uri)
 
     val session = SparkSession.builder()
       .config(conf)
