@@ -36,9 +36,10 @@ object ClusterTools {
   var radius = Array.ofDim[Double](1)
   var n = Array.ofDim[Int](1)
   var size = MasterWordModel.masterWordArr.size
+  val mongoDb = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb
 
   // MongoConfig
-  val writeConfig = WriteConfig(Map("collection" -> PropertiesLoader.dbMasterClusterUpdate))
+  val writeConfig = WriteConfig(Map("uri" -> mongoDb, "collection" -> PropertiesLoader.dbMasterClusterUpdate))
 
   val spark = OnlineStream.spark
   val sc = spark.sparkContext
