@@ -241,7 +241,7 @@ object ClusterTools {
     newCluster
   }
 
-  val updateRadius = udf((content: Seq[String], index: Integer ) => {
+  val updateRadius = udf((content: Seq[String], index: String ) => {
     size = MasterWordModel.masterWordArr.size
 
     val dataVec = convertSeqToFeatures(content)
