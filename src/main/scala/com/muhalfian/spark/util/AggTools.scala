@@ -24,9 +24,9 @@ import scala.util.Try
 
 object AggTools {
 
-  // val spark = OnlineStream.spark
-  // val sc = spark.sparkContext
-  // import spark.implicits._
+  val spark = OnlineStream.spark
+  val sc = spark.sparkContext
+  import spark.implicits._
 
   var masterWordsIndex = ArrayBuffer[String]()
   var masterWordCount = 0

@@ -46,7 +46,7 @@ object OnlineStream extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", "earliest")
-      .option("maxOffsetsPerTrigger", "100")
+      .option("maxOffsetsPerTrigger", "10")
       // .option("startingOffsets", """{"online_media":{"0":4000}}""")
       // .option("endingOffsets", """{"online_media":{"0":6000}}""")
       .load()
@@ -63,8 +63,7 @@ object OnlineStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    val stemmedDF = filteredDF
-                        .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
+    val stemmedDF = filteredDF.withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
     //
