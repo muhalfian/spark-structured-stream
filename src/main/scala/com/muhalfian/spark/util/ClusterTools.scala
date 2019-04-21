@@ -30,7 +30,7 @@ object ClusterTools {
   val vlib: VectorLib = new VectorLib()
 
   // Initialization Cluster Tools
-  var clusterArray = Array.ofDim[Int](1)
+  var clusterArray = Array.ofDim[String](1)
   var centroid = Array[Array[Double]](Array(1.0))
   var distance = Array.ofDim[Double](1)
   var radius = Array.ofDim[Double](1)
@@ -166,11 +166,11 @@ object ClusterTools {
     timestamp
   }
 
-  def addCentroidArr(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
+  def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
   }
 
-  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
+  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
@@ -205,7 +205,7 @@ object ClusterTools {
   def actionNewCluster(newData: Array[Double]) : Integer = {
     println("============= NEW CLUSTER =====================")
     // var newCluster = centroidArr.size
-    // var newCluster = randomUUID().toString
+    var newCluster = randomUUID().toString
     println("cluster selected = " + newCluster + " [NEW]")
     println("cluster distance = 0")
 
