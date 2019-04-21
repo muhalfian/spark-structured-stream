@@ -264,7 +264,7 @@ object ClusterTools {
     val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)
     println("selected cluster")
     println(selectedCluster)
-    var newCluster = 0
+    var newCluster = "0"
     println("if condition")
     if(selectedCluster._5 == 1){
       newCluster = actionNewCluster(newData)
