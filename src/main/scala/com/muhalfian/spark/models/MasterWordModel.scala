@@ -30,14 +30,15 @@ object MasterWordModel {
 
   def initMasterWord() = {
     try {
-      getMasterWordArr()
+      val masterWordData = getMasterWordArr()
     } catch {
       case _: Throwable =>  {
-        val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
-        save(newWord)
+        val masterWordData = ArrayBuffer(("init",0))
+        // val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
+        // save(newWord)
       }
     }
-    getMasterWordArr()
+    masterWordData
   }
 
   def getMasterWordArr() = {
