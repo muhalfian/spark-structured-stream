@@ -19,6 +19,7 @@ import org.apache.spark.ml.linalg.{Vector, Vectors}
 import java.util.Calendar
 import java.util.UUID.randomUUID
 
+
 import collection.JavaConverters._
 
 
@@ -64,7 +65,7 @@ object ClusterTools {
 
   def calculateDistance(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int]) = {
     for ( i <- 1 to (aggregateArray.length - 1) ) {
-      val cent = centroid(clusterArray(i))
+      val cent = centroid(clusterArray(i).toInt)
       val data = aggregateArray(i)
       distance(i) =  vlib.getDistance(cent, data)
     }
@@ -109,7 +110,6 @@ object ClusterTools {
 
   def getCosineToGround(cent: Seq[String]) : Double = {
     var centVec = ClusterTools.convertSeqToFeatures(cent)
-    var size = centVec.size
     var zeroVec = Array.fill(size)(0.01)
     var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     dist
@@ -166,11 +166,11 @@ object ClusterTools {
     timestamp
   }
 
-  def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
+  def addCentroidArr(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
     centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
   }
 
-  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
+  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
@@ -202,10 +202,10 @@ object ClusterTools {
     updateRadius
   }
 
-  def actionNewCluster(newData: Array[Double]) : String = {
+  def actionNewCluster(newData: Array[Double]) : Integer = {
     println("============= NEW CLUSTER =====================")
     // var newCluster = centroidArr.size
-    var newCluster = randomUUID().toString
+    // var newCluster = randomUUID().toString
     println("cluster selected = " + newCluster + " [NEW]")
     println("cluster distance = 0")
 
@@ -241,7 +241,7 @@ object ClusterTools {
   }
 
   val updateRadius = udf((content: Seq[String], index: Integer ) => {
-    // size = MasterWordModel.masterWordArr.size
+    size = MasterWordModel.masterWordArr.size
 
     val dataVec = convertSeqToFeatures(content)
     val centVec = convertSeqToFeatures(centroidArr.filter(_._2 == index)(0)._1)

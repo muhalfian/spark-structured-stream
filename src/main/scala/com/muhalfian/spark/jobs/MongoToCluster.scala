@@ -63,7 +63,7 @@ object MongoToCluster extends StreamUtils {
     var method = "average"
     val n = AggTools.masterWordCount
 
-    ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n)
+    ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n).map(_.toString)
     val cluster = ClusterTools.clusterArray.distinct
     println("jumlah data tercluster : " + ClusterTools.clusterArray.size )
     println("jumlah cluster : " + cluster.size )
