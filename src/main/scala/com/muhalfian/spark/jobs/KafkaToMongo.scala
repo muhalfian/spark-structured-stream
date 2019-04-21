@@ -80,7 +80,7 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection",PropertiesLoader.dbDataInit).save();
+    MongoSpark.write(aggregateDF).mode("append").option("uri",PropertiesLoader.mongoUrl+PropertiesLoader.mongoDb).option("collection",PropertiesLoader.dbDataInit).save();
 
   }
 }
