@@ -17,6 +17,7 @@ import scala.collection.mutable.{ArrayBuffer, WrappedArray}
 
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import java.util.Calendar
+import java.util.UUID.randomUUID
 
 import collection.JavaConverters._
 
@@ -36,8 +37,7 @@ object ClusterTools {
   var size = MasterWordModel.masterWordArr.size
 
   // MongoConfig
-  val writeConfig = WriteConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_6_update"))
-  // val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/", "database" -> "prayuga", "collection" -> "master_cluster_3"))
+  val writeConfig = WriteConfig(Map("collection" -> PropertiesLoader.dbMasterClusterUpdate))
 
   val spark = OnlineStream.spark
   val sc = spark.sparkContext
@@ -109,6 +109,7 @@ object ClusterTools {
 
   def getCosineToGround(cent: Seq[String]) : Double = {
     var centVec = ClusterTools.convertSeqToFeatures(cent)
+    var size = centVec.size
     var zeroVec = Array.fill(size)(0.01)
     var dist = CosineSimilarity.cosineSimilarity(centVec, zeroVec)
     dist
@@ -203,7 +204,8 @@ object ClusterTools {
 
   def actionNewCluster(newData: Array[Double]) : Integer = {
     println("============= NEW CLUSTER =====================")
-    var newCluster = centroidArr.size
+    // var newCluster = centroidArr.size
+    var newCluster = randomUUID().toString
     println("cluster selected = " + newCluster + " [NEW]")
     println("cluster distance = 0")
 
@@ -239,7 +241,7 @@ object ClusterTools {
   }
 
   val updateRadius = udf((content: Seq[String], index: Integer ) => {
-    size = MasterWordModel.masterWordArr.size
+    // size = MasterWordModel.masterWordArr.size
 
     val dataVec = convertSeqToFeatures(content)
     val centVec = convertSeqToFeatures(centroidArr.filter(_._2 == index)(0)._1)

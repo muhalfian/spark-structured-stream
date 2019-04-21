@@ -78,6 +78,7 @@ object WriterUtil {
             doc.put("publish_date", sc.publish_date)
             doc.put("title", sc.title)
             doc.put("text", sc.text)
+            doc.put("text_html", sc.text)
             doc.put("text_preprocess", sc.text_preprocess)
             doc.put("text_aggregate", sc.text_aggregate)
             doc.put("text_selected", sc.text_selected)

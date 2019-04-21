@@ -70,7 +70,7 @@ object OnlineStream extends StreamUtils {
 
     val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
 
-    val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+    val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_html" "text_preprocess")
                         .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
 
