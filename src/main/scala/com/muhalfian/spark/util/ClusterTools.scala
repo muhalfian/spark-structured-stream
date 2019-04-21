@@ -50,7 +50,7 @@ object ClusterTools {
   var centroidArr = MasterClusterModel.masterClusterArr
   var dmax = MasterClusterModel.getDmax()
 
-  def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
+  def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
     // merge cluster, array
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), data._1)
@@ -63,7 +63,7 @@ object ClusterTools {
     }
   }
 
-  def calculateDistance(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int]) = {
+  def calculateDistance(aggregateArray: Array[Array[Double]] , clusterArray: Array[String]) = {
     for ( i <- 1 to (aggregateArray.length - 1) ) {
       val cent = centroid(clusterArray(i).toInt)
       val data = aggregateArray(i)
@@ -71,7 +71,7 @@ object ClusterTools {
     }
   }
 
-  def calculateRadius(aggregateArray: Array[Array[Double]] , clusterArray: Array[Int] ) = {
+  def calculateRadius(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
     // merge cluster, array
     var dataArray = aggregateArray.zipWithIndex.map(data => {
       (clusterArray(data._2), distance(data._2))
