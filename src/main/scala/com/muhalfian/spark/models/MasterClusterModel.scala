@@ -42,7 +42,7 @@ object MasterClusterModel {
   }
 
   def getUnknownCluster() = {
-    var unknownClusterId = 0
+    var unknownClusterId = "0"
     try {
       unknownClusterId = masterClusterArr.map(data => {
         var centVec = ClusterTools.convertSeqToFeatures(data._1)
@@ -52,7 +52,7 @@ object MasterClusterModel {
       }).minBy(_._2)._1
     } catch {
       case _: Throwable =>  {
-        unknownClusterId = 0
+        unknownClusterId = "0"
       }
     }
     unknownClusterId

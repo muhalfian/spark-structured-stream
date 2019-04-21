@@ -177,7 +177,7 @@ object ClusterTools {
     MasterClusterModel.save(newDoc)
   }
 
-  def updateCentroidArr(updateCentroid: Seq[String], newCluster: Integer, updateSize: Integer, updateRadius: Double) = {
+  def updateCentroidArr(updateCentroid: Seq[String], newCluster: String, updateSize: Integer, updateRadius: Double) = {
     var index = centroidArr.indexWhere(_._2 == newCluster)
     centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius)
   }
@@ -197,7 +197,7 @@ object ClusterTools {
     newCentroidSeq
   }
 
-  def getUpdateRadius(selectedCluster : (Integer, Integer, Double, Double, Integer)) : Double = {
+  def getUpdateRadius(selectedCluster : (String, Integer, Double, Double, Integer)) : Double = {
     val updateRadius = if(selectedCluster._4 > selectedCluster._3) selectedCluster._4 else selectedCluster._3
     updateRadius
   }
@@ -220,7 +220,7 @@ object ClusterTools {
     newCluster
   }
 
-  def actionUpdateCluster(newData: Array[Double], selectedCluster: (String, Integer, Double, Double, Integer)) : Integer = {
+  def actionUpdateCluster(newData: Array[Double], selectedCluster: (String, Integer, Double, Double, Integer)) : String = {
     var newCluster = selectedCluster._1
     println("============= UPDATE CLUSTER =====================")
     println("cluster selected = " + newCluster)
