@@ -59,7 +59,7 @@ object ClusterTools {
     // find centroid
     for ((key, value) <- dataArray) {
       val data = value.map(arr => arr._2)
-      centroid(key) = clib.getCentroid(data)
+      centroid(key.toInt) = clib.getCentroid(data)
     }
   }
 
@@ -80,8 +80,8 @@ object ClusterTools {
     // find radius
     for ((key, value) <- dataArray) {
       val dist = value.map(arr => arr._2)
-      radius(key) = dist.max
-      n(key) = dist.size
+      radius(key.toInt) = dist.max
+      n(key.toInt) = dist.size
     }
   }
 
@@ -144,7 +144,7 @@ object ClusterTools {
     stringData
   }
 
-  def getDistanceToCentroids(newData : Array[Double]) : ArrayBuffer[(Integer, Integer, Double, Double, Integer)] = {
+  def getDistanceToCentroids(newData : Array[Double]) : ArrayBuffer[(String, Integer, Double, Double, Integer)] = {
     val distance = centroidArr.map(data => {
       val centVec = convertSeqToFeatures(data._1)
       val dd = vlib.getDistance(centVec, newData)
@@ -202,7 +202,7 @@ object ClusterTools {
     updateRadius
   }
 
-  def actionNewCluster(newData: Array[Double]) : Integer = {
+  def actionNewCluster(newData: Array[Double]) : String = {
     println("============= NEW CLUSTER =====================")
     // var newCluster = centroidArr.size
     var newCluster = randomUUID().toString
@@ -220,7 +220,7 @@ object ClusterTools {
     newCluster
   }
 
-  def actionUpdateCluster(newData: Array[Double], selectedCluster: (Integer, Integer, Double, Double, Integer)) : Integer = {
+  def actionUpdateCluster(newData: Array[Double], selectedCluster: (String, Integer, Double, Double, Integer)) : Integer = {
     var newCluster = selectedCluster._1
     println("============= UPDATE CLUSTER =====================")
     println("cluster selected = " + newCluster)
