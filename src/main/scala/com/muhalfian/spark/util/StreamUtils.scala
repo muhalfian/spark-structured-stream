@@ -7,12 +7,18 @@ import org.apache.spark.{SparkConf, SparkContext}
 
 // private[spark] trait StreamUtils {
 trait StreamUtils {
+
+  val dbDataInit = "data_init_7_temp"
+  val dbMasterWord = "master_word_7_temp"
+  val dbMasterData = "master_data_7_temp"
+  val dbMasterCluster = "master_cluster_7_temp"
+
   def getSparkContext(args: Array[String]): SparkContext = {
     getSparkSession(args).sparkContext
   }
 
   def getSparkSession(args: Array[String]): SparkSession = {
-    val uri: String = args.headOption.getOrElse("mongodb://10.252.37.112/prayuga.master_word_2")
+    // val uri: String = args.headOption.getOrElse("mongodb://10.252.37.112/prayuga.master_word_2")
     //val master: String = "spark://10.252.37.109:7077"
     val master: String = "local[*]"
 
@@ -20,8 +26,8 @@ trait StreamUtils {
       .setMaster(master)
       .setAppName("PrayugaStream")
       .set("spark.app.id", "StreamProtocolCountToMongo")
-      .set("spark.mongodb.input.uri", uri)
-      .set("spark.mongodb.output.uri", uri)
+      // .set("spark.mongodb.input.uri", uri)
+      // .set("spark.mongodb.output.uri", uri)
 
     val session = SparkSession.builder()
       .config(conf)
@@ -32,7 +38,7 @@ trait StreamUtils {
   }
 
   def getSparkSessionPlain(): SparkSession = {
-    val uri: String = "mongodb://10.252.37.112/prayuga.master_word_2"
+    // val uri: String = "mongodb://10.252.37.112/prayuga.master_word_2"
     //val master: String = "spark://10.252.37.109:7077"
     val master: String = "local[*]"
 
@@ -40,8 +46,8 @@ trait StreamUtils {
       .setMaster(master)
       .setAppName("PrayugaStream")
       .set("spark.app.id", "StreamProtocolCountToMongo")
-      .set("spark.mongodb.input.uri", uri)
-      .set("spark.mongodb.output.uri", uri)
+      // .set("spark.mongodb.input.uri", uri)
+      // .set("spark.mongodb.output.uri", uri)
 
     val session = SparkSession.builder()
       .config(conf)
