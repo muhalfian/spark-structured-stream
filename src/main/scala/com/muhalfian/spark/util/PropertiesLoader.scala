@@ -15,5 +15,7 @@ object PropertiesLoader {
   val dbDataInit = "data_init_7_temp"
   val dbMasterWord = "master_word_7_temp"
   val dbMasterData = "master_data_7_temp"
+  val dbMasterDataUpdate = "master_data_7_update_temp"
   val dbMasterCluster = "master_cluster_7_temp"
+  val dbMasterClusterUpdate = "master_cluster_7_update_temp"
 }
