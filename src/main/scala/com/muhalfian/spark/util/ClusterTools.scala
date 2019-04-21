@@ -104,7 +104,7 @@ object ClusterTools {
       val centStr = convertSeqToString(cent)
       val to_ground = getDistaceToGround(cent)
       val angle_ground = getCosineToGround(cent)
-      Document.parse(s"{cluster: $i, radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground}")
+      Document.parse(s"{cluster: '$i', radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground}")
     })
     masterCluster
   }
