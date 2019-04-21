@@ -55,7 +55,7 @@ object MasterClusterModel {
         unknownClusterId = 0
       }
     }
-    unknownCluster
+    unknownClusterId
   }
 
   def getDmax() = {
