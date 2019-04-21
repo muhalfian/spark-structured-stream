@@ -42,10 +42,10 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== READ MONGO ================================
 
-    val readWord = ReadConfig(Map("uri" -> PropertiesLoader.mongoUrl, "database" -> PropertiesLoader.mongoDb, "collection" -> PropertiesLoader.dbMasterWord), Some(ReadConfig(sc)))
+    val readWord = ReadConfig(Map("uri" -> PropertiesLoader.mongoUrl+PropertiesLoader.mongoDb, "database" -> PropertiesLoader.mongoDb, "collection" -> PropertiesLoader.dbMasterWord), Some(ReadConfig(sc)))
     AggTools.masterWordCount = MongoSpark.load(sc, readWord).count.toInt
 
-    val readConfig = ReadConfig(Map("uri" -> PropertiesLoader.mongoUrl, "database" -> PropertiesLoader.mongoDb, "collection" -> PropertiesLoader.dbDataInit), Some(ReadConfig(sc)))
+    val readConfig = ReadConfig(Map("uri" -> PropertiesLoader.mongoUrl+PropertiesLoader.mongoDb, "database" -> PropertiesLoader.mongoDb, "collection" -> PropertiesLoader.dbDataInit), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
 
     // ======================== AGGREGATION ================================
