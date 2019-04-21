@@ -42,10 +42,10 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== READ MONGO ================================
 
-    val readWord = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_5"), Some(ReadConfig(sc)))
+    val readWord = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "master_word_7_temp"), Some(ReadConfig(sc)))
     AggTools.masterWordCount = MongoSpark.load(sc, readWord).count.toInt
 
-    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_5"), Some(ReadConfig(sc)))
+    val readConfig = ReadConfig(Map("uri" -> "mongodb://10.252.37.112/prayuga", "database" -> "prayuga", "collection" -> "data_init_7_temp"), Some(ReadConfig(sc)))
     val mongoRDD = MongoSpark.load(sc, readConfig)
 
     // ======================== AGGREGATION ================================
@@ -90,9 +90,9 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    WriterUtil.saveBatchMongo("master_data_5",masterData)
-    WriterUtil.saveBatchMongo("master_cluster_5",masterCluster)
-    WriterUtil.saveBatchMongo("master_word_5",masterWord)
+    WriterUtil.saveBatchMongo("master_data_7_temp",masterData)
+    WriterUtil.saveBatchMongo("master_cluster_7_temp",masterCluster)
+    WriterUtil.saveBatchMongo("master_word_7_temp",masterWord)
   }
 
 }
