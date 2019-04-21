@@ -6,7 +6,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.{SparkConf, SparkContext}
 
 // private[spark] trait StreamUtils {
-trait StreamUtils {
+class StreamUtils extends Serializable {
 
   def getSparkContext(args: Array[String]): SparkContext = {
     getSparkSession(args).sparkContext
