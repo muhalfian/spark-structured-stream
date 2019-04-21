@@ -166,11 +166,11 @@ object ClusterTools {
     timestamp
   }
 
-  def addCentroidArr(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
+  def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
   }
 
-  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: Integer, newSize: Integer, newRadius: Double) = {
+  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : $clusterSelected, radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
@@ -202,7 +202,7 @@ object ClusterTools {
     updateRadius
   }
 
-  def actionNewCluster(newData: Array[Double]) : Integer = {
+  def actionNewCluster(newData: Array[Double]) : String = {
     println("============= NEW CLUSTER =====================")
     // var newCluster = centroidArr.size
     var newCluster = randomUUID().toString
