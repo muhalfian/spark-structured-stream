@@ -29,12 +29,13 @@ object MasterWordModel {
   val masterWordArr = initMasterWord()
 
   def initMasterWord() = {
-    try:
+    try {
       getMasterWordArr()
-    catch:
+    } catch {
       val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
       save(newWord)
       getMasterWordArr()
+    }
   }
 
   def getMasterWordArr() = {
