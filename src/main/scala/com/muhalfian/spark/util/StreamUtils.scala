@@ -15,8 +15,8 @@ trait StreamUtils {
   def getSparkSession(args: Array[String]): SparkSession = {
     val mongoUrl = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb + "." + PropertiesLoader.dbDataInit
     val uri: String = args.headOption.getOrElse(mongoUrl)
-    //val master: String = "spark://10.252.37.109:7077"
-    val master: String = "local[*]"
+    val master: String = "spark://10.252.37.109:7077"
+    // val master: String = "local[*]"
 
     val conf = new SparkConf()
       .setMaster(master)
@@ -35,8 +35,8 @@ trait StreamUtils {
 
   def getSparkSessionPlain(): SparkSession = {
     val uri: String = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb + "." + PropertiesLoader.dbDataInit
-    //val master: String = "spark://10.252.37.109:7077"
-    val master: String = "local[*]"
+    val master: String = "spark://10.252.37.109:7077"
+    // val master: String = "local[*]"
 
     val conf = new SparkConf()
       .setMaster(master)
