@@ -32,12 +32,6 @@ object MasterWordModel {
     var masterWordData = ArrayBuffer[(String, Integer)]()
     try {
       masterWordData = getMasterWordArr()
-    } catch {
-      case _: Throwable =>  {
-        masterWordData += (("init",0))
-        // val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
-        // save(newWord)
-      }
     }
     masterWordData
   }
