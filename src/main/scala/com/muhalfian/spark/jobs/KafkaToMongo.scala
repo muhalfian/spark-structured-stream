@@ -45,7 +45,7 @@ object KafkaToMongo extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", """{"online_media":{"0":-2}}""")
-      .option("endingOffsets", """{"online_media":{"0":2000}}""")
+      .option("endingOffsets", """{"online_media":{"0":10}}""")
       .load()
 
     // Transform data stream to Dataframe
@@ -70,7 +70,7 @@ object KafkaToMongo extends StreamUtils {
     val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
 
     val selectedDF = mergeDF
-                    .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess")
+                    .select("link", "source", "description", "image", "publish_date", "title", "text", "text_preprocess", "text_html")
                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     val aggregateDF = selectedDF
@@ -80,7 +80,7 @@ object KafkaToMongo extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_5").save();
+    MongoSpark.write(aggregateDF).mode("append").option("uri","mongodb://10.252.37.112/prayuga").option("collection","data_init_7_temp").save();
 
   }
 }

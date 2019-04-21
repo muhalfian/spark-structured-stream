@@ -10,7 +10,8 @@ object ColsArtifact {
     StructField("image", StringType, true),
     StructField("publish_date", StringType, true),
     StructField("title", StringType, true),
-    StructField("text", StringType, true)
+    StructField("text", StringType, true),
+    StructField("text_html", StringType, true)
     )
   )
 

@@ -44,7 +44,7 @@ object MasterClusterModel {
   def getUnknownCluster() = {
     masterClusterArr.map(data => {
       var centVec = ClusterTools.convertSeqToFeatures(data._1)
-      var zeroVec = Array.fill(size)(0.01)
+      var zeroVec = Array.fill(size)(0.0)
       var dist = ClusterTools.vlib.getDistance(centVec, zeroVec)
       (data._2, dist)
     }).minBy(_._2)._1
