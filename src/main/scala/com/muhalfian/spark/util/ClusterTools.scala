@@ -95,12 +95,16 @@ object ClusterTools {
 
   def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Int]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
-      val start = """[""""
-      val end = """"]"""
-      val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+      // val start = """[""""
+      // val end = """"]"""
+      // val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map(_.toString).mkString(start, "\",\"", end)
+
       val i = index.toInt
       val r = radius(index.toInt)
       val size = n(index.toInt)
+
+      val cent = convertSeqToString(centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map( row => row.toString))
+
       val to_ground = getDistaceToGround(cent)
       Document.parse(s"{cluster: $i, radius: $r, n: $size, centroid : $cent, to_ground : $to_ground}")
     })
