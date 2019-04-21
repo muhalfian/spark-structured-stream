@@ -94,7 +94,7 @@ object ClusterTools {
     masterData
   }
 
-  def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[Int]): Array[org.bson.Document] = {
+  def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[String]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
       val i = index.toInt
       val r = radius(index.toInt)
@@ -155,7 +155,7 @@ object ClusterTools {
       val action : Integer = if(dd > dt) 1 else 0
 
       // cluster, n, radius, distance, action
-      (data._2, data._3, data._4, dd, action)
+      (data._2.toString, data._3, data._4, dd, action)
     })
 
     distance

@@ -31,7 +31,7 @@ object MasterClusterModel {
 
   def getMasterClusterArr() = {
     val centroids = masterCluster.map(row => {
-      (row.getAs[Seq[String]]("centroid"),row.getAs[Integer]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
+      (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"))
     }).collect
 
     ArrayBuffer(centroids: _*)
