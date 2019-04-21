@@ -26,7 +26,16 @@ object MasterWordModel {
   val collectionWrite = "master_word_7_temp"
 
   val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
-  val masterWordArr = getMasterWordArr()
+  val masterWordArr = initMasterWord()
+
+  def initMasterWord() = {
+    try:
+      getMasterWordArr()
+    catch:
+      val newWord = sc.parallelize(Seq(Document.parse(s"{index: 0, word: 'none'}")))
+      save(newWord)
+      getMasterWordArr()
+  }
 
   def getMasterWordArr() = {
     val words = masterWord.select("word", "index").map(row => {
