@@ -41,6 +41,10 @@ object ClusterTools {
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> mongoDb, "collection" -> PropertiesLoader.dbMasterClusterUpdate))
 
+  val spark = OnlineStream.spark
+  val sc = spark.sparkContext
+  import spark.implicits._
+
   // read master cluster
   // var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
   // var dmax = 0.0
