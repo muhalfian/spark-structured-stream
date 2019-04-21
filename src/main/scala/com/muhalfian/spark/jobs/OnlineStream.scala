@@ -76,16 +76,10 @@ object OnlineStream extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val aggregateDF = selectedDF
+    val customDF = selectedDF
       .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
-
-    val clusterDF = aggregateDF
       .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
-
-    val clusterUpdateDF = clusterDF
       .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
-
-    val customDF = clusterUpdateDF
       .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
       .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
       .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
