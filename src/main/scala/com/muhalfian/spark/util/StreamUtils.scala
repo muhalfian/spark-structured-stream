@@ -8,11 +8,6 @@ import org.apache.spark.{SparkConf, SparkContext}
 // private[spark] trait StreamUtils {
 trait StreamUtils {
 
-  val dbDataInit = "data_init_7_temp"
-  val dbMasterWord = "master_word_7_temp"
-  val dbMasterData = "master_data_7_temp"
-  val dbMasterCluster = "master_cluster_7_temp"
-
   def getSparkContext(args: Array[String]): SparkContext = {
     getSparkSession(args).sparkContext
   }

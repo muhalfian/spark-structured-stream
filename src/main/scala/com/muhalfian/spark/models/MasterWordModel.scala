@@ -22,8 +22,8 @@ object MasterWordModel {
   // master cluster
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
-  val collectionRead = StreamUtils.dbMasterWord
-  val collectionWrite = StreamUtils.dbMasterWord
+  val collectionRead = PropertiesLoader.dbMasterWord
+  val collectionWrite = PropertiesLoader.dbMasterWord
 
   val masterWord = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterWordArr = initMasterWord()
