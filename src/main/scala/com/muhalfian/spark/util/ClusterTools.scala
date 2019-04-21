@@ -97,7 +97,7 @@ object ClusterTools {
 
   def masterClusterAgg(mongoRDD : RDD[org.bson.Document], cluster: Array[String]): Array[org.bson.Document] = {
     val masterCluster = cluster.map( index => {
-      val i = index.toInt
+      val i = index.toString
       val r = radius(index.toInt)
       val size = n(index.toInt)
       val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map( row => row.toString)
