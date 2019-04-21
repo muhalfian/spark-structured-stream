@@ -63,7 +63,7 @@ object AggTools {
         (word(0).toInt, word(1).toDouble)
       }).toSeq
 
-      val vectorData = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
+      val vectorData = Vectors.sparse(size-1, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
 
       vectorData
     }).collect()
