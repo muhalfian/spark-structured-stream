@@ -32,8 +32,8 @@ object RowArtifact {
       r.getAs[String](6),
       r.getAs[String](7),
       r.getAs[WrappedArray[String]](8),
-      r.getAs[WrappedArray[(String, Double)]](9),
-      r.getAs[WrappedArray[(Integer, Double)]](10),
+      r.getAs[WrappedArray[String]](9),
+      r.getAs[WrappedArray[String]](10),
       r.getAs[String](11),
       r.getAs[Double](12)
     )

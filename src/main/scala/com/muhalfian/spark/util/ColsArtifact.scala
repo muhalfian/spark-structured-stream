@@ -46,8 +46,8 @@ object ColsArtifact {
     text: String,
     text_html: String,
     text_preprocess: WrappedArray[String],
-    text_selected: WrappedArray[(String, Double)],
-    text_aggregate: WrappedArray[(Integer, Double)],
+    text_selected: WrappedArray[String],
+    text_aggregate: WrappedArray[String],
     new_cluster: String,
     to_centroid: Double
   )
