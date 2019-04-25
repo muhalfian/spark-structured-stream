@@ -104,7 +104,8 @@ object ClusterTools {
       val centStr = convertSeqToString(cent)
       val to_ground = getDistaceToGround(cent)
       val angle_ground = getCosineToGround(cent)
-      Document.parse(s"{cluster: '$i', radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground}")
+      val datetime = getTimeStamp()
+      Document.parse(s"{cluster: '$i', radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime}")
     })
     masterCluster
   }
@@ -174,6 +175,8 @@ object ClusterTools {
   def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
+    val to_ground = getDistaceToGround(newCentroid)
+    val angle_ground = getCosineToGround(newCentroid)
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
     MasterClusterModel.save(newDoc)
   }
