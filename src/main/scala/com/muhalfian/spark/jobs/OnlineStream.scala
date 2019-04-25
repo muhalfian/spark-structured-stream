@@ -69,7 +69,9 @@ object OnlineStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    val stemmedDF = filteredDF.withColumn("text_stemmed", TextTools.stemming(col("text_filter"))).cache()
+    val stemmedDF = filteredDF
+                    .withColumn("text_stemmed", col("text_filter"))
+                    .withColumn("text_stemmed", TextTools.stemming(col("text_stemmed")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
     //
