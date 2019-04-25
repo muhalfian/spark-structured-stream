@@ -30,7 +30,7 @@ object OnlineStream extends StreamUtils {
 
   // ===================== LOAD SPARK SESSION ============================
 
-  val spark = getSparkSessionPlain()
+  val spark = getSparkSession()
   import spark.implicits._
   spark.sparkContext.setLogLevel("ERROR")
 
