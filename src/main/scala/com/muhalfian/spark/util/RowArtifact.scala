@@ -1,6 +1,7 @@
 package com.muhalfian.spark.util
 
 import org.apache.spark.sql.Row
+import scala.collection.mutable.WrappedArray
 
 object RowArtifact {
 
@@ -30,9 +31,9 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      r.getAs[Array[String]](8),
-      r.getAs[Array[(String, Double)]](9),
-      r.getAs[Array[(Integer, Double)]](10),
+      r.getAs[WrappedArray[String]](8),
+      r.getAs[WrappedArray[(String, Double)]](9),
+      r.getAs[WrappedArray[(Integer, Double)]](10),
       r.getAs[String](11),
       r.getAs[Double](12)
     )
