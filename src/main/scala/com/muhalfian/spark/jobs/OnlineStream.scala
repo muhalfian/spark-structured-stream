@@ -108,7 +108,7 @@ object OnlineStream extends StreamUtils {
         .withColumn("new_cluster", col("text_aggregate"))
         .withColumn("new_cluster", ClusterTools.onlineClustering(col("new_cluster")))
 
-      val clusterUpdateDF = clusterDF.
+      val clusterUpdateDF = clusterDF
         .withColumn("to_centroid", col("text_aggregate"))
         .withColumn("to_centroid", ClusterTools.updateRadius(col("to_centroid"),col("new_cluster")))
 
