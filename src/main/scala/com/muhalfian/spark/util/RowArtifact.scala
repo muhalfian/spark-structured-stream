@@ -33,9 +33,9 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](8).toSeq : _*).asJava),
-      java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](9).toSeq : _*).asJava),
-      java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](10).toSeq : _*).asJava),
+      new java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](8).toSeq : _*).asJava),
+      new java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](9).toSeq : _*).asJava),
+      new java.util.ArrayList[String](ArrayBuffer(r.getAs[WrappedArray[String]](10).toSeq : _*).asJava),
       r.getAs[String](11),
       r.getAs[Double](12)
     )
