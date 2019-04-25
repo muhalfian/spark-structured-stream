@@ -2,6 +2,7 @@ package com.muhalfian.spark.util
 
 import org.apache.spark.sql.Row
 import scala.collection.mutable.WrappedArray
+import scala.collection.mutable.ArrayBuffer
 
 object RowArtifact {
 
