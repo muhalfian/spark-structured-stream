@@ -1,7 +1,7 @@
 package com.muhalfian.spark.util
 
 import org.apache.spark.sql.types._
-import scala.collection.mutable.WrappedArray
+import scala.collection.mutable.ArrayBuffer
 
 object ColsArtifact {
   val rawSchema : StructType = StructType(Seq(
