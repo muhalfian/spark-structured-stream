@@ -87,12 +87,12 @@ object OnlineStream extends StreamUtils {
       .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
       .withColumn("text_selected", TextTools.select(col("text_preprocess")))
       .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
-      .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
-      .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
-      .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-      .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-      .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
-      .withColumn("text", TextTools.stringify(col("text").cast("string")))
+      // .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+      // .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
+      // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+      // .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+      // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+      // .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
       // val aggregateDF = selectedDF
       //   .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
