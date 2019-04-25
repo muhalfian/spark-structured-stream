@@ -34,8 +34,8 @@ object RowArtifact {
       r.getAs[String](6),
       r.getAs[String](7),
       ArrayBuffer(r.getAs[WrappedArray[String]](8).toSeq : _*).toList,
-      ArrayBuffer(r.getAs[WrappedArray[String]](9).toSeq.toArray : _*).toList,
-      ArrayBuffer(r.getAs[WrappedArray[String]](10).toSeq.toArray : _*).toList,
+      ArrayBuffer(r.getAs[WrappedArray[String]](9).toSeq : _*).toList,
+      ArrayBuffer(r.getAs[WrappedArray[String]](10).toSeq : _*).toList,
       r.getAs[String](11),
       r.getAs[Double](12)
     )
