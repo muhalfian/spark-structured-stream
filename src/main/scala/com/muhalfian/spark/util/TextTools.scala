@@ -148,7 +148,7 @@ object TextTools {
     stemmed
   })
 
-  def stemmingFunc(words: Seq[String]) => {
+  def stemmingFunc(words: Seq[String]) = {
     val stemmed = words
                   .map(_.replaceAll("[^A-Za-z]", ""))     // replace all non - char
                   .map(_.trim).filter(_ != "")            // remove null list
