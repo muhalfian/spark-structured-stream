@@ -45,9 +45,9 @@ object ColsArtifact {
     title: String,
     text: String,
     text_html: String,
-    text_preprocess: java.util.List[String],
-    text_selected: java.util.List[String],
-    text_aggregate: java.util.List[String],
+    text_preprocess: List[String],
+    text_selected: List[String],
+    text_aggregate: List[String],
     new_cluster: String,
     to_centroid: Double
   )
