@@ -1,7 +1,7 @@
 package com.muhalfian.spark.util
 
 import org.apache.spark.sql.types._
-import scala.collection.mutable.ArrayBuffer
+// import scala.collection.mutable.ArrayBuffer
 
 object ColsArtifact {
   val rawSchema : StructType = StructType(Seq(
@@ -45,9 +45,9 @@ object ColsArtifact {
     title: String,
     text: String,
     text_html: String,
-    text_preprocess: ArrayBuffer[String],
-    text_selected: ArrayBuffer[String],
-    text_aggregate: ArrayBuffer[String],
+    text_preprocess: Array[String],
+    text_selected: Array[String],
+    text_aggregate: Array[String],
     new_cluster: String,
     to_centroid: Double
   )
