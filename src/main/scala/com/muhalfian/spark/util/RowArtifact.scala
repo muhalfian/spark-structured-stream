@@ -2,6 +2,8 @@ package com.muhalfian.spark.util
 
 import org.apache.spark.sql.Row
 import scala.collection.mutable.WrappedArray
+import scala.collection.mutable.ArrayBuffer
+import collection.JavaConverters._
 
 object RowArtifact {
 
@@ -31,9 +33,9 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      scala.collection.JavaConverters.seqAsJavaList(r.getAs[WrappedArray[String]](8).toSeq),
-      scala.collection.JavaConverters.seqAsJavaList(r.getAs[WrappedArray[String]](9).toSeq),
-      scala.collection.JavaConverters.seqAsJavaList(r.getAs[WrappedArray[String]](10).toSeq),
+      ArrayBuffer(r.getAs[WrappedArray[String]](8).toSeq : _*).asJava,
+      ArrayBuffer(r.getAs[WrappedArray[String]](9).toSeq.toArray : _*).asJava,
+      ArrayBuffer(r.getAs[WrappedArray[String]](10).toSeq.toArray : _*).asJava,
       r.getAs[String](11),
       r.getAs[Double](12)
     )
