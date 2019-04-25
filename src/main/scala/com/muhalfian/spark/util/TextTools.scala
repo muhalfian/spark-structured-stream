@@ -145,16 +145,9 @@ object TextTools {
                   .map(_.replaceAll("[^A-Za-z]", ""))     // replace all non - char
                   .map(_.trim).filter(_ != "")            // remove null list
                   .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
+    println(stemmed)
     stemmed
   })
-
-  def stemmingFunc(words: Seq[String]) = {
-    val stemmed = words
-                  .map(_.replaceAll("[^A-Za-z]", ""))     // replace all non - char
-                  .map(_.trim).filter(_ != "")            // remove null list
-                  .map(row => lemmatizer.lemmatize(row))  // stemming using sastrawi
-    stemmed
-  }
 
   // ====================== MERGE TEXT =================================
 
