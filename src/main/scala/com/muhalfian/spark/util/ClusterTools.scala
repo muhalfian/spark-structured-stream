@@ -177,7 +177,7 @@ object ClusterTools {
     val datetime = getTimeStamp()
     val to_ground = getDistaceToGround(newCentroid)
     val angle_ground = getCosineToGround(newCentroid)
-    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, datetime: $datetime}")))
+    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime}")))
     MasterClusterModel.save(newDoc)
   }
 

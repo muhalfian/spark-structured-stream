@@ -106,9 +106,9 @@ object OnlineStream extends StreamUtils {
         .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
       val customDF = clusterDF
-        // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-        // .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-        // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+        .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+        .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+        .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
         .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // =========================== SINK ====================================
