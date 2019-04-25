@@ -30,9 +30,9 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      r.getAs[String](8),
-      r.getAs[String](9),
-      r.getAs[String](10),
+      r.getAs[Array[String]](8),
+      r.getAs[Array[(String, Double)]](9),
+      r.getAs[Array[(Integer, Double)]](10),
       r.getAs[String](11),
       r.getAs[Double](12)
     )
