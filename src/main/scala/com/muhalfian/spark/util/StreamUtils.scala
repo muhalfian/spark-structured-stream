@@ -40,7 +40,7 @@ class StreamUtils extends Serializable {
   def getSparkSessionPlain(): SparkSession = {
     val uri: String = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb + "." + PropertiesLoader.dbDataInit
     // val master: String = "spark://10.252.37.109:7077"
-    val master: String = "local[2]"
+    val master: String = "local[3]"
 
     val conf = new SparkConf()
       .setMaster(master)
