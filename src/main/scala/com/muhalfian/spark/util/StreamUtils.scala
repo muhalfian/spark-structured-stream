@@ -24,10 +24,10 @@ class StreamUtils extends Serializable {
       .set("spark.app.id", "StreamProtocolCountToMongo")
       .set("spark.mongodb.input.uri", uri)
       .set("spark.mongodb.output.uri", uri)
-      // 1 workers
-      .set("spark.executor.instances", "1")
-      // 1 cores on each workers
-      .set("spark.executor.cores", "1");
+      // // 1 workers
+      // .set("spark.executor.instances", "1")
+      // // 1 cores on each workers
+      // .set("spark.executor.cores", "1");
 
     val session = SparkSession.builder()
       .config(conf)
@@ -49,7 +49,7 @@ class StreamUtils extends Serializable {
       .set("spark.mongodb.input.uri", uri)
       .set("spark.mongodb.output.uri", uri)
       // 1 workers
-      .set("spark.executor.instances", "1")
+      // .set("spark.executor.instances", "1")
 
     val session = SparkSession.builder()
       .config(conf)
