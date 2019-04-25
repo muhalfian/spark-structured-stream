@@ -69,7 +69,7 @@ object OnlineStream extends StreamUtils {
 
     val filteredDF = TextTools.remover.transform(regexDF)
 
-    val stemmedDF = filteredDF.withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
+    val stemmedDF = filteredDF.withColumn("text_stemmed", TextTools.stemmingFunc(col("text_filter")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
     //
@@ -85,7 +85,7 @@ object OnlineStream extends StreamUtils {
       .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
       .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
       .withColumn("text_selected", TextTools.select(col("text_preprocess")))
-      .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected"))).cache()
+      .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
       // .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
       // .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
       // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
