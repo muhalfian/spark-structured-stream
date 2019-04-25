@@ -83,14 +83,10 @@ object OnlineStream extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    val preprocessDF = ngramDF
-      .withColumn("text_preprocess", col("text_stemmed"))
-      .withColumn("text_preprocess", TextTools.merge(col("text_preprocess"), col("text_ngram_2")))
-
-    val selectedDF = preprocessDF
+    val selectedDF = ngramDF
+      .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
       .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
-      .withColumn("text_selected", col("text_preprocess"))
-      .withColumn("text_selected", TextTools.select(col("text_selected")))
+      .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
       // .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
       // .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
@@ -107,12 +103,9 @@ object OnlineStream extends StreamUtils {
       val clusterDF = aggregateDF
         .withColumn("new_cluster", col("text_aggregate"))
         .withColumn("new_cluster", ClusterTools.onlineClustering(col("new_cluster")))
+        .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
-      val clusterUpdateDF = clusterDF
-        .withColumn("to_centroid", col("text_aggregate"))
-        .withColumn("to_centroid", ClusterTools.updateRadius(col("to_centroid"),col("new_cluster")))
-
-      val customDF = clusterUpdateDF
+      val customDF = clusterDF
         .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
         .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
         .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
@@ -120,12 +113,12 @@ object OnlineStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    val saveMasterData = customDF
-          .map(r => RowArtifact.rowMasterDataUpdate(r))
-          .writeStream
-          .outputMode("append")
-          .foreach(WriterUtil.masterDataUpdate)
-          .start()
+    // val saveMasterData = customDF
+    //       .map(r => RowArtifact.rowMasterDataUpdate(r))
+    //       .writeStream
+    //       .outputMode("append")
+    //       .foreach(WriterUtil.masterDataUpdate)
+    //       .start()
 
     //Show Data after processed
     val printConsole = customDF.writeStream
