@@ -31,9 +31,9 @@ object RowArtifact {
       r.getAs[String](5),
       r.getAs[String](6),
       r.getAs[String](7),
-      r.getAs[WrappedArray[String]](8).toArray,
-      r.getAs[WrappedArray[String]](9).toArray,
-      r.getAs[WrappedArray[String]](10).toArray,
+      r.getAs[WrappedArray[String]](8),
+      r.getAs[WrappedArray[String]](9),
+      r.getAs[WrappedArray[String]](10),
       r.getAs[String](11),
       r.getAs[Double](12)
     )
