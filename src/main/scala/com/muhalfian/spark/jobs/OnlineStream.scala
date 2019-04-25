@@ -57,6 +57,12 @@ object OnlineStream extends StreamUtils {
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
+    //Show Data after processed
+    val printConsole1 = kafkaDF.writeStream
+          .format("console")
+          // .option("truncate","false")
+          .start()
+
     // =================== PREPROCESS SASTRAWI =============================
 
     val regexDF = TextTools.regexTokenizer.transform(kafkaDF)
@@ -102,12 +108,12 @@ object OnlineStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    val saveMasterData = customDF
-          .map(r => RowArtifact.rowMasterDataUpdate(r))
-          .writeStream
-          .outputMode("append")
-          .foreach(WriterUtil.masterDataUpdate)
-          .start()
+    // val saveMasterData = customDF
+    //       .map(r => RowArtifact.rowMasterDataUpdate(r))
+    //       .writeStream
+    //       .outputMode("append")
+    //       .foreach(WriterUtil.masterDataUpdate)
+    //       .start()
 
     //Show Data after processed
     val printConsole = customDF.writeStream
@@ -115,7 +121,8 @@ object OnlineStream extends StreamUtils {
           // .option("truncate","false")
           .start()
 
-    saveMasterData.awaitTermination()
+    // saveMasterData.awaitTermination()
+    printConsole1.awaitTermination()
     printConsole.awaitTermination()
 
   }
