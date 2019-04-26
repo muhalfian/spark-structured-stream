@@ -62,7 +62,7 @@ object OnlineStream extends StreamUtils {
     // Transform data stream to Dataframe
     val kafkaDF = kafka.selectExpr("CAST(value AS STRING)","CAST(offset AS STRING)").as[(String,String)]
       .select(from_json($"value", ColsArtifact.rawSchema).as("data"), $"offset".as("id"))
-      .select("data.*", "id")
+      .select("data.*", "id.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // =================== PREPROCESS SASTRAWI =============================
