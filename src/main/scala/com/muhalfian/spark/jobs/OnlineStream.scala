@@ -53,7 +53,7 @@ object OnlineStream extends StreamUtils {
 
     //Show Data after processed
     val printConsole1 = kafka
-          .selectExpr("CAST(value AS STRING)","CAST(offset AS STRING)").as[(String,String)]
+          .selectExpr("CAST(value AS STRING)","CAST(offset AS INTEGER)").as[(String,String)]
           .writeStream
           .format("console")
           // .option("truncate","false")
