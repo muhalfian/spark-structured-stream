@@ -172,7 +172,7 @@ object ClusterTools {
     distance
   }
 
-  def getTimeStamp() : Integer = {
+  def getTimeStamp() : Long = {
     val timestamp = java.lang.System.currentTimeMillis
     // val timestamp = java.lang.System.currentTimeMillis / 1000
     timestamp
