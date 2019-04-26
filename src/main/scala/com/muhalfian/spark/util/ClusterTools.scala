@@ -93,9 +93,9 @@ object ClusterTools {
       // row._1.text_preprocess = row._1.text_preprocess.replaceAll("[\\]\\[]", "")
       // println(row._1.toString())
       // println(row._1.get("text_preprocess").toString())
-      row._1.put("text_preprocess", clusterArray(row._2.toInt))
-      row._1.put("text_aggregate", clusterArray(row._2.toInt))
-      row._1.put("text_selected", clusterArray(row._2.toInt))
+      row._1.put("text_preprocess", row._1.get("text_preprocess").toString())
+      row._1.put("text_aggregate", row._1.get("text_aggregate").toString())
+      row._1.put("text_selected", row._1.get("text_selected").toString())
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
       row._1
