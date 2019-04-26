@@ -51,17 +51,17 @@ object OnlineStream extends StreamUtils {
       // .option("endingOffsets", """{"online_media":{"0":6000}}""")
       .load()
 
+    //Show Data after processed
+    val printConsole1 = kafka.writeStream
+          .format("console")
+          // .option("truncate","false")
+          .start()
+
     // Transform data stream to Dataframe
     val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
       .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
       .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
-
-    //Show Data after processed
-    val printConsole1 = kafkaDF.writeStream
-          .format("console")
-          // .option("truncate","false")
-          .start()
 
     // =================== PREPROCESS SASTRAWI =============================
 
@@ -128,9 +128,8 @@ object OnlineStream extends StreamUtils {
     //       .option("topic", "master_data")
     //       .start()
 
-    val mongoDF = customDF.map(r => RowArtifact.rowMasterDataUpdate(r))
-
-    val saveMasterData = mongoDF
+    val saveMasterData = customDF
+          .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
           .outputMode("append")
           .foreach(WriterUtil.masterDataUpdate)
