@@ -82,7 +82,7 @@ object OnlineStream extends StreamUtils {
 
     val clusterDF = aggregateDF
       .withColumn("new_cluster", col("text_aggregate"))
-      .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+      .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate"),col("link")))
       .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
     val customDF = clusterDF

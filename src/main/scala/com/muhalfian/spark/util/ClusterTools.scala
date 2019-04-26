@@ -169,24 +169,24 @@ object ClusterTools {
     timestamp
   }
 
-  def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
-    centroidArr += ((newCentroid, clusterSelected, newSize, newRadius))
+  def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double, link: String) = {
+    centroidArr += ((newCentroid, clusterSelected, newSize, newRadius, link))
   }
 
-  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double) = {
+  def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double, link: String) = {
     val newCentroidStr = convertSeqToString(newCentroid)
     val datetime = getTimeStamp()
     // val to_ground = getDistaceToGround(newCentroid)
     // val angle_ground = getCosineToGround(newCentroid)
     val to_ground = 0
     val angle_ground = 0
-    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime}")))
+    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime, link: '$link'}")))
     MasterClusterModel.save(newDoc)
   }
 
-  def updateCentroidArr(updateCentroid: Seq[String], newCluster: String, updateSize: Integer, updateRadius: Double) = {
+  def updateCentroidArr(updateCentroid: Seq[String], newCluster: String, updateSize: Integer, updateRadius: Double, link: String) = {
     var index = centroidArr.indexWhere(_._2 == newCluster)
-    centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius)
+    centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius, link)
   }
 
   def vectorQuantization(centroid: Double, newData: Double): Double = {
@@ -209,7 +209,7 @@ object ClusterTools {
     updateRadius
   }
 
-  def actionNewCluster(newData: Array[Double]) : String = {
+  def actionNewCluster(newData: Array[Double], link: String) : String = {
     println("============= NEW CLUSTER =====================")
     // var newCluster = centroidArr.size.toString
     var newCluster = randomUUID().toString
@@ -221,8 +221,8 @@ object ClusterTools {
     var newRadius = 0
 
     // sink
-    addCentroidArr(newCentroid, newCluster, newSize, newRadius)
-    addCentroidMongo(newCentroid, newCluster, newSize, newRadius)
+    addCentroidArr(newCentroid, newCluster, newSize, newRadius, link)
+    addCentroidMongo(newCentroid, newCluster, newSize, newRadius, link)
 
     newCluster
   }
@@ -258,26 +258,34 @@ object ClusterTools {
     radius
   })
 
-  val onlineClustering = udf((content: Seq[String]) => {
+  val onlineClustering = udf((content: Seq[String], link: String) => {
 
-    println("########### Start Online Clustering ##################")
-
-    // update size array [word]
-    size = MasterWordModel.masterWordArr.size
-
-    val newData = convertSeqToFeatures(content)
-    println("new data")
-    println(newData)
-    val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)
-    println("selected cluster")
-    println(selectedCluster)
     var newCluster = "0"
-    println("if condition")
-    if(selectedCluster._5 == 1){
-      newCluster = actionNewCluster(newData)
+    var index = centroidArr.indexWhere(_._5 == link)
+
+    if(index == -1) {
+      println("########### Start Online Clustering ##################")
+      // update size array [word]
+      size = MasterWordModel.masterWordArr.size
+
+      val newData = convertSeqToFeatures(content)
+      println("new data")
+      println(newData)
+      val selectedCluster = getDistanceToCentroids(newData).minBy(_._4)
+      println("selected cluster")
+      println(selectedCluster)
+
+      println("if condition")
+      if(selectedCluster._5 == 1){
+        newCluster = actionNewCluster(newData, link)
+      } else {
+        newCluster = actionUpdateCluster(newData, selectedCluster, link)
+      }
     } else {
-      newCluster = actionUpdateCluster(newData, selectedCluster)
+      println("************* PASSING *************")
+      newCluster = centroidArr(index)._2
     }
+
     newCluster
   })
 }
