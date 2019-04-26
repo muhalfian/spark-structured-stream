@@ -5,7 +5,7 @@ import org.apache.spark.sql.types._
 
 object ColsArtifact {
   val rawSchema : StructType = StructType(Seq(
-    StructField("offset", IntegerType,true),
+    StructField("id", IntegerType,true),
     StructField("link", StringType,true),
     StructField("source", StringType, true),
     StructField("description", StringType, true),
