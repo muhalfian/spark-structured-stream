@@ -52,9 +52,9 @@ object OnlineStream extends StreamUtils {
       .load()
 
     // Transform data stream to Dataframe
-    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)","CAST(offset AS INTEGER)").as[(String,String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"), col("offset"))
-      .select("data.*", "offset.")
+    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
+      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
+      .select("data.*")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // =================== PREPROCESS SASTRAWI =============================
