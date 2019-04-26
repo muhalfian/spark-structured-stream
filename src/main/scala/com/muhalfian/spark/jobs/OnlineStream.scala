@@ -51,18 +51,10 @@ object OnlineStream extends StreamUtils {
       // .option("endingOffsets", """{"online_media":{"0":6000}}""")
       .load()
 
-    //Show Data after processed
-    val printConsole1 = kafka
-          .selectExpr("CAST(value AS STRING)","CAST(offset AS INTEGER)").as[(String,String)]
-          .writeStream
-          .format("console")
-          // .option("truncate","false")
-          .start()
-
     // Transform data stream to Dataframe
-    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)","CAST(offset AS STRING)").as[(String,String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"), $"offset".as("id"))
-      .select("data.*", "id.")
+    val kafkaDF = kafka.selectExpr("CAST(value AS STRING)","CAST(offset AS INTEGER)").as[(String,String)]
+      .select(from_json($"value", ColsArtifact.rawSchema).as("data"), col("offset"))
+      .select("data.*", "offset.")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // =================== PREPROCESS SASTRAWI =============================
@@ -76,27 +68,13 @@ object OnlineStream extends StreamUtils {
                     .withColumn("text_stemmed", TextTools.stemming(col("text_filter")))
 
     val ngramDF = TextTools.ngram.transform(stemmedDF)
-    //
-    // val mergeDF = ngramDF.withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
-    //
-    // val selectedDF = mergeDF.select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
-    //                     .withColumn("text_selected", TextTools.select(col("text_preprocess")))
-
-
-    // ======================== AGGREGATION ================================
 
     val selectedDF = ngramDF
       .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
       .select("id", "link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
       .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
-      // .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
-      // .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
-      // .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
-      // .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-      // .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-      // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
-      // .withColumn("text", TextTools.stringify(col("text").cast("string")))
+    // ======================== AGGREGATION ================================
 
     val aggregateDF = selectedDF
       .withColumn("text_aggregate", col("text_selected"))
@@ -123,13 +101,6 @@ object OnlineStream extends StreamUtils {
           // .option("truncate","false")
           .start()
 
-    // val saveMasterData = customDF.writeStream
-    //       .format("kafka")
-    //       .outputMode("append")
-    //       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-    //       .option("topic", "master_data")
-    //       .start()
-
     val saveMasterData = customDF
           .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
@@ -137,7 +108,6 @@ object OnlineStream extends StreamUtils {
           .foreach(WriterUtil.masterDataUpdate)
           .start()
 
-    printConsole1.awaitTermination()
     printConsole.awaitTermination()
     saveMasterData.awaitTermination()
 

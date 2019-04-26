@@ -105,7 +105,8 @@ object ClusterTools {
       val to_ground = getDistaceToGround(cent)
       val angle_ground = getCosineToGround(cent)
       val datetime = getTimeStamp()
-      Document.parse(s"{cluster: '$i', radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime}")
+      val link_id = "predefined"
+      Document.parse(s"{cluster: '$i', radius: $r, n: $size, centroid : $centStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime, link_id: '$link_id'}")
     })
     masterCluster
   }
