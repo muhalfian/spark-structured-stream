@@ -232,8 +232,12 @@ object ClusterTools {
     var newRadius = 0
 
     // sink
-    addCentroidArr(newCentroid, newCluster, newSize, newRadius, link)
-    addCentroidMongo(newCentroid, newCluster, newSize, newRadius, link)
+    if(linkCheck(link) == -1) {
+      addCentroidArr(newCentroid, newCluster, newSize, newRadius, link)
+      addCentroidMongo(newCentroid, newCluster, newSize, newRadius, link)
+    } else {
+      println("************* PASSING *************")
+    }
 
     newCluster
   }
@@ -252,8 +256,12 @@ object ClusterTools {
     var updateRadius = getUpdateRadius(selectedCluster)
 
     // sink
-    updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius, link)
-    addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
+    if(linkCheck(link) == -1) {
+      updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius, link)
+      addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
+    } else {
+      println("************* PASSING *************")
+    }
 
     newCluster
   }
