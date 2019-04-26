@@ -90,8 +90,6 @@ object OnlineStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
-
-
     //Show Data after processed
     val printConsole = customDF.writeStream
           .format("console")
