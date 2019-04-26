@@ -123,6 +123,7 @@ object OnlineStream extends StreamUtils {
 
     val saveMasterData = customDF.writeStream
           .format("kafka")
+          .outputMode("append")
           .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
           .option("topic", "master_data")
           .start()
