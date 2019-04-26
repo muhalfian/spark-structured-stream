@@ -279,7 +279,9 @@ object ClusterTools {
       println(selectedCluster)
 
       println("if condition")
-      if(linkCheck(link) == -1){
+
+      index = linkCheck(link)
+      if(index == -1){
         if(selectedCluster._5 == 1){
           newCluster = actionNewCluster(newData, link)
         } else {
