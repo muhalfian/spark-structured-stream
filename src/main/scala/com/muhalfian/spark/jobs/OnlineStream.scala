@@ -61,8 +61,8 @@ object OnlineStream extends StreamUtils {
 
     // Transform data stream to Dataframe
     val kafkaDF = kafka.selectExpr("CAST(value AS STRING)").as[(String)]
-      .select(from_json($"value", ColsArtifact.rawSchema).as("data"))
-      .select("data.*")
+      .select(from_json($"value", ColsArtifact.rawSchema).as("data"), "offset")
+      .select("data.*", "offset")
       .withColumn("raw_text", concat(col("title"), lit(" "), col("text"))) // add column aggregate title and text
 
     // =================== PREPROCESS SASTRAWI =============================
@@ -87,7 +87,7 @@ object OnlineStream extends StreamUtils {
 
     val selectedDF = ngramDF
       .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
-      .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
+      .select("offset", "link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
       .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
       // .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
