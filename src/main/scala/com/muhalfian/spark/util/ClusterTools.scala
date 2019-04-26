@@ -227,7 +227,7 @@ object ClusterTools {
     newCluster
   }
 
-  def actionUpdateCluster(newData: Array[Double], selectedCluster: (String, Integer, Double, Double, Integer)) : String = {
+  def actionUpdateCluster(newData: Array[Double], selectedCluster: (String, Integer, Double, Double, Integer), link: String) : String = {
     var newCluster = selectedCluster._1
     println("============= UPDATE CLUSTER =====================")
     println("cluster selected = " + newCluster)
@@ -241,8 +241,8 @@ object ClusterTools {
     var updateRadius = getUpdateRadius(selectedCluster)
 
     // sink
-    updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius)
-    addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius)
+    updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius, link)
+    addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
 
     newCluster
   }
