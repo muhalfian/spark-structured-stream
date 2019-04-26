@@ -121,20 +121,20 @@ object OnlineStream extends StreamUtils {
           // .option("truncate","false")
           .start()
 
-    val saveMasterData = customDF.writeStream
-          .format("kafka")
-          .outputMode("append")
-          .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
-          .option("topic", "master_data")
-          .start()
-
-    // val mongoDF = customDF.map(r => RowArtifact.rowMasterDataUpdate(r))
-    //
-    // val saveMasterData = mongoDF
-    //       .writeStream
+    // val saveMasterData = customDF.writeStream
+    //       .format("kafka")
     //       .outputMode("append")
-    //       .foreach(WriterUtil.masterDataUpdate)
+    //       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
+    //       .option("topic", "master_data")
     //       .start()
+
+    val mongoDF = customDF.map(r => RowArtifact.rowMasterDataUpdate(r))
+
+    val saveMasterData = mongoDF
+          .writeStream
+          .outputMode("append")
+          .foreach(WriterUtil.masterDataUpdate)
+          .start()
 
     printConsole1.awaitTermination()
     printConsole.awaitTermination()
