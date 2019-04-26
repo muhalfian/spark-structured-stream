@@ -71,7 +71,7 @@ object OnlineStream extends StreamUtils {
 
     val selectedDF = ngramDF
       .withColumn("text_preprocess", TextTools.merge(col("text_stemmed"), col("text_ngram_2")))
-      .select("id", "link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
+      .select("link", "source", "description", "image", "publish_date", "title", "text", "text_html", "text_preprocess")
       .withColumn("text_selected", TextTools.select(col("text_preprocess")))
 
     // ======================== AGGREGATION ================================
