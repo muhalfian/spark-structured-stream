@@ -91,10 +91,10 @@ object ClusterTools {
       // var result = word.replaceAll("[\\]\\[]", "")
       // result = result.replaceAll("\"", " ")
       // row._1.text_preprocess = row._1.text_preprocess.replaceAll("[\\]\\[]", "")
-      println(row._1.text_preprocess)
+      println(row._1.toString())
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
-      row._1
+      row._1.toString()
     })
     masterData
   }
