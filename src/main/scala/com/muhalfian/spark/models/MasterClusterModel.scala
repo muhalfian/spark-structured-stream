@@ -34,10 +34,9 @@ object MasterClusterModel {
       (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Long]("datetime"))
     }).collect
 
-    // println(centroids)
-    println(centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList)
+    val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
 
-    ArrayBuffer(centroids: _*)
+    ArrayBuffer(groupedCentroids: _*)
   }
 
   def getSize() = {
