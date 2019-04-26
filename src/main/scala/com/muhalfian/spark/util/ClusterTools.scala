@@ -95,7 +95,7 @@ object ClusterTools {
       println(row._1.toString())
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
-      // row._1.toString()
+      row._1
     })
     masterData
   }
