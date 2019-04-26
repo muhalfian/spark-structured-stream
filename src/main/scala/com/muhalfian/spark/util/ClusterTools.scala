@@ -178,7 +178,8 @@ object ClusterTools {
   }
 
   def addCentroidArr(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double, link: String) = {
-    centroidArr += ((newCentroid, clusterSelected, newSize, newRadius, link))
+    val datetime = getTimeStamp()
+    centroidArr += ((newCentroid, clusterSelected, newSize, newRadius, link, datetime))
   }
 
   def addCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double, link: String) = {
@@ -194,7 +195,8 @@ object ClusterTools {
 
   def updateCentroidArr(updateCentroid: Seq[String], newCluster: String, updateSize: Integer, updateRadius: Double, link: String) = {
     var index = centroidArr.indexWhere(_._2 == newCluster)
-    centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius, link)
+    val datetime = getTimeStamp()
+    centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius, link, datetime)
   }
 
   def vectorQuantization(centroid: Double, newData: Double): Double = {
