@@ -41,6 +41,7 @@ class StreamUtils extends Serializable {
     val uri: String = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb + "." + PropertiesLoader.dbDataInit
     // val master: String = "spark://10.252.37.109:7077"
     val master: String = "local[*]"
+    val chk = "/home/blade1/Documents/spark-structured-stream"
 
     val conf = new SparkConf()
       .setMaster(master)
@@ -48,6 +49,7 @@ class StreamUtils extends Serializable {
       .set("spark.app.id", "StreamProtocolCountToMongo")
       .set("spark.mongodb.input.uri", uri)
       .set("spark.mongodb.output.uri", uri)
+      .set("spark.sql.streaming.checkpointLocation", chk)
 
     val session = SparkSession.builder()
       .config(conf)
