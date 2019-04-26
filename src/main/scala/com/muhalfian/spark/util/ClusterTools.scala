@@ -247,6 +247,10 @@ object ClusterTools {
     newCluster
   }
 
+  def linkCheck(link: String) = {
+    centroidArr.indexWhere(_._5 == link)
+  }
+
   val updateRadius = udf((content: Seq[String], index: String ) => {
     size = MasterWordModel.masterWordArr.size
 
@@ -261,8 +265,7 @@ object ClusterTools {
   val onlineClustering = udf((content: Seq[String], link: String) => {
 
     var newCluster = "0"
-    var index = centroidArr.indexWhere(_._5 == link)
-
+    var index = linkCheck(link)
     if(index == -1) {
       println("########### Start Online Clustering ##################")
       // update size array [word]
@@ -276,10 +279,15 @@ object ClusterTools {
       println(selectedCluster)
 
       println("if condition")
-      if(selectedCluster._5 == 1){
-        newCluster = actionNewCluster(newData, link)
+      if(linkCheck(link) == -1){
+        if(selectedCluster._5 == 1){
+          newCluster = actionNewCluster(newData, link)
+        } else {
+          newCluster = actionUpdateCluster(newData, selectedCluster, link)
+        }
       } else {
-        newCluster = actionUpdateCluster(newData, selectedCluster, link)
+        println("************* PASSING *************")
+        newCluster = centroidArr(index)._2
       }
     } else {
       println("************* PASSING *************")
