@@ -52,7 +52,9 @@ object OnlineStream extends StreamUtils {
       .load()
 
     //Show Data after processed
-    val printConsole1 = kafka.writeStream
+    val printConsole1 = kafka
+          .selectExpr("CAST(value AS STRING)","CAST(offset AS STRING)").as[(String,String)]
+          .writeStream
           .format("console")
           // .option("truncate","false")
           .start()
@@ -96,20 +98,20 @@ object OnlineStream extends StreamUtils {
       // .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
       // .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
-      val aggregateDF = selectedDF
-        .withColumn("text_aggregate", col("text_selected"))
-        .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
+    val aggregateDF = selectedDF
+      .withColumn("text_aggregate", col("text_selected"))
+      .withColumn("text_aggregate", AggTools.aggregateMongo(col("text_selected")))
 
-      val clusterDF = aggregateDF
-        .withColumn("new_cluster", col("text_aggregate"))
-        .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
-        .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
+    val clusterDF = aggregateDF
+      .withColumn("new_cluster", col("text_aggregate"))
+      .withColumn("new_cluster", ClusterTools.onlineClustering(col("text_aggregate")))
+      .withColumn("to_centroid", ClusterTools.updateRadius(col("text_aggregate"),col("new_cluster")))
 
-      val customDF = clusterDF
-        .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
-        .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
-        .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
-        .withColumn("text", TextTools.stringify(col("text").cast("string")))
+    val customDF = clusterDF
+      .withColumn("text_aggregate", TextTools.stringify(col("text_aggregate").cast("string")))
+      .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
+      .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
+      .withColumn("text", TextTools.stringify(col("text").cast("string")))
 
     // =========================== SINK ====================================
 
