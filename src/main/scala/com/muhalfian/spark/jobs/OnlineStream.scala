@@ -113,12 +113,7 @@ object OnlineStream extends StreamUtils {
 
     // =========================== SINK ====================================
 
-    // val saveMasterData = customDF
-    //       .map(r => RowArtifact.rowMasterDataUpdate(r))
-    //       .writeStream
-    //       .outputMode("append")
-    //       .foreach(WriterUtil.masterDataUpdate)
-    //       .start()
+
 
     //Show Data after processed
     val printConsole = customDF.writeStream
@@ -126,9 +121,16 @@ object OnlineStream extends StreamUtils {
           // .option("truncate","false")
           .start()
 
-    // saveMasterData.awaitTermination()
+    val saveMasterData = customDF
+          .map(r => RowArtifact.rowMasterDataUpdate(r))
+          .writeStream
+          .outputMode("append")
+          .foreach(WriterUtil.masterDataUpdate)
+          .start()
+
     printConsole1.awaitTermination()
     printConsole.awaitTermination()
+    saveMasterData.awaitTermination()
 
   }
 
