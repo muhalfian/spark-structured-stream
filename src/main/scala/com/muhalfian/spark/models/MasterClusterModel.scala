@@ -34,6 +34,9 @@ object MasterClusterModel {
       (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"))
     }).collect
 
+    // println(centroids)
+    println(centroids.groupBy(_._2))
+
     ArrayBuffer(centroids: _*)
   }
 
