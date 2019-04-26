@@ -173,7 +173,8 @@ object ClusterTools {
   }
 
   def getTimeStamp() : Integer = {
-    val timestamp = java.lang.System.currentTimeMillis / 1000
+    val timestamp = java.lang.System.currentTimeMillis
+    // val timestamp = java.lang.System.currentTimeMillis / 1000
     timestamp
   }
 
