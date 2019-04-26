@@ -35,7 +35,7 @@ object MasterClusterModel {
     }).collect
 
     // println(centroids)
-    println(centroids.groupBy(_._2).mapValues(_.sortWith(_._6 < _._6)(0)).map(_._2).tolist)
+    println(centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).tolist)
 
     ArrayBuffer(centroids: _*)
   }
