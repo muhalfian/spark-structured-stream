@@ -82,7 +82,7 @@ object WriterUtil {
             doc.put("text_preprocess", sc.text_preprocess)
             doc.put("text_aggregate", sc.text_aggregate)
             doc.put("text_selected", sc.text_selected)
-            doc.put("new_cluster", sc.new_cluster)
+            doc.put("cluster", sc.cluster)
             doc.put("to_centroid", sc.to_centroid)
             doc
           }).asJava)
