@@ -52,7 +52,7 @@ object ColsArtifact {
     text_preprocess: String,
     text_selected: String,
     text_aggregate: String,
-    new_cluster: String,
+    cluster: String,
     to_centroid: Double
   )
 
