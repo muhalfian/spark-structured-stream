@@ -31,19 +31,7 @@ object MasterClusterModel {
 
   def getMasterClusterArr() = {
     val centroids = masterCluster
-    .withPipeline(Seq(Document.parse("{
-      "$sort":{
-        "datetime":-1
-      },
-      "$group":{
-        _id:"$cluster",
-        "cluster":{"$first": "$cluster"},
-        "centroid":{"$first": "$centroid"},
-        "radius":{"$first": "$radius"},
-        "n":{"$first": "$n"},
-        "datetime":{"$first": "$datetime"},
-      }
-     }")))
+    .withPipeline(Seq(Document.parse("{'$sort':{'datetime':-1},'$group':{_id:'$cluster','cluster':{'$first': '$cluster'},'centroid':{'$first': '$centroid'},'radius':{'$first': '$radius'},'n':{'$first': '$n'},'datetime':{'$first': '$datetime'},}}")))
     .map(row => {
       (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Long]("datetime"))
     }).collect
