@@ -52,24 +52,24 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    // val dict = 3430
-    println("dict : "+ AggTools.masterWordCount)
+    // val dict = AggTools.masterWordCount
+    val dict = 5000
+    println("dict : "+ dict)
 
-    val aggregateArray = AggTools.mongoToArray(mongoRDD, AggTools.masterWordCount)
+    val aggregateArray = AggTools.mongoToArray(mongoRDD, dict)
     println("jumlah data aggregasi : " + aggregateArray.size )
 
     // ======================== CLUSTERING ================================
 
     var method = "average"
-    // val n = AggTools.masterWordCount
-    val n = 5000
+    val n = dict
 
     ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n).map(_.toString)
     val cluster = ClusterTools.clusterArray.distinct
     println("jumlah data tercluster : " + ClusterTools.clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
-    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, AggTools.masterWordCount)
+    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, d)
     ClusterTools.distance = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.radius = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.n = Array.ofDim[Int](ClusterTools.clusterArray.size)
