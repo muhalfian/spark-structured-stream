@@ -69,7 +69,7 @@ object MongoToCluster extends StreamUtils {
     println("jumlah data tercluster : " + ClusterTools.clusterArray.size )
     println("jumlah cluster : " + cluster.size )
 
-    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, d)
+    ClusterTools.centroid = Array.ofDim[Double](ClusterTools.clusterArray.size, dict)
     ClusterTools.distance = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.radius = Array.ofDim[Double](ClusterTools.clusterArray.size)
     ClusterTools.n = Array.ofDim[Int](ClusterTools.clusterArray.size)
