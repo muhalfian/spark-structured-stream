@@ -61,7 +61,8 @@ object MongoToCluster extends StreamUtils {
     // ======================== CLUSTERING ================================
 
     var method = "average"
-    val n = AggTools.masterWordCount
+    // val n = AggTools.masterWordCount
+    val n = 5000
 
     ClusterTools.clusterArray = ClusterTools.clib.AutomaticClustering(method, aggregateArray, n).map(_.toString)
     val cluster = ClusterTools.clusterArray.distinct
