@@ -109,6 +109,7 @@ object ClusterTools {
       val r = radius(index.toInt)
       val size = n(index.toInt)
       val cent = centroid(index.toInt).zipWithIndex.map( row => (row._2, row._1)).filter(_._2 > 0.0).map( row => row.toString)
+      print(cent)
       val centStr = convertSeqToString(cent)
       val to_ground = getDistaceToGround(cent)
       val angle_ground = getCosineToGround(cent)
