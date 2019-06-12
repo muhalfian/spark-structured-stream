@@ -112,9 +112,9 @@ object ClusterTools {
       row._1.remove("publish_date")
       row._1.remove("title")
       row._1.remove("text")
-      row._1.put("text_aggregate", row._1.get("text_aggregate").toString().replaceAll("[\\]\\[]", ""))
-      row._1.put("cluster", clusterArray(row._2.toInt))
-      row._1.put("to_centroid", distance(row._2.toInt))
+      row._1.remove("text_preprocess")
+      row._1.remove("text_html")
+      row._1.remove("text_selected")
       row._1
     })
     masterDistance
