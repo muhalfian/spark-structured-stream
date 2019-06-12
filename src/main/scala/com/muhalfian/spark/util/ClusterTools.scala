@@ -105,13 +105,13 @@ object ClusterTools {
 
   def masterDistanceAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterDistance = mongoRDD.zipWithIndex.map( row => {
-      row._1.remove(0)
-      row._1.remove(1)
-      row._1.remove(2)
-      row._1.remove(3)
-      row._1.remove(4)
-      row._1.remove(5)
-      row._1.remove(6)
+      row._1.remove("link")
+      row._1.remove("source")
+      row._1.remove("description")
+      row._1.remove("image")
+      row._1.remove("publish_date")
+      row._1.remove("title")
+      row._1.remove("text")
       row._1.put("text_aggregate", row._1.get("text_aggregate").toString().replaceAll("[\\]\\[]", ""))
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
