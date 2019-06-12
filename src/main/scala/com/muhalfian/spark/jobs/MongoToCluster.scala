@@ -86,6 +86,8 @@ object MongoToCluster extends StreamUtils {
     // merge to masterData
     val masterData = ClusterTools.masterDataAgg(mongoRDD)
 
+    val masterDistance = ClusterTools.masterDistanceAgg(mongoRDD)
+
     // merge to masterCluster
     val masterCluster = sc.parallelize(ClusterTools.masterClusterAgg(mongoRDD, cluster))
 
@@ -94,6 +96,7 @@ object MongoToCluster extends StreamUtils {
     // ======================== WRITE MONGO ================================
 
     WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterData,masterData)
+    WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterDistance,masterDistance)
     WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterCluster,masterCluster)
     WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterWord,masterWord)
   }
