@@ -117,6 +117,7 @@ object ClusterTools {
       row._1.put("text_aggregate", row._1.get("text_aggregate").toString().replaceAll("[\\]\\[]", ""))
       row._1.put("cluster", clusterArray(row._2.toInt))
       row._1.put("to_centroid", distance(row._2.toInt))
+      row._1.put("datetime", getTimeStamp())
       row._1
     })
     masterDistance
