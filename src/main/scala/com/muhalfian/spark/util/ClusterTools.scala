@@ -48,7 +48,7 @@ object ClusterTools {
   // read master cluster
   // var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
   // var dmax = 0.0
-  var centroidArr = MasterClusterModel.masterClusterArr.map(data=>(data._1,data._2,data._3,data._4,data._5,data._6))
+  var centroidArr = MasterClusterModel.masterClusterUpdateArr
   var dmax = MasterClusterModel.getDmax()
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
