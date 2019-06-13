@@ -33,7 +33,7 @@ object MasterClusterModel {
   def getMasterClusterArr() = {
     val centroids = masterCluster
     .map(row => {
-      (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Double]("datetime"), row.getAs[Double]("to_ground"))
+      (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Long]("datetime"), row.getAs[Double]("to_ground"))
     }).collect
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
