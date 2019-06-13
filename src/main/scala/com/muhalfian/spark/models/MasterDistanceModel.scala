@@ -27,7 +27,6 @@ object MasterDistanceModel {
   val masterData = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   val masterDistanceArr = getMasterDistanceArr()
   var size = MasterWordModel.masterWordArr.size
-  var unknownCluster = getUnknownCluster()
 
   def getMasterDistanceArr() = {
     val distance = masterData
