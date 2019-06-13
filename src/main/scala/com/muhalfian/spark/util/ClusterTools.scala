@@ -105,7 +105,6 @@ object ClusterTools {
 
   def masterDistanceAgg(mongoRDD: RDD[org.bson.Document]) : RDD[org.bson.Document] = {
     val masterDistance = mongoRDD.zipWithIndex.map( row => {
-      row._1.remove("link")
       row._1.remove("source")
       row._1.remove("description")
       row._1.remove("image")
