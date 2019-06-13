@@ -32,7 +32,7 @@ object MasterClusterModel {
   def getMasterClusterArr() = {
     val centroids = masterCluster
     .map(row => {
-      (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Double]("datetime"))
+      (row.getAs[Seq[String]]("centroid"),row.getAs[String]("cluster"),row.getAs[Integer]("n"),row.getAs[Double]("radius"),row.getAs[String]("link_id"), row.getAs[Double]("datetime"), row.getAs[Double]("to_ground"))
     }).collect
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
@@ -47,12 +47,13 @@ object MasterClusterModel {
   def getUnknownCluster() = {
     var unknownClusterId = "0"
     try {
-      unknownClusterId = masterClusterArr.map(data => {
-        var centVec = ClusterTools.convertSeqToFeatures(data._1)
-        var zeroVec = Array.fill(size)(0.0)
-        var dist = ClusterTools.vlib.getDistance(centVec, zeroVec)
-        (data._2, dist)
-      }).minBy(_._2)._1
+      // unknownClusterId = masterClusterArr.map(data => {
+      //   var centVec = ClusterTools.convertSeqToFeatures(data._1)
+      //   var zeroVec = Array.fill(size)(0.0)
+      //   var dist = ClusterTools.vlib.getDistance(centVec, zeroVec)
+      //   (data._2, dist)
+      // }).minBy(_._2)._1
+      unknownClusterId = masterClusterArr.minBy(_._7)._2
     } catch {
       case _: Throwable =>  {
         unknownClusterId = "0"
