@@ -198,7 +198,7 @@ object ClusterTools {
     val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
     val dist = ClusterTools.vlib.getDistance(dataVec, centVec)
     dist
-  })
+  }
 
   def getTimeStamp() : Long = {
     val timestamp = java.lang.System.currentTimeMillis
