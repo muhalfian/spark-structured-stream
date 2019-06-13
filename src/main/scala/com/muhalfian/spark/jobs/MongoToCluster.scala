@@ -100,5 +100,4 @@ object MongoToCluster extends StreamUtils {
     WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterCluster,masterCluster)
     WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterWord,masterWord)
   }
-
 }
