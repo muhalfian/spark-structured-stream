@@ -261,8 +261,8 @@ object ClusterTools {
     if(linkCheck(link) == -1) {
       addCentroidArr(newCentroid, newCluster, newSize, newRadius, link)
       addCentroidMongo(newCentroid, newCluster, newSize, newRadius, link)
-      addDistanceArr(newData, newCentroid, newCluster, link)
-      addDistanceMongo(newData, newCentroid, newCluster, link)
+      addDistanceArr(newData, newData, newCluster, link)
+      addDistanceMongo(newData, newData, newCluster, link)
     } else {
       println("************* PASSING *************")
     }
@@ -314,8 +314,8 @@ object ClusterTools {
   def addDistanceArr(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
     val datetime = getTimeStamp()
     val to_centroid = getDistance(newData, newCentroid)
-
-    distanceArr += ((link, newData, clusterSelected, to_centroid, datetime))
+    val newDataStr = convertSeqToString(newData)
+    distanceArr += ((link, newDataStr, clusterSelected, to_centroid, datetime))
   }
 
   def addDistanceMongo(newData: Array[String], newCentroid: Seq[String], clusterSelected: String, link: String) = {
