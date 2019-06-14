@@ -193,8 +193,8 @@ object ClusterTools {
     distance
   }
 
-  def getDistance(newData : Array[Double], newCentroid : Seq[String]) : Double = {
-    val dist = ClusterTools.vlib.getDistance(dataVec, centVec)
+  def getDistance(newData : Array[Double], newCentroid : Array[Double]) : Double = {
+    val dist = ClusterTools.vlib.getDistance(newData, newCentroid)
     dist
   }
 
@@ -313,13 +313,12 @@ object ClusterTools {
 
   def addDistanceArr(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
     val datetime = getTimeStamp()
-    val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
-    val to_centroid = getDistance(newData, centVec)
+    val to_centroid = getDistance(newData, newCentroid)
 
     distanceArr += ((link, newData, clusterSelected, to_centroid, datetime))
   }
 
-  def addDistanceMongo(newData: Seq[String], newCentroid: Seq[String], clusterSelected: String, link: String) = {
+  def addDistanceMongo(newData: Array[String], newCentroid: Seq[String], clusterSelected: String, link: String) = {
     val newDataStr = convertSeqToString(newData)
     val datetime = getTimeStamp()
     val to_centroid = getDistance(newData, newCentroid)
