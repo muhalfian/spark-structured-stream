@@ -49,12 +49,12 @@ object ClusterTools {
   // var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
   // var dmax = 0.0
   var centroidArr = MasterClusterModel.masterClusterUpdateArr
-  var distanceArr = MasterDistanceModel.masterDistanceArr
+  // var distanceArr = MasterDistanceModel.masterDistanceArr
   var dmax = MasterClusterModel.getDmax()
 
   println("================== unknown : " + MasterClusterModel.unknownCluster + "========================")
   println("================== dmax : " + dmax + "========================")
-  println(distanceArr)
+  // println(distanceArr)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
     // merge cluster, array
@@ -265,8 +265,8 @@ object ClusterTools {
     if(linkCheck(link) == -1) {
       addCentroidArr(newCentroid, newCluster, newSize, newRadius, link)
       addCentroidMongo(newCentroid, newCluster, newSize, newRadius, link)
-      addDistanceArr(newData, newData, newCluster, link)
-      addDistanceMongo(newData, newData, newCluster, link)
+      // addDistanceArr(newData, newData, newCluster, link)
+      // addDistanceMongo(newData, newData, newCluster, link)
     } else {
       println("************* PASSING *************")
     }
@@ -291,7 +291,7 @@ object ClusterTools {
     if(linkCheck(link) == -1) {
       updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius, link)
       addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
-      updateDistanceArr(newData, updateCentroid, newCluster, link)
+      // updateDistanceArr(newData, updateCentroid, newCluster, link)
 
     } else {
       println("************* PASSING *************")
@@ -300,39 +300,39 @@ object ClusterTools {
     newCluster
   }
 
-  def updateDistanceArr(newData: Array[Double], newCentroid: Seq[String], clusterSelected: String, link: String) = {
-    var distanceSeq = Seq[Document]()
-    distanceArr.filter(_._3 == clusterSelected).map(data => {
-      val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
-      val dataVec = ClusterTools.convertSeqToFeatures(data._2)
-      val to_centroid = getDistance(dataVec, centVec)
-      var index = distanceArr.indexWhere(_._1 == link)
-      val datetime = getTimeStamp()
-
-      distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$data._2', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
-      distanceArr(index) = (link, data._2, clusterSelected, to_centroid, datetime)
-    })
-
-    val masterDistance = sc.parallelize(distanceSeq)
-    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterDistance, masterDistance)
-  }
-
-  def addDistanceArr(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
-    val datetime = getTimeStamp()
-    val to_centroid = getDistance(newData, newCentroid)
-    val newDataSeq = convertFeaturesToSeq(newData)
-    distanceArr += ((link, newDataSeq, clusterSelected, to_centroid, datetime))
-  }
-
-  def addDistanceMongo(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
-    val newDataSeq = convertFeaturesToSeq(newData)
-    val newDataStr = convertSeqToString(newDataSeq)
-    val datetime = getTimeStamp()
-    val to_centroid = getDistance(newData, newCentroid)
-
-    var newDoc = sc.parallelize(Seq(Document.parse(s"{link : '$link', text_aggregate : '$newDataStr', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")))
-    MasterDistanceModel.save(newDoc)
-  }
+  // def updateDistanceArr(newData: Array[Double], newCentroid: Seq[String], clusterSelected: String, link: String) = {
+  //   var distanceSeq = Seq[Document]()
+  //   distanceArr.filter(_._3 == clusterSelected).map(data => {
+  //     val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
+  //     val dataVec = ClusterTools.convertSeqToFeatures(data._2)
+  //     val to_centroid = getDistance(dataVec, centVec)
+  //     var index = distanceArr.indexWhere(_._1 == link)
+  //     val datetime = getTimeStamp()
+  //
+  //     distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$data._2', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
+  //     distanceArr(index) = (link, data._2, clusterSelected, to_centroid, datetime)
+  //   })
+  //
+  //   val masterDistance = sc.parallelize(distanceSeq)
+  //   WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterDistance, masterDistance)
+  // }
+  //
+  // def addDistanceArr(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
+  //   val datetime = getTimeStamp()
+  //   val to_centroid = getDistance(newData, newCentroid)
+  //   val newDataSeq = convertFeaturesToSeq(newData)
+  //   distanceArr += ((link, newDataSeq, clusterSelected, to_centroid, datetime))
+  // }
+  //
+  // def addDistanceMongo(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
+  //   val newDataSeq = convertFeaturesToSeq(newData)
+  //   val newDataStr = convertSeqToString(newDataSeq)
+  //   val datetime = getTimeStamp()
+  //   val to_centroid = getDistance(newData, newCentroid)
+  //
+  //   var newDoc = sc.parallelize(Seq(Document.parse(s"{link : '$link', text_aggregate : '$newDataStr', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")))
+  //   MasterDistanceModel.save(newDoc)
+  // }
 
   def linkCheck(link: String) = {
     centroidArr.indexWhere(_._5 == link)
