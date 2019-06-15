@@ -2,6 +2,7 @@ package com.muhalfian.spark.util
 
 import org.mongodb.scala._
 import org.mongodb.scala.model.Updates._
+import org.mongodb.scala.model.Filters._
 
 object ConnectionTools {
   // // To directly connect to the default server localhost on port 27017
@@ -19,6 +20,6 @@ object ConnectionTools {
   val masterClusterDb: MongoCollection[Document] = prayugaDb.getCollection(PropertiesLoader.dbMasterCluster)
 
   def updateCentroidCluster(clusterSelected: String, newCentroid: Seq[String], to_ground: Double, angle_ground: Double, datetime: Long, newSize: Integer, newRadius: Double, link: String) = {
-      masterClusterDb.updateOne(eq("cluster", clusterSelected), set("to_ground", to_ground))
+      masterClusterDb.updateOne(equal("cluster", clusterSelected), set("to_ground", to_ground))
   }
 }
