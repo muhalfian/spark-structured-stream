@@ -31,26 +31,13 @@ object MasterDistanceModel {
 
   def getMasterDistanceArr() = {
     val datenow = getTimeStamp()
-    val coba = masterData
-    .map(row => {
-      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),datenow)
-    })
-    println("DICOBA")
-    coba.collect.foreach(println)
-
     val distance = masterData
     .map(row => {
-      println((row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp()))
-      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp())
-    })
-    println(distance)
-    distance.collect.foreach(println)
-    println(distance.count)
-    val distanceCol = distance.collect
-    println(distanceCol)
+      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),datenow)
+    }).collect
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
-    ArrayBuffer(distanceCol: _*)
+    ArrayBuffer(distance: _*)
   }
 
   def getTimeStamp() : Long = {
