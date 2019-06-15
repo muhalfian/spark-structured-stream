@@ -30,6 +30,7 @@ object MasterDistanceModel {
   var size = MasterWordModel.masterWordArr.size
 
   def getMasterDistanceArr() = {
+    val masterData = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
     val distance = masterData
     .map(row => {
       println((row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp()))
