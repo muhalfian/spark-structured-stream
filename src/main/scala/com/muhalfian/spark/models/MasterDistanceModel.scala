@@ -30,9 +30,10 @@ object MasterDistanceModel {
   var size = MasterWordModel.masterWordArr.size
 
   def getMasterDistanceArr() = {
+    val datenow = getTimeStamp()
     val coba = masterData
     .map(row => {
-      (row.getAs[String]("link"),row.getAs[String]("text_aggregate"),row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),0)
+      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),datenow)
     })
     println("DICOBA")
     coba.collect.foreach(println)
