@@ -49,11 +49,11 @@ object ClusterTools {
   // var centroidArr = ArrayBuffer[(Seq[String], Integer, Integer, Double)]((Seq("test"),0,0,0.0))
   // var dmax = 0.0
   var centroidArr = MasterClusterModel.masterClusterUpdateArr
-  // var distanceArr = MasterDistanceModel.masterDistanceArr
+  var distanceArr = MasterDistanceModel.masterDistanceArr
   var dmax = MasterClusterModel.getDmax()
 
-  println("================== unknown : " + MasterClusterModel.unknownCluster + "========================")
-  println("================== dmax : " + dmax + "========================")
+  println("================== unknown : " + MasterClusterModel.unknownCluster + " ========================")
+  println("================== dmax : " + dmax + " ========================")
   // println(distanceArr)
 
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
