@@ -37,6 +37,7 @@ object MasterDistanceModel {
     })
     println(distance)
     val distanceCol = distance.collect
+    println(distanceCol)
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
     ArrayBuffer(distanceCol: _*)
