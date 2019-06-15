@@ -304,6 +304,7 @@ object ClusterTools {
     var distanceSeq = Seq[Document]()
     distanceArr.filter(_._3 == clusterSelected).map(data => {
       val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
+      println(data._2)
       val dataVec = ClusterTools.convertSeqToFeatures(data._2)
       val to_centroid = getDistance(dataVec, centVec)
       var index = distanceArr.indexWhere(_._1 == link)
