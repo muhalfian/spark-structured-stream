@@ -34,8 +34,8 @@ object MasterDistanceModel {
     .map(row => {
       println((row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp()))
       (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp())
-    }).rdd
-    // println(distance)
+    })
+    println(distance)
     println(distance.count)
     val distanceCol = distance.collect
     println(distanceCol)
