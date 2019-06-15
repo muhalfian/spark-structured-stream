@@ -38,6 +38,8 @@ object ClusterTools {
   var size = MasterWordModel.masterWordArr.size
   val mongoDb = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb
 
+  val connModel = ConnectionTools.masterClusterDb
+
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> mongoDb, "collection" -> PropertiesLoader.dbMasterClusterUpdate))
 
