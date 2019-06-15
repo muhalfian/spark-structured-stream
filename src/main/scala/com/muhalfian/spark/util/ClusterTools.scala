@@ -38,8 +38,6 @@ object ClusterTools {
   var size = MasterWordModel.masterWordArr.size
   val mongoDb = PropertiesLoader.mongoUrl + PropertiesLoader.mongoDb
 
-  val connModel = ConnectionTools.masterClusterDb
-
   // MongoConfig
   val writeConfig = WriteConfig(Map("uri" -> mongoDb, "collection" -> PropertiesLoader.dbMasterClusterUpdate))
 
@@ -224,6 +222,7 @@ object ClusterTools {
     // val angle_ground = 0
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime, link_id: '$link'}")))
     MasterClusterModel.save(newDoc)
+    MasterClusterModel.saveMaster(newDoc)
   }
 
   def updateCentroidArr(updateCentroid: Seq[String], newCluster: String, updateSize: Integer, updateRadius: Double, link: String) = {
@@ -239,8 +238,6 @@ object ClusterTools {
     val angle_ground = getCosineToGround(newCentroid)
     // val to_ground = 0
     // val angle_ground = 0
-
-    ConnectionTools.updateCentroidCluster(clusterSelected, newCentroid, to_ground, angle_ground, datetime, newSize, newRadius, link)
 
     var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime, link_id: '$link'}")))
     MasterClusterModel.save(newDoc)
