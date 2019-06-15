@@ -160,9 +160,9 @@ object ClusterTools {
   }
 
   def convertSeqToFeatures(data : Seq[String]) : Array[Double] = {
+    data.foreach((element:String) => println(element+" - "))  
     val tempSeq = data.map( row => {
       var word = row.drop(1).dropRight(1).split("\\,")
-      println(word)
       (word(0).toInt, word(1).toDouble)
     }).toSeq
     val features = Vectors.sparse(size, tempSeq.sortWith(_._1 < _._1)).toDense.toArray
