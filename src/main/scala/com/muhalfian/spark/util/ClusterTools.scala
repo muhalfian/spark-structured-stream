@@ -230,6 +230,20 @@ object ClusterTools {
     centroidArr(index) = (updateCentroid, newCluster, updateSize, updateRadius, link, datetime)
   }
 
+  def updateCentroidMongo(newCentroid: Seq[String], clusterSelected: String, newSize: Integer, newRadius: Double, link: String) = {
+    val newCentroidStr = convertSeqToString(newCentroid)
+    val datetime = getTimeStamp()
+    val to_ground = getDistaceToGround(newCentroid)
+    val angle_ground = getCosineToGround(newCentroid)
+    // val to_ground = 0
+    // val angle_ground = 0
+
+    ConnectionTools.updateCentroidCluster(clusterSelected, newCentroid, to_ground, angle_ground, datetime, newSize, newRadius, link)
+
+    var newDoc = sc.parallelize(Seq(Document.parse(s"{cluster : '$clusterSelected', radius: $newRadius, n: $newSize, centroid: $newCentroidStr, to_ground : $to_ground, angle_ground : $angle_ground, datetime: $datetime, link_id: '$link'}")))
+    MasterClusterModel.save(newDoc)
+  }
+
   def vectorQuantization(centroid: Double, newData: Double): Double = {
     val alpha = 0.1
     val vq = centroid + (alpha * (newData - centroid))
@@ -290,7 +304,7 @@ object ClusterTools {
     // sink
     if(linkCheck(link) == -1) {
       updateCentroidArr(updateCentroid, newCluster, updateSize, updateRadius, link)
-      addCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
+      updateCentroidMongo(updateCentroid, newCluster, updateSize, updateRadius, link)
       updateDistanceArr(newData, updateCentroid, newCluster, link)
 
     } else {
