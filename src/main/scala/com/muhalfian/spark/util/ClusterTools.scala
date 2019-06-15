@@ -52,6 +52,10 @@ object ClusterTools {
   var distanceArr = MasterDistanceModel.masterDistanceArr
   var dmax = MasterClusterModel.getDmax()
 
+  println("================== unknown : " + MasterClusterModel.unknownCluster + "========================")
+  println("================== dmax : " + dmax + "========================")
+  println(distanceArr)
+
   def getCentroid(aggregateArray: Array[Array[Double]] , clusterArray: Array[String] ) = {
     // merge cluster, array
     var dataArray = aggregateArray.zipWithIndex.map(data => {
