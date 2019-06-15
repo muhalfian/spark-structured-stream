@@ -311,6 +311,7 @@ object ClusterTools {
 
       distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$data._2', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
       var index = distanceArr.indexWhere(_._1 == link)
+      println(link)
       println(index)
       distanceArr(index) = (link, data._2, clusterSelected, to_centroid, datetime)
     })
