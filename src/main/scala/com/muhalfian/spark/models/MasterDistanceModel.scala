@@ -26,7 +26,6 @@ object MasterDistanceModel {
 
   val masterData = MongoSpark.load(spark, ReadConfig(Map("uri" -> uri, "database" -> db, "collection" -> collectionRead)))
   println(masterData)
-  masterData.collect.foreach(println)
   val masterDistanceArr = getMasterDistanceArr()
   var size = MasterWordModel.masterWordArr.size
 
