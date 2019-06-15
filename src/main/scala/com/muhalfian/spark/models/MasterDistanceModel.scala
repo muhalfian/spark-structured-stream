@@ -32,6 +32,7 @@ object MasterDistanceModel {
   def getMasterDistanceArr() = {
     val distance = masterData
     .map(row => {
+      println((row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp()))
       (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp())
     })
     println(distance)
