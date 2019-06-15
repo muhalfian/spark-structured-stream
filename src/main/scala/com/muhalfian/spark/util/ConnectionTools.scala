@@ -20,6 +20,6 @@ object ConnectionTools {
   val masterClusterDb: MongoCollection[Document] = prayugaDb.getCollection(PropertiesLoader.dbMasterCluster)
 
   def updateCentroidCluster(clusterSelected: String, newCentroid: Seq[String], to_ground: Double, angle_ground: Double, datetime: Long, newSize: Integer, newRadius: Double, link: String) = {
-      masterClusterDb.updateOne(equal("cluster", clusterSelected), set("to_ground", to_ground))
+      masterClusterDb.updateOne(equal("cluster", clusterSelected), set("to_ground", to_ground)).printHeadResult("Update Result: ")
   }
 }
