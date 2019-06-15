@@ -316,8 +316,7 @@ object ClusterTools {
     val datetime = getTimeStamp()
     val to_centroid = getDistance(newData, newCentroid)
     val newDataSeq = convertFeaturesToSeq(newData)
-    val newDataStr = convertSeqToString(newDataSeq)
-    distanceArr += ((link, newDataStr, clusterSelected, to_centroid, datetime))
+    distanceArr += ((link, newDataSeq, clusterSelected, to_centroid, datetime))
   }
 
   def addDistanceMongo(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
