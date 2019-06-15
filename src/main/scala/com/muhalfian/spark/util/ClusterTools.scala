@@ -308,10 +308,10 @@ object ClusterTools {
       val dataVec = ClusterTools.convertSeqToFeatures(data._2)
       val to_centroid = getDistance(dataVec, centVec)
       val datetime = getTimeStamp()
-
-      distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$data._2', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
-      var index = distanceArr.indexWhere(_._1 == link)
       val agg = data._2
+
+      distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$agg', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
+      var index = distanceArr.indexWhere(_._1 == link)
       if(index != -1){
           distanceArr(index) = (link, agg, clusterSelected, to_centroid, datetime)
       } else {
