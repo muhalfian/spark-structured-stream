@@ -36,7 +36,8 @@ object MasterDistanceModel {
       (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),getTimeStamp())
     })
     println(distance)
-    val distanceCol = distance.collect
+    println(distance.size)
+    val distanceCol = distance.collect()
     println(distanceCol)
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
