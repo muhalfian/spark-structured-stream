@@ -76,6 +76,6 @@ object MasterClusterModel {
   }
 
   def save(newDoc: RDD[org.bson.Document]) = {
-    WriterUtil.saveBatchMongo(collectionWrite, newDoc)
+    WriterUtils.saveBatchMongo(collectionWrite, newDoc)
   }
 }

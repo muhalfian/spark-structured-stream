@@ -50,7 +50,7 @@ object MasterWordModel {
   }
 
   def save(newWord: RDD[org.bson.Document]) = {
-    WriterUtil.saveBatchMongo(collectionWrite, newWord)
+    WriterUtils.saveBatchMongo(collectionWrite, newWord)
   }
 
   def getIndex(word: String) = {

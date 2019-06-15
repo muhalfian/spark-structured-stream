@@ -297,14 +297,15 @@ object ClusterTools {
   }
 
   def updateDistanceArr(newData: Array[Double], newCentroid: Seq[String], clusterSelected: String, link: String) = {
-    var distanceSeq = Seq[(String, Seq[String], String, Double, Long)]()
+    var distanceSeq = Seq[Document]()
     distanceArr.filter(_._3 == clusterSelected).map(data => {
       val centVec = ClusterTools.convertSeqToFeatures(newCentroid)
       val dataVec = ClusterTools.convertSeqToFeatures(data._2)
       val to_centroid = getDistance(dataVec, centVec)
       var index = distanceArr.indexWhere(_._1 == link)
       val datetime = getTimeStamp()
-      distanceSeq = distanceSeq :+ (link, data._2, clusterSelected, to_centroid, datetime)
+
+      distanceSeq = distanceSeq :+ Document.parse(s"{link : '$link', text_aggregate : '$data._2', cluster : '$clusterSelected', to_centroid: $to_centroid, datetime : $datetime}")
       distanceArr(index) = (link, data._2, clusterSelected, to_centroid, datetime)
     })
 
