@@ -95,9 +95,9 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== WRITE MONGO ================================
 
-    WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterData,masterData)
-    WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterDistance,masterDistance)
-    WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterCluster,masterCluster)
-    WriterUtil.saveBatchMongo(PropertiesLoader.dbMasterWord,masterWord)
+    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterData,masterData)
+    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterDistance,masterDistance)
+    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterCluster,masterCluster)
+    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterWord,masterWord)
   }
 }

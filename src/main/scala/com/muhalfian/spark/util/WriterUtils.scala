@@ -13,7 +13,7 @@ import org.apache.spark.rdd.RDD
 import com.mongodb.spark.config._
 import com.mongodb.spark.MongoSpark
 
-object WriterUtil {
+object WriterUtils {
 
   val uri = PropertiesLoader.mongoUrl
   val db = PropertiesLoader.mongoDb
