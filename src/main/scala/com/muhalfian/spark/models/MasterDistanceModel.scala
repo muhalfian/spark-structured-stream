@@ -33,7 +33,7 @@ object MasterDistanceModel {
     val datenow = getTimeStamp()
     val distance = masterData
     .map(row => {
-      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split("\\,").toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),datenow)
+      (row.getAs[String]("link"),row.getAs[String]("text_aggregate").split(',').toSeq,row.getAs[String]("cluster"),row.getAs[Double]("to_centroid"),datenow)
     }).collect
 
     // val groupedCentroids = centroids.groupBy(_._2).mapValues(_.maxBy(_._6)).map(_._2).toList
