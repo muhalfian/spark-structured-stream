@@ -309,7 +309,7 @@ object ClusterTools {
     })
 
     val masterDistance = sc.parallelize(distanceSeq)
-    WriteUtils.saveBatchMongo(PropertiesLoader.dbMasterDistance, masterDistance)
+    WriterUtils.saveBatchMongo(PropertiesLoader.dbMasterDistance, masterDistance)
   }
 
   def addDistanceArr(newData: Array[Double], newCentroid: Array[Double], clusterSelected: String, link: String) = {
