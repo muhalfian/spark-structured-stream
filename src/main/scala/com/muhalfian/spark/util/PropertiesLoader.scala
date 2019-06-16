@@ -12,7 +12,7 @@ object PropertiesLoader {
   val mongoUrl : String = conf.getString("MONGO_URL")
   val mongoDb : String = conf.getString("MONGO_DB")
 
-  val dbDataInit = "data_init_temp"
+  val dbDataInit = "data_init"
   val dbMasterWord = "master_word"
   val dbMasterData = "master_data"
   val dbMasterDistance = "master_distance"
