@@ -96,15 +96,15 @@ object OnlineStream extends StreamUtils {
           // .option("truncate","false")
           .start()
 
-    // val saveMasterData = customDF
-    //       .map(r => RowArtifact.rowMasterDataUpdate(r))
-    //       .writeStream
-    //       .outputMode("append")
-    //       .foreach(WriterUtil.masterDataUpdate)
-    //       .start()
+    val saveMasterData = customDF
+          .map(r => RowArtifact.rowMasterDataUpdate(r))
+          .writeStream
+          .outputMode("append")
+          .foreach(WriterUtil.masterDataUpdate)
+          .start()
 
     printConsole.awaitTermination()
-    // saveMasterData.awaitTermination()
+    saveMasterData.awaitTermination()
 
   }
 
