@@ -100,7 +100,7 @@ object OnlineStream extends StreamUtils {
           .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
           .outputMode("append")
-          .foreach(WriterUtil.masterDataUpdate)
+          .foreach(WriterUtils.masterDataUpdate)
           .start()
 
     printConsole.awaitTermination()
