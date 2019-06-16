@@ -52,8 +52,8 @@ object MongoToCluster extends StreamUtils {
 
     // ======================== AGGREGATION ================================
 
-    // val dict = AggTools.masterWordCount
-    val dict = 5000
+    val dict = AggTools.masterWordCount
+    // val dict = 5000
     println("dict : "+ dict)
 
     val aggregateArray = AggTools.mongoToArray(mongoRDD, dict)
