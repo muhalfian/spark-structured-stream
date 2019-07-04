@@ -46,7 +46,7 @@ object OnlineStream extends StreamUtils {
       .option("kafka.bootstrap.servers", PropertiesLoader.kafkaBrokerUrl)
       .option("subscribe", PropertiesLoader.kafkaTopic)
       .option("startingOffsets", "latest")
-      .option("maxOffsetsPerTrigger", "10")
+      .option("maxOffsetsPerTrigger", "1")
       // .option("startingOffsets", """{"online_media":{"0":4000}}""")
       // .option("endingOffsets", """{"online_media":{"0":6000}}""")
       .load()
@@ -87,24 +87,26 @@ object OnlineStream extends StreamUtils {
       .withColumn("text_preprocess", TextTools.stringify(col("text_preprocess").cast("string")))
       .withColumn("text_selected", TextTools.stringify(col("text_selected").cast("string")))
       .withColumn("text", TextTools.stringify(col("text").cast("string")))
+      .map(r => RowArtifact.rowMasterDataUpdate(r))
 
     // =========================== SINK ====================================
 
-    //Show Data after processed
-    val printConsole = customDF.writeStream
-          .format("console")
-          // .option("truncate","false")
-          .start()
+
 
     val saveMasterData = customDF
-          .map(r => RowArtifact.rowMasterDataUpdate(r))
           .writeStream
           .outputMode("append")
           .foreach(WriterUtils.masterDataUpdate)
           .start()
 
-    printConsole.awaitTermination()
+   //Show Data after processed
+   val printConsole = customDF.writeStream
+          .format("console")
+          // .option("truncate","false")
+          .start()
+
     saveMasterData.awaitTermination()
+    printConsole.awaitTermination()
 
   }
 
